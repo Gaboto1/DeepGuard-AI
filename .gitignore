@@ -1,46 +1,70 @@
-# Python
+# ── Python ────────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
-venv/
-.env
+*.pyd
 *.egg-info/
+dist/
+build/
+.Python
 
-# Models (large files)
+# ── Entornos virtuales ────────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── Variables de entorno con secretos ────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.production.example
+!.env.worker.example
+
+# ── Node / Next.js ────────────────────────────────────────────────────────────
+node_modules/
+.next/
+frontend/out/
+npm-debug.log*
+
+# ── Datos temporales ──────────────────────────────────────────────────────────
+backend/uploads/
+reports/tasks/
+reports/custody/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Modelos de IA (>GB — no van en Git) ──────────────────────────────────────
 models/
 *.bin
 *.safetensors
 *.pt
 *.pth
 
-# Uploads
-uploads/
+# ── Archivos de imagen/video subidos ─────────────────────────────────────────
 *.jpg
 *.jpeg
 *.png
+*.webp
 *.mp4
 *.mov
 *.mkv
+*.webm
 
-# Logs
-logs/
-*.log
+# ── Caché de compilación TypeScript ──────────────────────────────────────────
+frontend/tsconfig.tsbuildinfo
 
-# Node / Next.js
-node_modules/
-.next/
-.env.local
-npm-debug.log*
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
 
-# Docker
-*.tar
-
-# OS
+# ── OS ───────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# IDEs
-.vscode/
-.idea/
-*.swp
+# ── Docker ───────────────────────────────────────────────────────────────────
+*.tar

@@ -424,18 +424,31 @@ async def verify_custody(task_id: str) -> JSONResponse:
 
 @router.get("/health")
 async def health_v1() -> JSONResponse:
-    """Estado completo del sistema enterprise (API + Redis + Worker)."""
-    import torch
+    """Estado completo del sistema enterprise (API + Redis + Worker).
+    Compatible con modo API_ONLY=true (sin PyTorch instalado en Render).
+    """
+    from app.config import settings as _cfg
 
-    # Estado de Redis (con timeout estricto para no bloquear)
+    # CUDA / GPU — solo disponible en modo local con GPU
+    cuda_ok = False
+    gpu_name = "N/A (API-only mode)"
+    if not _cfg.API_ONLY:
+        try:
+            import torch
+            cuda_ok  = torch.cuda.is_available()
+            gpu_name = torch.cuda.get_device_name(0) if cuda_ok else "N/A"
+        except ImportError:
+            pass
+
+    # Estado de Redis (con timeout razonable para cloud)
     redis_ok   = False
-    redis_info = "No disponible (Redis no está corriendo localmente)"
+    redis_info = "No disponible"
     try:
         import redis as redis_lib
         r = redis_lib.from_url(
             __import__("os").getenv("REDIS_URL", "redis://localhost:6379/0"),
-            socket_connect_timeout=1,
-            socket_timeout=1,
+            socket_connect_timeout=4,
+            socket_timeout=4,
         )
         r.ping()
         redis_ok   = True
@@ -455,13 +468,14 @@ async def health_v1() -> JSONResponse:
             workers_info = "Celery no disponible"
 
     return JSONResponse(content={
-        "version":       "enterprise-v1",
-        "status":        "ok",
-        "cuda":          torch.cuda.is_available(),
-        "gpu":           torch.cuda.get_device_name(0) if torch.cuda.is_available() else "N/A",
-        "redis_status":  redis_ok,
-        "redis_info":    redis_info,
-        "workers_status":workers_info,
+        "version":        "enterprise-v1",
+        "status":         "ok",
+        "mode":           "api-only" if _cfg.API_ONLY else "full-gpu",
+        "cuda":           cuda_ok,
+        "gpu":            gpu_name,
+        "redis_status":   redis_ok,
+        "redis_info":     redis_info,
+        "workers_status": workers_info,
         "endpoints": {
             "analyze":  "POST /api/v1/analyze",
             "status":   "GET  /api/v1/tasks/{task_id}",
