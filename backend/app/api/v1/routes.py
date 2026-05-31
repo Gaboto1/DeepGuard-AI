@@ -236,26 +236,31 @@ async def analyze_async(
     size_mb   = len(content) / 1_048_576
     est_secs  = int(size_mb * (3 if file_type == "video" else 0.5) + 5)
 
-    # Verificar Redis disponible antes de intentar Celery (fail-fast)
+    # Verificar Redis disponible antes de intentar Celery.
+    # Timeout generoso (8s) para conexiones TLS remotas a Aiven/Upstash.
     redis_available = False
     try:
         import redis as _redis
+        _redis_url = __import__("os").getenv("REDIS_URL", "redis://localhost:6379/0")
         _r = _redis.from_url(
-            __import__("os").getenv("REDIS_URL", "redis://localhost:6379/0"),
-            socket_connect_timeout=1, socket_timeout=1,
+            _redis_url,
+            socket_connect_timeout=8,
+            socket_timeout=8,
         )
         _r.ping()
         redis_available = True
-    except Exception:
-        pass
+    except Exception as _e:
+        logger.warning(f"Redis ping failed: {type(_e).__name__}: {_e}")
 
-    # Dispatch a Celery (si Redis disponible) o fallback síncrono
-    # En modo API_ONLY el sync_fallback está deshabilitado: la API en la nube
-    # no tiene PyTorch — el procesamiento SIEMPRE ocurre en el worker GPU remoto.
+    # Dispatch a Celery — siempre se intenta, con o sin ping previo exitoso.
+    # El ping es solo diagnóstico; Celery tiene su propia gestión de conexión.
     from app.config import settings as _cfg
     _api_only = _cfg.API_ONLY
 
-    if redis_available:
+    if redis_available or _api_only:
+        # API_ONLY: siempre intentar Celery aunque el ping haya fallado —
+        # el ping usa 1 conexión corta; apply_async usa el pool de Celery
+        # que puede tener una conexión previa activa.
         try:
             from app.tasks.analysis_tasks import analyze_image_task, analyze_video_task
             if file_type == "image":
@@ -271,29 +276,36 @@ async def analyze_async(
             dispatch_mode = "celery"
         except Exception as e:
             if _api_only:
-                logger.error(f"Celery dispatch falló y API_ONLY=true — no hay fallback GPU: {e}")
-                dispatch_mode = "celery_error"
+                logger.error(f"Celery dispatch falló en modo API_ONLY: {e}")
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "error":   "worker_no_disponible",
+                        "mensaje": (
+                            f"No se pudo conectar con el worker GPU remoto. "
+                            f"Verifica que el worker Celery esté corriendo y conectado a Aiven. "
+                            f"Error: {type(e).__name__}"
+                        ),
+                    },
+                )
             else:
                 logger.warning(f"Celery dispatch failed ({e}), using sync fallback")
                 _process_sync_fallback(task_id, dest, file.filename, file_type)
                 dispatch_mode = "sync_fallback"
-    elif _api_only:
-        logger.error("Redis no disponible y API_ONLY=true — imposible procesar sin worker GPU remoto")
+    elif not _api_only:
+        # Solo en modo local sin Redis: usar sync fallback con GPU local
+        logger.info("Redis no disponible — usando modo síncrono (sync fallback)")
+        _process_sync_fallback(task_id, dest, file.filename, file_type)
+        dispatch_mode = "sync_fallback"
+    else:
+        # Caso imposible (api_only=False y redis_available=False) — ya manejado arriba
         raise HTTPException(
             status_code=503,
             detail={
                 "error":   "worker_no_disponible",
-                "mensaje": (
-                    "El worker GPU remoto no está conectado a Redis. "
-                    "Asegúrate de que el worker Celery local esté corriendo y "
-                    "conectado a la misma instancia de Redis que la API."
-                ),
+                "mensaje": "Redis no disponible.",
             },
         )
-    else:
-        logger.info("Redis no disponible — usando modo síncrono (sync fallback)")
-        _process_sync_fallback(task_id, dest, file.filename, file_type)
-        dispatch_mode = "sync_fallback"
 
     return JSONResponse(
         status_code=202,
