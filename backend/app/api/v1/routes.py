@@ -123,11 +123,18 @@ def _get_celery_and_redis():
 def _get_task_result(task_id: str) -> Optional[dict]:
     """
     Busca el resultado de una tarea en orden de prioridad:
-      1. Redis (resultado Celery) — en memoria, rápido
-      2. Disco (JSON persistido) — backup ante reinicio de Redis
-    Enriquece la respuesta con campos legibles en español.
+      1. Redis (resultado Celery via AsyncResult)
+      2. Disco (JSON persistido por el worker local)
+      3. Fallback PENDING — NUNCA devuelve None para UUIDs válidos.
+         Esto evita que el frontend reciba 404 mientras el worker procesa.
+
+    Arquitectura híbrida: el worker GPU local escribe en Aiven Redis (backend
+    de Celery) y en disco local. Render lee desde Aiven. Si la conexión a Aiven
+    falla momentáneamente, se devuelve PENDING para que el frontend siga
+    haciendo polling en lugar de abortar con error.
     """
-    # 1. Redis via Celery AsyncResult
+    # ── 1. Redis via Celery AsyncResult ──────────────────────────────────────
+    redis_error = None
     try:
         from app.celery_app import celery_app
         from celery.result import AsyncResult
@@ -154,11 +161,13 @@ def _get_task_result(task_id: str) -> Optional[dict]:
                 "stage":    meta.get("stage", "Procesando..."),
             })
         else:
+            # PENDING — tarea en cola o no iniciada aún
             return _enriquecer_estado({"status": "PENDING", "task_id": task_id})
-    except Exception:
-        pass
+    except Exception as e:
+        redis_error = str(e)
+        logger.debug(f"AsyncResult error para {task_id[:8]}...: {e}")
 
-    # 2. Disco (fallback)
+    # ── 2. Disco (worker local guarda JSON aquí) ──────────────────────────────
     disk_path = RESULTS_DIR / f"{task_id}.json"
     if disk_path.exists():
         try:
@@ -168,7 +177,16 @@ def _get_task_result(task_id: str) -> Optional[dict]:
         except Exception:
             pass
 
-    return None
+    # ── 3. Fallback seguro: PENDING ───────────────────────────────────────────
+    # Si llegamos aquí, Redis no respondió y el disco no tiene el resultado aún.
+    # Devolvemos PENDING en lugar de None para que el frontend siga haciendo
+    # polling — el worker puede estar en medio del procesamiento GPU.
+    # Esto es correcto porque el task_id fue generado por nuestra API.
+    logger.debug(
+        f"Task {task_id[:8]}... no encontrado aún "
+        f"(redis_err={redis_error or 'ok'}) — devolviendo PENDING"
+    )
+    return _enriquecer_estado({"status": "PENDING", "task_id": task_id})
 
 
 # ─── POST /api/v1/analyze ─────────────────────────────────────────────────────
