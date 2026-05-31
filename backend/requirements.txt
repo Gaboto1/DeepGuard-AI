@@ -1,0 +1,61 @@
+# ============================================================
+# DeepGuard AI - Backend Requirements
+# Compatible: Python 3.11 / 3.12 / 3.13 — CUDA 12.4
+#
+# STEP 1 — Install PyTorch with CUDA first:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+#
+# STEP 2 — Install these requirements:
+#   pip install -r requirements.txt
+# ============================================================
+
+# ─── VLM Semántico (LLaVA-1.5-7b-hf) ─────────────────────────────────────────
+# Cuantización 4-bit para RTX 4070 SUPER (12GB VRAM)
+bitsandbytes>=0.43.0          # 4-bit NF4 quantization (CUDA)
+accelerate>=0.29.0            # device_map="auto" y offloading
+
+# Cola de tareas asíncronas (enterprise)
+celery[redis]>=5.3.0
+redis>=5.0.0
+
+# ─── Web Framework ────────────────────────────────────────────────────────────
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+aiofiles==23.2.1
+
+# AI / ML (PyTorch installed separately with CUDA)
+transformers>=4.40.0
+accelerate>=0.29.0
+huggingface-hub>=0.22.0
+timm>=0.9.12
+
+# Grad-CAM for explainability heatmaps
+grad-cam>=1.4.8
+
+# Face Detection
+facenet-pytorch>=2.5.3
+
+# Computer Vision
+opencv-python-headless>=4.9.0.80
+Pillow>=10.3.0
+
+# NumPy 2.x — required for Python 3.13
+numpy>=2.0.0
+scipy>=1.13.0
+
+# Data validation
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# Logging & security
+loguru>=0.7.2
+slowapi>=0.1.9
+
+# File type validation (Windows binary — python-magic compatible)
+python-magic-bin>=0.4.14; sys_platform == "win32"
+python-magic>=0.4.27; sys_platform != "win32"
+
+# Performance monitoring
+psutil>=5.9.8

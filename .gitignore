@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.env
+*.egg-info/
+
+# Models (large files)
+models/
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# Uploads
+uploads/
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.mov
+*.mkv
+
+# Logs
+logs/
+*.log
+
+# Node / Next.js
+node_modules/
+.next/
+.env.local
+npm-debug.log*
+
+# Docker
+*.tar
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp

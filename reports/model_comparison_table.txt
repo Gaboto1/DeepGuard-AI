@@ -1,0 +1,16 @@
+MODEL COMPARISON REPORT
+================================================================================
+Model                                F1    Prec    Rec     AUC    FPR    FNR
+--------------------------------------------------------------------------------
+efficientnet_b4                   58.3%   50.0%  70.0%  0.400  70.0%  30.0%
+efficientnet_b0                   13.3%   20.0%  10.0%  0.335  40.0%  90.0%
+sdxl_detector                     85.7%   81.8%  90.0%  0.880  20.0%  10.0%
+face_deepfake_vit                 64.3%   50.0%  90.0%  0.360  90.0%  10.0%
+ensemble_current_b0               85.7%   81.8%  90.0%  0.830  20.0%  10.0%
+ensemble_with_b4                  85.7%   81.8%  90.0%  0.810  20.0%  10.0%
+
+VERDICT
+B4 beats SDXL:    NO
+B4 beats B0:      YES
+Ensemble B4 better: NO
+Recommend replace B0: YES

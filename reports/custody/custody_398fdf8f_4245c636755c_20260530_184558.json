@@ -1,0 +1,27 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v1",
+    "task_id": "398fdf8f-6a3e-4a58-8605-25e63c689413",
+    "file_sha256": "4245c636755c2cbb380036dff5880a8bdc932614b73f1fc4d63dfb09e71cecb6",
+    "filename": "blade_runner_couple_v2.png",
+    "file_type": "image",
+    "final_score": 0.13653905,
+    "evidence_level": "Very Low Evidence",
+    "timestamp_utc": "2026-05-30T18:45:58.203568+00:00",
+    "timestamp_unix": 1780166758.204,
+    "custody_token": "21f4147372555b48689ce72dae4e6be61991f64722d6c898949b61c11cba6317",
+    "canonical_string": "DG-CUSTODY-v1:398fdf8f-6a3e-4a58-8605-25e63c689413:4245c636755c2cbb380036dff5880a8bdc932614b73f1fc4d63dfb09e71cecb6:0.13653905:1780166758.204",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v1:398fdf8f-6a3e-4a58-8605-25e63c689413:4245c636755c2cbb380036dff5880a8bdc932614b73f1fc4d63dfb09e71cecb6:0.13653905:1780166758.204'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 13.65,
+    "evidence_level": null,
+    "model_agreement": null,
+    "model_used": null,
+    "device_used": null,
+    "analysis_time_seconds": null,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}

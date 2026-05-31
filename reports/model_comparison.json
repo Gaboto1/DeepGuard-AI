@@ -1,0 +1,158 @@
+{
+  "golden_set_n": 20,
+  "threshold": 0.5,
+  "models": {
+    "efficientnet_b4": {
+      "f1": 0.5833,
+      "precision": 0.5,
+      "recall": 0.7,
+      "roc_auc": 0.4,
+      "pr_auc": 0.4453,
+      "accuracy": 0.5,
+      "fpr": 0.7,
+      "fnr": 0.3,
+      "tp": 7,
+      "tn": 3,
+      "fp": 7,
+      "fn": 3,
+      "n": 20,
+      "inference_ms_per_img": 64.0
+    },
+    "efficientnet_b0": {
+      "f1": 0.1333,
+      "precision": 0.2,
+      "recall": 0.1,
+      "roc_auc": 0.335,
+      "pr_auc": 0.4474,
+      "accuracy": 0.35,
+      "fpr": 0.4,
+      "fnr": 0.9,
+      "tp": 1,
+      "tn": 6,
+      "fp": 4,
+      "fn": 9,
+      "n": 20,
+      "inference_ms_per_img": 25.7
+    },
+    "sdxl_detector": {
+      "f1": 0.8571,
+      "precision": 0.8182,
+      "recall": 0.9,
+      "roc_auc": 0.88,
+      "pr_auc": 0.8613,
+      "accuracy": 0.85,
+      "fpr": 0.2,
+      "fnr": 0.1,
+      "tp": 9,
+      "tn": 8,
+      "fp": 2,
+      "fn": 1,
+      "n": 20,
+      "inference_ms_per_img": 72.1
+    },
+    "face_deepfake_vit": {
+      "f1": 0.6429,
+      "precision": 0.5,
+      "recall": 0.9,
+      "roc_auc": 0.36,
+      "pr_auc": 0.4737,
+      "accuracy": 0.5,
+      "fpr": 0.9,
+      "fnr": 0.1,
+      "tp": 9,
+      "tn": 1,
+      "fp": 9,
+      "fn": 1,
+      "n": 20
+    },
+    "ensemble_current_b0": {
+      "f1": 0.8571,
+      "precision": 0.8182,
+      "recall": 0.9,
+      "roc_auc": 0.83,
+      "pr_auc": 0.7525,
+      "accuracy": 0.85,
+      "fpr": 0.2,
+      "fnr": 0.1,
+      "tp": 9,
+      "tn": 8,
+      "fp": 2,
+      "fn": 1,
+      "n": 20
+    },
+    "ensemble_with_b4": {
+      "f1": 0.8571,
+      "precision": 0.8182,
+      "recall": 0.9,
+      "roc_auc": 0.81,
+      "pr_auc": 0.7391,
+      "accuracy": 0.85,
+      "fpr": 0.2,
+      "fnr": 0.1,
+      "tp": 9,
+      "tn": 8,
+      "fp": 2,
+      "fn": 1,
+      "n": 20
+    }
+  },
+  "verdict": {
+    "b4_beats_sdxl": false,
+    "b4_beats_b0": true,
+    "b4_beats_ensemble": false,
+    "ensemble_b4_better": false,
+    "recommend_replace_b0": true
+  },
+  "b4_errors": [
+    {
+      "name": "landscape_mountain",
+      "truth": 0,
+      "score": 0.7880233526229858
+    },
+    {
+      "name": "urban_street_jpeg_artifacts",
+      "truth": 0,
+      "score": 0.6663879156112671
+    },
+    {
+      "name": "night_cityscape",
+      "truth": 0,
+      "score": 0.8127051591873169
+    },
+    {
+      "name": "group_event_photo",
+      "truth": 0,
+      "score": 0.7146328091621399
+    },
+    {
+      "name": "sports_action_motion_blur",
+      "truth": 0,
+      "score": 0.7293211221694946
+    },
+    {
+      "name": "old_photo_aging_vignette",
+      "truth": 0,
+      "score": 0.7524794936180115
+    },
+    {
+      "name": "underwater_scene",
+      "truth": 0,
+      "score": 0.6363272666931152
+    },
+    {
+      "name": "digital_art_portrait_diffusion",
+      "truth": 1,
+      "score": 0.4953015148639679
+    },
+    {
+      "name": "anime_style_face",
+      "truth": 1,
+      "score": 0.4457835555076599
+    },
+    {
+      "name": "textureless_skin_flat_lighting",
+      "truth": 1,
+      "score": 0.4347410798072815
+    }
+  ]
+}

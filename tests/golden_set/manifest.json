@@ -1,0 +1,202 @@
+[
+  {
+    "path": "tests\\golden_set\\real\\landscape_mountain.jpg",
+    "category": "real",
+    "name": "landscape_mountain",
+    "description": "Natural mountain landscape with atmospheric gradient and noise",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\portrait_natural_asymmetry.jpg",
+    "category": "real",
+    "name": "portrait_natural_asymmetry",
+    "description": "Portrait with intentional asymmetry and natural skin noise",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\urban_street_jpeg_artifacts.jpg",
+    "category": "real",
+    "name": "urban_street_jpeg_artifacts",
+    "description": "Urban scene with JPEG compression artifacts (news photo style)",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\bw_portrait_newspaper.jpg",
+    "category": "real",
+    "name": "bw_portrait_newspaper",
+    "description": "Black & white portrait, newspaper/historical style with grain",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\nature_closeup_forest.jpg",
+    "category": "real",
+    "name": "nature_closeup_forest",
+    "description": "Nature close-up: forest floor with leaves, natural color variation",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\night_cityscape.jpg",
+    "category": "real",
+    "name": "night_cityscape",
+    "description": "Night cityscape with natural light scatter and noise",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\group_event_photo.jpg",
+    "category": "real",
+    "name": "group_event_photo",
+    "description": "Group photo at event, varied skin tones, natural blur",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\sports_action_motion_blur.jpg",
+    "category": "real",
+    "name": "sports_action_motion_blur",
+    "description": "Sports action photo with motion blur, natural stadium background",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\old_photo_aging_vignette.jpg",
+    "category": "real",
+    "name": "old_photo_aging_vignette",
+    "description": "Old/vintage photo with aging artifacts, vignette, grain",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\real\\underwater_scene.jpg",
+    "category": "real",
+    "name": "underwater_scene",
+    "description": "Underwater scene with natural light absorption and particles",
+    "expected_label": 0,
+    "expected_verdict": "REAL"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\perfect_smooth_face_gan.jpg",
+    "category": "ai_generated",
+    "name": "perfect_smooth_face_gan",
+    "description": "GAN-typical: perfect symmetry, over-smoothed skin, oversaturated",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\digital_art_portrait_diffusion.jpg",
+    "category": "ai_generated",
+    "name": "digital_art_portrait_diffusion",
+    "description": "Digital art / diffusion-style portrait with unreal colors",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\fantasy_landscape_impossible.jpg",
+    "category": "ai_generated",
+    "name": "fantasy_landscape_impossible",
+    "description": "Fantasy landscape with floating islands, impossible physics, AI colors",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\anime_style_face.jpg",
+    "category": "ai_generated",
+    "name": "anime_style_face",
+    "description": "Anime-style face: huge eyes, impossible proportions, flat shading",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\textureless_skin_flat_lighting.jpg",
+    "category": "ai_generated",
+    "name": "textureless_skin_flat_lighting",
+    "description": "Diffusion artifact: zero skin texture, flat uniform studio lighting",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\perfect_mirror_symmetry.jpg",
+    "category": "ai_generated",
+    "name": "perfect_mirror_symmetry",
+    "description": "Perfect bilateral symmetry \u2014 impossible in real faces, key AI artifact",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\ai_color_grading_hdr.jpg",
+    "category": "ai_generated",
+    "name": "ai_color_grading_hdr",
+    "description": "AI-typical teal/orange color grading with HDR-like contrast",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\concept_art_glow_effect.jpg",
+    "category": "ai_generated",
+    "name": "concept_art_glow_effect",
+    "description": "Concept art style with impossible glow effects and deep saturation",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\midjourney_hyperdetail_portrait.jpg",
+    "category": "ai_generated",
+    "name": "midjourney_hyperdetail_portrait",
+    "description": "Midjourney-typical: jewel eyes, over-sharpened + oversaturated skin",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\ai_generated\\gan_frequency_artifacts.jpg",
+    "category": "ai_generated",
+    "name": "gan_frequency_artifacts",
+    "description": "GAN-typical: spectral frequency artifacts + unnatural upscaling",
+    "expected_label": 1,
+    "expected_verdict": "DEEPFAKE"
+  },
+  {
+    "path": "tests\\golden_set\\uncertain\\heavily_retouched_beauty_filter.jpg",
+    "category": "uncertain",
+    "name": "heavily_retouched_beauty_filter",
+    "description": "Real portrait with beauty filter \u2014 could be AI or real",
+    "expected_label": null,
+    "expected_verdict": "N/A"
+  },
+  {
+    "path": "tests\\golden_set\\uncertain\\whatsapp_compressed_upscaled.jpg",
+    "category": "uncertain",
+    "name": "whatsapp_compressed_upscaled",
+    "description": "WhatsApp-style compression + upscale: heavy artifacts",
+    "expected_label": null,
+    "expected_verdict": "N/A"
+  },
+  {
+    "path": "tests\\golden_set\\uncertain\\screenshot_screen.jpg",
+    "category": "uncertain",
+    "name": "screenshot_screen",
+    "description": "Screenshot of a screen showing a face \u2014 indirect capture",
+    "expected_label": null,
+    "expected_verdict": "N/A"
+  },
+  {
+    "path": "tests\\golden_set\\uncertain\\instagram_warm_filter.jpg",
+    "category": "uncertain",
+    "name": "instagram_warm_filter",
+    "description": "Instagram warm filter: color-shifted, unnaturally saturated",
+    "expected_label": null,
+    "expected_verdict": "N/A"
+  },
+  {
+    "path": "tests\\golden_set\\uncertain\\upscaled_thumbnail_pixelated.jpg",
+    "category": "uncertain",
+    "name": "upscaled_thumbnail_pixelated",
+    "description": "Thumbnail upscaled to HD: block artifacts, loss of information",
+    "expected_label": null,
+    "expected_verdict": "N/A"
+  }
+]

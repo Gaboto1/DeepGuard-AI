@@ -1,0 +1,40 @@
+# ============================================================
+# DeepGuard AI — Requirements API-only (Render free tier)
+#
+# SIN: torch · torchvision · transformers · bitsandbytes ·
+#      accelerate · timm · facenet-pytorch · opencv · grad-cam
+#
+# Build resultante: ~180 MB  RAM en producción: < 100 MB
+#
+# INSTALACIÓN:
+#   pip install -r requirements-api.txt
+# ============================================================
+
+# ── Web framework ──────────────────────────────────────────
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+aiofiles==23.2.1
+
+# ── Cola de tareas (despacho a worker GPU remoto) ──────────
+celery[redis]>=5.3.0
+redis>=5.0.0
+
+# ── Validación y serialización ─────────────────────────────
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# ── Imagen — solo para validación de tipo MIME ─────────────
+Pillow>=10.3.0
+
+# ── Validación de tipo MIME real (no solo extensión) ───────
+python-magic-bin>=0.4.14; sys_platform == "win32"
+python-magic>=0.4.27;     sys_platform != "win32"
+
+# ── Logging y seguridad ────────────────────────────────────
+loguru>=0.7.2
+slowapi>=0.1.9
+
+# ── Monitoreo de sistema ───────────────────────────────────
+psutil>=5.9.8

@@ -1,0 +1,42 @@
+# No incluir en la imagen Docker de la API
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Modelos (varios GB — se descargan en el worker local, no en la API)
+models/
+
+# Uploads temporales
+uploads/
+
+# Logs
+logs/
+*.log
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Tests y scripts de desarrollo
+test_*.py
+audit_*.py
+generar_informe.py
+*.md
+
+# Archivos de entorno con secretos reales
+.env
+.env.local
+
+# Reportes de custodia
+reports/
+
+# Git
+.git/
+.gitignore

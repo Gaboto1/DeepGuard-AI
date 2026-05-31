@@ -1,0 +1,27 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v1",
+    "task_id": "86136b91-341e-47ae-bc66-b083afc9ee1d",
+    "file_sha256": "fd95228e563260fd5cdd97abc61621ac5558f3972bbfaaf7aa742a9f9cad93f2",
+    "filename": "José_Ignacio_Gentile_(Nate_Gentile)_En_2018.jpg",
+    "file_type": "image",
+    "final_score": 0.376,
+    "evidence_level": "Low Evidence",
+    "timestamp_utc": "2026-05-30T18:47:47.341102+00:00",
+    "timestamp_unix": 1780166867.341,
+    "custody_token": "d19d6bc0479f80fe2d2e7d4c52256e218ee49c0b55773aac708a195e97fef112",
+    "canonical_string": "DG-CUSTODY-v1:86136b91-341e-47ae-bc66-b083afc9ee1d:fd95228e563260fd5cdd97abc61621ac5558f3972bbfaaf7aa742a9f9cad93f2:0.37600000:1780166867.341",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v1:86136b91-341e-47ae-bc66-b083afc9ee1d:fd95228e563260fd5cdd97abc61621ac5558f3972bbfaaf7aa742a9f9cad93f2:0.37600000:1780166867.341'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 37.6,
+    "evidence_level": null,
+    "model_agreement": null,
+    "model_used": null,
+    "device_used": null,
+    "analysis_time_seconds": null,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}

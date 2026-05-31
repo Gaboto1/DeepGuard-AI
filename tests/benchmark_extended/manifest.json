@@ -1,0 +1,317 @@
+[
+  {
+    "path": "tests\\benchmark_extended\\real\\selfies\\selfie_00.jpg",
+    "category": "real/selfies",
+    "name": "selfie_00",
+    "label": 0,
+    "description": "Selfie con asimetría facial natural"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\selfies\\selfie_01.jpg",
+    "category": "real/selfies",
+    "name": "selfie_01",
+    "label": 0,
+    "description": "Selfie con asimetría facial natural"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\selfies\\selfie_02.jpg",
+    "category": "real/selfies",
+    "name": "selfie_02",
+    "label": 0,
+    "description": "Selfie con asimetría facial natural"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\selfies\\selfie_03.jpg",
+    "category": "real/selfies",
+    "name": "selfie_03",
+    "label": 0,
+    "description": "Selfie con asimetría facial natural"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\selfies\\selfie_04.jpg",
+    "category": "real/selfies",
+    "name": "selfie_04",
+    "label": 0,
+    "description": "Selfie con asimetría facial natural"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\deportes\\deporte_00.jpg",
+    "category": "real/deportes",
+    "name": "deporte_00",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento y fondo real"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\deportes\\deporte_01.jpg",
+    "category": "real/deportes",
+    "name": "deporte_01",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento y fondo real"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\deportes\\deporte_02.jpg",
+    "category": "real/deportes",
+    "name": "deporte_02",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento y fondo real"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\deportes\\deporte_03.jpg",
+    "category": "real/deportes",
+    "name": "deporte_03",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento y fondo real"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\deportes\\deporte_04.jpg",
+    "category": "real/deportes",
+    "name": "deporte_04",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento y fondo real"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\paisajes\\paisaje_00.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_00",
+    "label": 0,
+    "description": "Paisaje natural con gradiente atmosférico y ruido"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\paisajes\\paisaje_01.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_01",
+    "label": 0,
+    "description": "Paisaje natural con gradiente atmosférico y ruido"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\paisajes\\paisaje_02.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_02",
+    "label": 0,
+    "description": "Paisaje natural con gradiente atmosférico y ruido"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\paisajes\\paisaje_03.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_03",
+    "label": 0,
+    "description": "Paisaje natural con gradiente atmosférico y ruido"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\paisajes\\paisaje_04.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_04",
+    "label": 0,
+    "description": "Paisaje natural con gradiente atmosférico y ruido"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\nocturnas\\nocturna_00.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_00",
+    "label": 0,
+    "description": "Escena nocturna urbana con luces naturales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\nocturnas\\nocturna_01.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_01",
+    "label": 0,
+    "description": "Escena nocturna urbana con luces naturales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\nocturnas\\nocturna_02.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_02",
+    "label": 0,
+    "description": "Escena nocturna urbana con luces naturales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\nocturnas\\nocturna_03.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_03",
+    "label": 0,
+    "description": "Escena nocturna urbana con luces naturales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\noticias\\noticia_00.jpg",
+    "category": "real/noticias",
+    "name": "noticia_00",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG de agencia"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\noticias\\noticia_01.jpg",
+    "category": "real/noticias",
+    "name": "noticia_01",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG de agencia"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\noticias\\noticia_02.jpg",
+    "category": "real/noticias",
+    "name": "noticia_02",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG de agencia"
+  },
+  {
+    "path": "tests\\benchmark_extended\\real\\noticias\\noticia_03.jpg",
+    "category": "real/noticias",
+    "name": "noticia_03",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG de agencia"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\midjourney\\midjourney_00.jpg",
+    "category": "ia/midjourney",
+    "name": "midjourney_00",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría perfecta, hipernítido, supersaturado"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\midjourney\\midjourney_01.jpg",
+    "category": "ia/midjourney",
+    "name": "midjourney_01",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría perfecta, hipernítido, supersaturado"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\midjourney\\midjourney_02.jpg",
+    "category": "ia/midjourney",
+    "name": "midjourney_02",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría perfecta, hipernítido, supersaturado"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\midjourney\\midjourney_03.jpg",
+    "category": "ia/midjourney",
+    "name": "midjourney_03",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría perfecta, hipernítido, supersaturado"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\midjourney\\midjourney_04.jpg",
+    "category": "ia/midjourney",
+    "name": "midjourney_04",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría perfecta, hipernítido, supersaturado"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\sdxl\\sdxl_00.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_00",
+    "label": 1,
+    "description": "Estilo SDXL: alta resolución, piel textureless, iluminación plana perfecta"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\sdxl\\sdxl_01.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_01",
+    "label": 1,
+    "description": "Estilo SDXL: alta resolución, piel textureless, iluminación plana perfecta"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\sdxl\\sdxl_02.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_02",
+    "label": 1,
+    "description": "Estilo SDXL: alta resolución, piel textureless, iluminación plana perfecta"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\sdxl\\sdxl_03.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_03",
+    "label": 1,
+    "description": "Estilo SDXL: alta resolución, piel textureless, iluminación plana perfecta"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\sdxl\\sdxl_04.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_04",
+    "label": 1,
+    "description": "Estilo SDXL: alta resolución, piel textureless, iluminación plana perfecta"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\anime\\anime_00.jpg",
+    "category": "ia/anime",
+    "name": "anime_00",
+    "label": 1,
+    "description": "Anime IA: proporciones imposibles, ojos enormes, colores planos"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\anime\\anime_01.jpg",
+    "category": "ia/anime",
+    "name": "anime_01",
+    "label": 1,
+    "description": "Anime IA: proporciones imposibles, ojos enormes, colores planos"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\anime\\anime_02.jpg",
+    "category": "ia/anime",
+    "name": "anime_02",
+    "label": 1,
+    "description": "Anime IA: proporciones imposibles, ojos enormes, colores planos"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\anime\\anime_03.jpg",
+    "category": "ia/anime",
+    "name": "anime_03",
+    "label": 1,
+    "description": "Anime IA: proporciones imposibles, ojos enormes, colores planos"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\flux\\flux_00.jpg",
+    "category": "ia/flux",
+    "name": "flux_00",
+    "label": 1,
+    "description": "Estilo FLUX: paleta de colores imposible, físicas irreales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\flux\\flux_01.jpg",
+    "category": "ia/flux",
+    "name": "flux_01",
+    "label": 1,
+    "description": "Estilo FLUX: paleta de colores imposible, físicas irreales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\flux\\flux_02.jpg",
+    "category": "ia/flux",
+    "name": "flux_02",
+    "label": 1,
+    "description": "Estilo FLUX: paleta de colores imposible, físicas irreales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\flux\\flux_03.jpg",
+    "category": "ia/flux",
+    "name": "flux_03",
+    "label": 1,
+    "description": "Estilo FLUX: paleta de colores imposible, físicas irreales"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\ideogram\\ideogram_00.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_00",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\ideogram\\ideogram_01.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_01",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\ideogram\\ideogram_02.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_02",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_extended\\ia\\ideogram\\ideogram_03.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_03",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  }
+]

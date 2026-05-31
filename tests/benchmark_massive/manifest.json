@@ -1,0 +1,3586 @@
+[
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_000.jpg",
+    "category": "real/selfies",
+    "name": "selfie_000",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_001.jpg",
+    "category": "real/selfies",
+    "name": "selfie_001",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_002.jpg",
+    "category": "real/selfies",
+    "name": "selfie_002",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_003.jpg",
+    "category": "real/selfies",
+    "name": "selfie_003",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_004.jpg",
+    "category": "real/selfies",
+    "name": "selfie_004",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_005.jpg",
+    "category": "real/selfies",
+    "name": "selfie_005",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_006.jpg",
+    "category": "real/selfies",
+    "name": "selfie_006",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_007.jpg",
+    "category": "real/selfies",
+    "name": "selfie_007",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_008.jpg",
+    "category": "real/selfies",
+    "name": "selfie_008",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_009.jpg",
+    "category": "real/selfies",
+    "name": "selfie_009",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_010.jpg",
+    "category": "real/selfies",
+    "name": "selfie_010",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_011.jpg",
+    "category": "real/selfies",
+    "name": "selfie_011",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_012.jpg",
+    "category": "real/selfies",
+    "name": "selfie_012",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_013.jpg",
+    "category": "real/selfies",
+    "name": "selfie_013",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_014.jpg",
+    "category": "real/selfies",
+    "name": "selfie_014",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_015.jpg",
+    "category": "real/selfies",
+    "name": "selfie_015",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_016.jpg",
+    "category": "real/selfies",
+    "name": "selfie_016",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_017.jpg",
+    "category": "real/selfies",
+    "name": "selfie_017",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_018.jpg",
+    "category": "real/selfies",
+    "name": "selfie_018",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_019.jpg",
+    "category": "real/selfies",
+    "name": "selfie_019",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_020.jpg",
+    "category": "real/selfies",
+    "name": "selfie_020",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_021.jpg",
+    "category": "real/selfies",
+    "name": "selfie_021",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_022.jpg",
+    "category": "real/selfies",
+    "name": "selfie_022",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_023.jpg",
+    "category": "real/selfies",
+    "name": "selfie_023",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_024.jpg",
+    "category": "real/selfies",
+    "name": "selfie_024",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_025.jpg",
+    "category": "real/selfies",
+    "name": "selfie_025",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_026.jpg",
+    "category": "real/selfies",
+    "name": "selfie_026",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_027.jpg",
+    "category": "real/selfies",
+    "name": "selfie_027",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_028.jpg",
+    "category": "real/selfies",
+    "name": "selfie_028",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_029.jpg",
+    "category": "real/selfies",
+    "name": "selfie_029",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_030.jpg",
+    "category": "real/selfies",
+    "name": "selfie_030",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\selfies\\selfie_031.jpg",
+    "category": "real/selfies",
+    "name": "selfie_031",
+    "label": 0,
+    "description": "Selfie con asimetría natural"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_000.jpg",
+    "category": "real/deportes",
+    "name": "deporte_000",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_001.jpg",
+    "category": "real/deportes",
+    "name": "deporte_001",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_002.jpg",
+    "category": "real/deportes",
+    "name": "deporte_002",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_003.jpg",
+    "category": "real/deportes",
+    "name": "deporte_003",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_004.jpg",
+    "category": "real/deportes",
+    "name": "deporte_004",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_005.jpg",
+    "category": "real/deportes",
+    "name": "deporte_005",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_006.jpg",
+    "category": "real/deportes",
+    "name": "deporte_006",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_007.jpg",
+    "category": "real/deportes",
+    "name": "deporte_007",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_008.jpg",
+    "category": "real/deportes",
+    "name": "deporte_008",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_009.jpg",
+    "category": "real/deportes",
+    "name": "deporte_009",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_010.jpg",
+    "category": "real/deportes",
+    "name": "deporte_010",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_011.jpg",
+    "category": "real/deportes",
+    "name": "deporte_011",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_012.jpg",
+    "category": "real/deportes",
+    "name": "deporte_012",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_013.jpg",
+    "category": "real/deportes",
+    "name": "deporte_013",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_014.jpg",
+    "category": "real/deportes",
+    "name": "deporte_014",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_015.jpg",
+    "category": "real/deportes",
+    "name": "deporte_015",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_016.jpg",
+    "category": "real/deportes",
+    "name": "deporte_016",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_017.jpg",
+    "category": "real/deportes",
+    "name": "deporte_017",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_018.jpg",
+    "category": "real/deportes",
+    "name": "deporte_018",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_019.jpg",
+    "category": "real/deportes",
+    "name": "deporte_019",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_020.jpg",
+    "category": "real/deportes",
+    "name": "deporte_020",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_021.jpg",
+    "category": "real/deportes",
+    "name": "deporte_021",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_022.jpg",
+    "category": "real/deportes",
+    "name": "deporte_022",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_023.jpg",
+    "category": "real/deportes",
+    "name": "deporte_023",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_024.jpg",
+    "category": "real/deportes",
+    "name": "deporte_024",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_025.jpg",
+    "category": "real/deportes",
+    "name": "deporte_025",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_026.jpg",
+    "category": "real/deportes",
+    "name": "deporte_026",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_027.jpg",
+    "category": "real/deportes",
+    "name": "deporte_027",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_028.jpg",
+    "category": "real/deportes",
+    "name": "deporte_028",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_029.jpg",
+    "category": "real/deportes",
+    "name": "deporte_029",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_030.jpg",
+    "category": "real/deportes",
+    "name": "deporte_030",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\deportes\\deporte_031.jpg",
+    "category": "real/deportes",
+    "name": "deporte_031",
+    "label": 0,
+    "description": "Fotografía deportiva con movimiento"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_000.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_000",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_001.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_001",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_002.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_002",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_003.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_003",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_004.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_004",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_005.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_005",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_006.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_006",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_007.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_007",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_008.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_008",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_009.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_009",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_010.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_010",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_011.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_011",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_012.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_012",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_013.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_013",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_014.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_014",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_015.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_015",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_016.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_016",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_017.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_017",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_018.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_018",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_019.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_019",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_020.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_020",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_021.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_021",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_022.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_022",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_023.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_023",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_024.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_024",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_025.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_025",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_026.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_026",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_027.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_027",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_028.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_028",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_029.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_029",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_030.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_030",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\naturaleza\\naturaleza_031.jpg",
+    "category": "real/naturaleza",
+    "name": "naturaleza_031",
+    "label": 0,
+    "description": "Escena natural con texturas variadas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_000.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_000",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_001.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_001",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_002.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_002",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_003.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_003",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_004.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_004",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_005.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_005",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_006.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_006",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_007.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_007",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_008.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_008",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_009.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_009",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_010.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_010",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_011.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_011",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_012.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_012",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_013.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_013",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_014.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_014",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_015.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_015",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_016.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_016",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_017.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_017",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_018.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_018",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_019.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_019",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_020.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_020",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_021.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_021",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_022.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_022",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_023.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_023",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_024.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_024",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_025.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_025",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_026.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_026",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_027.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_027",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_028.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_028",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_029.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_029",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_030.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_030",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\paisajes\\paisaje_031.jpg",
+    "category": "real/paisajes",
+    "name": "paisaje_031",
+    "label": 0,
+    "description": "Paisaje natural con montañas y cielo"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_000.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_000",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_001.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_001",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_002.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_002",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_003.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_003",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_004.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_004",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_005.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_005",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_006.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_006",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_007.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_007",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_008.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_008",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_009.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_009",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_010.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_010",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_011.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_011",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_012.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_012",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_013.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_013",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_014.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_014",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_015.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_015",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_016.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_016",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_017.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_017",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_018.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_018",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_019.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_019",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_020.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_020",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_021.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_021",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_022.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_022",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_023.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_023",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_024.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_024",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_025.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_025",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_026.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_026",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_027.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_027",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_028.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_028",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_029.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_029",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_030.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_030",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\arquitectura\\arq_031.jpg",
+    "category": "real/arquitectura",
+    "name": "arq_031",
+    "label": 0,
+    "description": "Fotografía arquitectónica con edificios y ventanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_000.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_000",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_001.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_001",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_002.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_002",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_003.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_003",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_004.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_004",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_005.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_005",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_006.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_006",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_007.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_007",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_008.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_008",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_009.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_009",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_010.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_010",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_011.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_011",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_012.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_012",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_013.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_013",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_014.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_014",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_015.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_015",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_016.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_016",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_017.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_017",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_018.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_018",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_019.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_019",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_020.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_020",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_021.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_021",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_022.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_022",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_023.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_023",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_024.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_024",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_025.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_025",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_026.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_026",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_027.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_027",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_028.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_028",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_029.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_029",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_030.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_030",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\nocturnas\\nocturna_031.jpg",
+    "category": "real/nocturnas",
+    "name": "nocturna_031",
+    "label": 0,
+    "description": "Escena nocturna con luces urbanas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_000.jpg",
+    "category": "real/noticias",
+    "name": "noticia_000",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 46%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_001.jpg",
+    "category": "real/noticias",
+    "name": "noticia_001",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 51%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_002.jpg",
+    "category": "real/noticias",
+    "name": "noticia_002",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 55%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_003.jpg",
+    "category": "real/noticias",
+    "name": "noticia_003",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 69%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_004.jpg",
+    "category": "real/noticias",
+    "name": "noticia_004",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 46%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_005.jpg",
+    "category": "real/noticias",
+    "name": "noticia_005",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 57%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_006.jpg",
+    "category": "real/noticias",
+    "name": "noticia_006",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 49%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_007.jpg",
+    "category": "real/noticias",
+    "name": "noticia_007",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 64%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_008.jpg",
+    "category": "real/noticias",
+    "name": "noticia_008",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 47%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_009.jpg",
+    "category": "real/noticias",
+    "name": "noticia_009",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 65%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_010.jpg",
+    "category": "real/noticias",
+    "name": "noticia_010",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 52%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_011.jpg",
+    "category": "real/noticias",
+    "name": "noticia_011",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 59%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_012.jpg",
+    "category": "real/noticias",
+    "name": "noticia_012",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 58%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_013.jpg",
+    "category": "real/noticias",
+    "name": "noticia_013",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 56%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_014.jpg",
+    "category": "real/noticias",
+    "name": "noticia_014",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 63%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_015.jpg",
+    "category": "real/noticias",
+    "name": "noticia_015",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 61%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_016.jpg",
+    "category": "real/noticias",
+    "name": "noticia_016",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 55%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_017.jpg",
+    "category": "real/noticias",
+    "name": "noticia_017",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 59%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_018.jpg",
+    "category": "real/noticias",
+    "name": "noticia_018",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 66%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_019.jpg",
+    "category": "real/noticias",
+    "name": "noticia_019",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 60%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_020.jpg",
+    "category": "real/noticias",
+    "name": "noticia_020",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 51%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_021.jpg",
+    "category": "real/noticias",
+    "name": "noticia_021",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 46%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_022.jpg",
+    "category": "real/noticias",
+    "name": "noticia_022",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 66%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_023.jpg",
+    "category": "real/noticias",
+    "name": "noticia_023",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 51%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_024.jpg",
+    "category": "real/noticias",
+    "name": "noticia_024",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 50%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_025.jpg",
+    "category": "real/noticias",
+    "name": "noticia_025",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 53%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_026.jpg",
+    "category": "real/noticias",
+    "name": "noticia_026",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 66%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_027.jpg",
+    "category": "real/noticias",
+    "name": "noticia_027",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 52%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_028.jpg",
+    "category": "real/noticias",
+    "name": "noticia_028",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 66%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_029.jpg",
+    "category": "real/noticias",
+    "name": "noticia_029",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 48%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_030.jpg",
+    "category": "real/noticias",
+    "name": "noticia_030",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 64%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\noticias\\noticia_031.jpg",
+    "category": "real/noticias",
+    "name": "noticia_031",
+    "label": 0,
+    "description": "Escena de prensa con compresión JPEG 58%"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_000.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_000",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_001.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_001",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_002.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_002",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_003.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_003",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_004.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_004",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_005.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_005",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_006.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_006",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_007.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_007",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_008.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_008",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_009.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_009",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_010.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_010",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_011.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_011",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_012.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_012",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_013.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_013",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_014.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_014",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_015.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_015",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_016.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_016",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_017.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_017",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_018.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_018",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_019.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_019",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_020.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_020",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_021.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_021",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_022.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_022",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_023.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_023",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_024.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_024",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_025.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_025",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_026.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_026",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_027.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_027",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_028.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_028",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_029.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_029",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_030.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_030",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\real\\foto_profesional\\prof_031.jpg",
+    "category": "real/foto_profesional",
+    "name": "prof_031",
+    "label": 0,
+    "description": "Fotografía profesional con iluminación de estudio"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_000.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_000",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_001.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_001",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_002.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_002",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_003.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_003",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_004.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_004",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_005.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_005",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_006.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_006",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_007.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_007",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_008.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_008",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_009.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_009",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_010.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_010",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_011.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_011",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_012.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_012",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_013.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_013",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_014.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_014",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_015.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_015",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_016.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_016",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_017.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_017",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_018.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_018",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_019.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_019",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_020.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_020",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_021.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_021",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_022.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_022",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_023.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_023",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_024.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_024",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_025.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_025",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_026.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_026",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_027.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_027",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_028.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_028",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_029.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_029",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_030.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_030",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\midjourney\\mj_031.jpg",
+    "category": "ia/midjourney",
+    "name": "mj_031",
+    "label": 1,
+    "description": "Estilo Midjourney: simetría, hipernítido, oversaturado"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_000.jpg",
+    "category": "ia/flux",
+    "name": "flux_000",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_001.jpg",
+    "category": "ia/flux",
+    "name": "flux_001",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_002.jpg",
+    "category": "ia/flux",
+    "name": "flux_002",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_003.jpg",
+    "category": "ia/flux",
+    "name": "flux_003",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_004.jpg",
+    "category": "ia/flux",
+    "name": "flux_004",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_005.jpg",
+    "category": "ia/flux",
+    "name": "flux_005",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_006.jpg",
+    "category": "ia/flux",
+    "name": "flux_006",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_007.jpg",
+    "category": "ia/flux",
+    "name": "flux_007",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_008.jpg",
+    "category": "ia/flux",
+    "name": "flux_008",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_009.jpg",
+    "category": "ia/flux",
+    "name": "flux_009",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_010.jpg",
+    "category": "ia/flux",
+    "name": "flux_010",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_011.jpg",
+    "category": "ia/flux",
+    "name": "flux_011",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_012.jpg",
+    "category": "ia/flux",
+    "name": "flux_012",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_013.jpg",
+    "category": "ia/flux",
+    "name": "flux_013",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_014.jpg",
+    "category": "ia/flux",
+    "name": "flux_014",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_015.jpg",
+    "category": "ia/flux",
+    "name": "flux_015",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_016.jpg",
+    "category": "ia/flux",
+    "name": "flux_016",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_017.jpg",
+    "category": "ia/flux",
+    "name": "flux_017",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_018.jpg",
+    "category": "ia/flux",
+    "name": "flux_018",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_019.jpg",
+    "category": "ia/flux",
+    "name": "flux_019",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_020.jpg",
+    "category": "ia/flux",
+    "name": "flux_020",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_021.jpg",
+    "category": "ia/flux",
+    "name": "flux_021",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_022.jpg",
+    "category": "ia/flux",
+    "name": "flux_022",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_023.jpg",
+    "category": "ia/flux",
+    "name": "flux_023",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_024.jpg",
+    "category": "ia/flux",
+    "name": "flux_024",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_025.jpg",
+    "category": "ia/flux",
+    "name": "flux_025",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_026.jpg",
+    "category": "ia/flux",
+    "name": "flux_026",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_027.jpg",
+    "category": "ia/flux",
+    "name": "flux_027",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_028.jpg",
+    "category": "ia/flux",
+    "name": "flux_028",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_029.jpg",
+    "category": "ia/flux",
+    "name": "flux_029",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_030.jpg",
+    "category": "ia/flux",
+    "name": "flux_030",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\flux\\flux_031.jpg",
+    "category": "ia/flux",
+    "name": "flux_031",
+    "label": 1,
+    "description": "Estilo FLUX: paleta imposible, física irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_000.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_000",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_001.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_001",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_002.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_002",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_003.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_003",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_004.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_004",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_005.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_005",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_006.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_006",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_007.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_007",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_008.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_008",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_009.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_009",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_010.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_010",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_011.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_011",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_012.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_012",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_013.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_013",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_014.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_014",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_015.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_015",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_016.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_016",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_017.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_017",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_018.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_018",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_019.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_019",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_020.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_020",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_021.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_021",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_022.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_022",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_023.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_023",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_024.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_024",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_025.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_025",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_026.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_026",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_027.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_027",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_028.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_028",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_029.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_029",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_030.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_030",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\gpt_image\\gpt_031.jpg",
+    "category": "ia/gpt_image",
+    "name": "gpt_031",
+    "label": 1,
+    "description": "Estilo GPT Image/DALL-E: iluminación perfectamente uniforme, sin texturas"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_000.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_000",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_001.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_001",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_002.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_002",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_003.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_003",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_004.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_004",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_005.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_005",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_006.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_006",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_007.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_007",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_008.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_008",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_009.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_009",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_010.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_010",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_011.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_011",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_012.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_012",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_013.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_013",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_014.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_014",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_015.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_015",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_016.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_016",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_017.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_017",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_018.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_018",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_019.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_019",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_020.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_020",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_021.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_021",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_022.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_022",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_023.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_023",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_024.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_024",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_025.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_025",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_026.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_026",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_027.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_027",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_028.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_028",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_029.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_029",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_030.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_030",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\sdxl\\sdxl_031.jpg",
+    "category": "ia/sdxl",
+    "name": "sdxl_031",
+    "label": 1,
+    "description": "Estilo SDXL: piel textureless, iluminación plana uniforme"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_000.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_000",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_001.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_001",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_002.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_002",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_003.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_003",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_004.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_004",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_005.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_005",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_006.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_006",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_007.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_007",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_008.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_008",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_009.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_009",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_010.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_010",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_011.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_011",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_012.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_012",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_013.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_013",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_014.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_014",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_015.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_015",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_016.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_016",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_017.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_017",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_018.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_018",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_019.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_019",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_020.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_020",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_021.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_021",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_022.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_022",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_023.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_023",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_024.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_024",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_025.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_025",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_026.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_026",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_027.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_027",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_028.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_028",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_029.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_029",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_030.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_030",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\ideogram\\ideogram_031.jpg",
+    "category": "ia/ideogram",
+    "name": "ideogram_031",
+    "label": 1,
+    "description": "Estilo Ideogram: sujeto brillante, fondo oscuro, colores imposibles"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_000.jpg",
+    "category": "ia/anime",
+    "name": "anime_000",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_001.jpg",
+    "category": "ia/anime",
+    "name": "anime_001",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_002.jpg",
+    "category": "ia/anime",
+    "name": "anime_002",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_003.jpg",
+    "category": "ia/anime",
+    "name": "anime_003",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_004.jpg",
+    "category": "ia/anime",
+    "name": "anime_004",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_005.jpg",
+    "category": "ia/anime",
+    "name": "anime_005",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_006.jpg",
+    "category": "ia/anime",
+    "name": "anime_006",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_007.jpg",
+    "category": "ia/anime",
+    "name": "anime_007",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_008.jpg",
+    "category": "ia/anime",
+    "name": "anime_008",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_009.jpg",
+    "category": "ia/anime",
+    "name": "anime_009",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_010.jpg",
+    "category": "ia/anime",
+    "name": "anime_010",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_011.jpg",
+    "category": "ia/anime",
+    "name": "anime_011",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_012.jpg",
+    "category": "ia/anime",
+    "name": "anime_012",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_013.jpg",
+    "category": "ia/anime",
+    "name": "anime_013",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_014.jpg",
+    "category": "ia/anime",
+    "name": "anime_014",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_015.jpg",
+    "category": "ia/anime",
+    "name": "anime_015",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_016.jpg",
+    "category": "ia/anime",
+    "name": "anime_016",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_017.jpg",
+    "category": "ia/anime",
+    "name": "anime_017",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_018.jpg",
+    "category": "ia/anime",
+    "name": "anime_018",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_019.jpg",
+    "category": "ia/anime",
+    "name": "anime_019",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_020.jpg",
+    "category": "ia/anime",
+    "name": "anime_020",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_021.jpg",
+    "category": "ia/anime",
+    "name": "anime_021",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_022.jpg",
+    "category": "ia/anime",
+    "name": "anime_022",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_023.jpg",
+    "category": "ia/anime",
+    "name": "anime_023",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_024.jpg",
+    "category": "ia/anime",
+    "name": "anime_024",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_025.jpg",
+    "category": "ia/anime",
+    "name": "anime_025",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_026.jpg",
+    "category": "ia/anime",
+    "name": "anime_026",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_027.jpg",
+    "category": "ia/anime",
+    "name": "anime_027",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_028.jpg",
+    "category": "ia/anime",
+    "name": "anime_028",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_029.jpg",
+    "category": "ia/anime",
+    "name": "anime_029",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_030.jpg",
+    "category": "ia/anime",
+    "name": "anime_030",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\anime\\anime_031.jpg",
+    "category": "ia/anime",
+    "name": "anime_031",
+    "label": 1,
+    "description": "Anime IA: ojos imposibles, proporciones anime, shading plano"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_000.jpg",
+    "category": "ia/arte",
+    "name": "arte_000",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_001.jpg",
+    "category": "ia/arte",
+    "name": "arte_001",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_002.jpg",
+    "category": "ia/arte",
+    "name": "arte_002",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_003.jpg",
+    "category": "ia/arte",
+    "name": "arte_003",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_004.jpg",
+    "category": "ia/arte",
+    "name": "arte_004",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_005.jpg",
+    "category": "ia/arte",
+    "name": "arte_005",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_006.jpg",
+    "category": "ia/arte",
+    "name": "arte_006",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_007.jpg",
+    "category": "ia/arte",
+    "name": "arte_007",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_008.jpg",
+    "category": "ia/arte",
+    "name": "arte_008",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_009.jpg",
+    "category": "ia/arte",
+    "name": "arte_009",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_010.jpg",
+    "category": "ia/arte",
+    "name": "arte_010",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_011.jpg",
+    "category": "ia/arte",
+    "name": "arte_011",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_012.jpg",
+    "category": "ia/arte",
+    "name": "arte_012",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_013.jpg",
+    "category": "ia/arte",
+    "name": "arte_013",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_014.jpg",
+    "category": "ia/arte",
+    "name": "arte_014",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_015.jpg",
+    "category": "ia/arte",
+    "name": "arte_015",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_016.jpg",
+    "category": "ia/arte",
+    "name": "arte_016",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_017.jpg",
+    "category": "ia/arte",
+    "name": "arte_017",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_018.jpg",
+    "category": "ia/arte",
+    "name": "arte_018",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_019.jpg",
+    "category": "ia/arte",
+    "name": "arte_019",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_020.jpg",
+    "category": "ia/arte",
+    "name": "arte_020",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_021.jpg",
+    "category": "ia/arte",
+    "name": "arte_021",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_022.jpg",
+    "category": "ia/arte",
+    "name": "arte_022",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_023.jpg",
+    "category": "ia/arte",
+    "name": "arte_023",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_024.jpg",
+    "category": "ia/arte",
+    "name": "arte_024",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_025.jpg",
+    "category": "ia/arte",
+    "name": "arte_025",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_026.jpg",
+    "category": "ia/arte",
+    "name": "arte_026",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_027.jpg",
+    "category": "ia/arte",
+    "name": "arte_027",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_028.jpg",
+    "category": "ia/arte",
+    "name": "arte_028",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_029.jpg",
+    "category": "ia/arte",
+    "name": "arte_029",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_030.jpg",
+    "category": "ia/arte",
+    "name": "arte_030",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\arte\\arte_031.jpg",
+    "category": "ia/arte",
+    "name": "arte_031",
+    "label": 1,
+    "description": "Arte IA: gradientes imposibles, efectos espectrales, colores no naturales"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_000.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_000",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_001.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_001",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_002.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_002",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_003.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_003",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_004.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_004",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_005.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_005",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_006.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_006",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_007.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_007",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_008.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_008",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_009.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_009",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_010.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_010",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_011.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_011",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_012.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_012",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_013.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_013",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_014.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_014",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_015.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_015",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_016.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_016",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_017.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_017",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_018.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_018",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_019.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_019",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_020.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_020",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_021.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_021",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_022.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_022",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_023.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_023",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_024.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_024",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_025.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_025",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_026.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_026",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_027.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_027",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_028.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_028",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_029.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_029",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_030.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_030",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  },
+  {
+    "path": "tests\\benchmark_massive\\ia\\paisajes_ia\\paisaje_ia_031.jpg",
+    "category": "ia/paisajes_ia",
+    "name": "paisaje_ia_031",
+    "label": 1,
+    "description": "Paisaje IA: colores imposibles, geografía irreal, saturación extrema"
+  }
+]

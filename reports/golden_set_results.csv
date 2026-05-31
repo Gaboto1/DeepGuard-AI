@@ -1,0 +1,5 @@
+path,category,name,description,expected_label,expected_verdict,score_a,score_b,score_c,score_ensemble,pred_label,verdict,inference_time_s,error_type
+tests\golden_set\real\landscape_mountain.jpg,real,landscape_mountain,Natural mountain landscape with atmospheric gradient and noise,0,REAL,0.6126,0.0003,0.5647,0.3251,0,LIKELY REAL,0.65,correct
+tests\golden_set\real\portrait_natural_asymmetry.jpg,real,portrait_natural_asymmetry,Portrait with intentional asymmetry and natural skin noise,0,REAL,0.5682,0.0,0.0,0.1705,0,REAL,0.088,correct
+tests\golden_set\real\urban_street_jpeg_artifacts.jpg,real,urban_street_jpeg_artifacts,Urban scene with JPEG compression artifacts (news photo style),0,REAL,0.6466,0.0013,0.0,0.1946,0,REAL,0.094,correct
+tests\golden_set\real\bw_portrait_newspaper.jpg,real,bw_portrait_newspaper,"Black & white portrait, newspaper/historical style with grain",0,REAL,0.6025,0.0,1.0,0.4307,0,UNCERTAIN,0.094,correct

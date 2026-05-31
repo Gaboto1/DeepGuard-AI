@@ -1,0 +1,28 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v2",
+    "task_id": "c017ca2d-32dd-4e44-b286-bc66e060bae4",
+    "file_sha256": "7daaf3ba5451e776fa8edb3e5aa7180932335d969d790657dad090fafa9ab6b9",
+    "filename": "Lionel-Messi-Argentina-Netherlands-World-Cup-Qatar-2022.webp",
+    "file_type": "image",
+    "final_score": 0.24646902,
+    "evidence_level": "Low Evidence",
+    "semantic_score": 50,
+    "timestamp_utc": "2026-05-30T19:27:30.755914+00:00",
+    "timestamp_unix": 1780169250.756,
+    "custody_token": "2b4594f284ca4e02941f07c997a62d71c537d04797ed37953b8a08caf93c7af2",
+    "canonical_string": "DG-CUSTODY-v2:c017ca2d-32dd-4e44-b286-bc66e060bae4:7daaf3ba5451e776fa8edb3e5aa7180932335d969d790657dad090fafa9ab6b9:0.24646902:1780169250.756:sem=50",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v2:c017ca2d-32dd-4e44-b286-bc66e060bae4:7daaf3ba5451e776fa8edb3e5aa7180932335d969d790657dad090fafa9ab6b9:0.24646902:1780169250.756:sem=50'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 24.65,
+    "evidence_level": null,
+    "model_agreement": null,
+    "model_used": null,
+    "device_used": null,
+    "analysis_time_seconds": null,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}

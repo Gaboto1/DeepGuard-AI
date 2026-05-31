@@ -1,0 +1,28 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v2",
+    "task_id": "0e5eda85-19df-4195-919b-b7864b23bf87",
+    "file_sha256": "5a26e59f1faa3986441d2730b1ab193b2b5b8a4a5a495f1fba4fca13b4ec0c96",
+    "filename": "ias-generadoras-de-imagenes.jpg",
+    "file_type": "image",
+    "final_score": 0.98524884,
+    "evidence_level": "Strong Evidence",
+    "semantic_score": -1,
+    "timestamp_utc": "2026-05-31T02:44:37.705296+00:00",
+    "timestamp_unix": 1780195477.705,
+    "custody_token": "31a3e25759d41066c0618fdd548ed4728062436882d61366c0bc2e40758a4758",
+    "canonical_string": "DG-CUSTODY-v2:0e5eda85-19df-4195-919b-b7864b23bf87:5a26e59f1faa3986441d2730b1ab193b2b5b8a4a5a495f1fba4fca13b4ec0c96:0.98524884:1780195477.705:sem=-1",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v2:0e5eda85-19df-4195-919b-b7864b23bf87:5a26e59f1faa3986441d2730b1ab193b2b5b8a4a5a495f1fba4fca13b4ec0c96:0.98524884:1780195477.705:sem=-1'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 98.5,
+    "evidence_level": "Strong Evidence",
+    "model_agreement": "Medium Consensus",
+    "model_used": "prithivMLmods/Deep-Fake-Detector-v2-Model | Organika/sdxl-detector | CLIP ViT-L/14 + LR Probe (Advanced GenAI) | haywoodsloan/ai-image-detector-deploy | prithivMLmods/Deepfake-Detect-Siglip2",
+    "device_used": "NVIDIA GeForce RTX 4070 SUPER",
+    "analysis_time_seconds": 0.571,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}

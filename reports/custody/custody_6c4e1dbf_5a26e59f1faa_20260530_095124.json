@@ -1,0 +1,27 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v1",
+    "task_id": "6c4e1dbf-d5b6-4fdc-a271-56117db73bf0",
+    "file_sha256": "5a26e59f1faa3986441d2730b1ab193b2b5b8a4a5a495f1fba4fca13b4ec0c96",
+    "filename": "ias-generadoras-de-imagenes.jpg",
+    "file_type": "image",
+    "final_score": 0.98524884,
+    "evidence_level": "Strong Evidence",
+    "timestamp_utc": "2026-05-30T09:51:24.287607+00:00",
+    "timestamp_unix": 1780134684.288,
+    "custody_token": "3e1e1d6bf45390f80b82e73411bc868f3727971201fde8ea8cd5885992dad1ac",
+    "canonical_string": "DG-CUSTODY-v1:6c4e1dbf-d5b6-4fdc-a271-56117db73bf0:5a26e59f1faa3986441d2730b1ab193b2b5b8a4a5a495f1fba4fca13b4ec0c96:0.98524884:1780134684.288",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v1:6c4e1dbf-d5b6-4fdc-a271-56117db73bf0:5a26e59f1faa3986441d2730b1ab193b2b5b8a4a5a495f1fba4fca13b4ec0c96:0.98524884:1780134684.288'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 98.52,
+    "evidence_level": null,
+    "model_agreement": null,
+    "model_used": null,
+    "device_used": null,
+    "analysis_time_seconds": null,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}

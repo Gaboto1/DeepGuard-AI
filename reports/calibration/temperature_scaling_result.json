@@ -1,0 +1,90 @@
+{
+  "n_samples": 20,
+  "before_scaling": {
+    "ece": 0.1462,
+    "n_bins": 5,
+    "bins": [
+      {
+        "bin_range": "[0.0, 0.2)",
+        "confidence": 0.1809,
+        "accuracy": 0.0,
+        "gap": 0.1809,
+        "n_samples": 3,
+        "calibration": "OVER"
+      },
+      {
+        "bin_range": "[0.2, 0.4)",
+        "confidence": 0.3024,
+        "accuracy": 0.2,
+        "gap": 0.1024,
+        "n_samples": 5,
+        "calibration": "OVER"
+      },
+      {
+        "bin_range": "[0.4, 0.6)",
+        "confidence": 0.4458,
+        "accuracy": 0.6667,
+        "gap": -0.2209,
+        "n_samples": 3,
+        "calibration": "UNDER"
+      },
+      {
+        "bin_range": "[0.6, 0.8)",
+        "confidence": 0.6438,
+        "accuracy": 0.7778,
+        "gap": -0.134,
+        "n_samples": 9,
+        "calibration": "UNDER"
+      }
+    ]
+  },
+  "optimal_temperature": 0.6011,
+  "after_scaling": {
+    "ece": 0.1669,
+    "n_bins": 5,
+    "bins": [
+      {
+        "bin_range": "[0.0, 0.2)",
+        "confidence": 0.1058,
+        "accuracy": 0.2,
+        "gap": -0.0942,
+        "n_samples": 5,
+        "calibration": "OK"
+      },
+      {
+        "bin_range": "[0.2, 0.4)",
+        "confidence": 0.2936,
+        "accuracy": 0.2,
+        "gap": 0.0936,
+        "n_samples": 5,
+        "calibration": "OK"
+      },
+      {
+        "bin_range": "[0.4, 0.6)",
+        "confidence": 0.468,
+        "accuracy": 1.0,
+        "gap": -0.532,
+        "n_samples": 1,
+        "calibration": "UNDER"
+      },
+      {
+        "bin_range": "[0.6, 0.8)",
+        "confidence": 0.689,
+        "accuracy": 0.8571,
+        "gap": -0.1682,
+        "n_samples": 7,
+        "calibration": "UNDER"
+      },
+      {
+        "bin_range": "[0.8, 1.0)",
+        "confidence": 0.8451,
+        "accuracy": 0.5,
+        "gap": 0.3451,
+        "n_samples": 2,
+        "calibration": "OVER"
+      }
+    ]
+  },
+  "calibration_status": "POORLY CALIBRATED \u2014 temperature scaling recommended",
+  "recommendation": "Apply temperature T=0.60 to all model outputs before thresholding."
+}

@@ -1,0 +1,27 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v1",
+    "task_id": "39980dde-7173-45b5-bfef-448f8f525f39",
+    "file_sha256": "50c2d510d50561f388d64349aa619245317b18b184f163bba84ee178e6f86893",
+    "filename": "portada-5.png",
+    "file_type": "image",
+    "final_score": 0.10114314,
+    "evidence_level": "Very Low Evidence",
+    "timestamp_utc": "2026-05-30T09:53:44.666474+00:00",
+    "timestamp_unix": 1780134824.666,
+    "custody_token": "7c326d2024d32e992cecc2b58faf111731e1b337a14eefaa0e67393e779dc910",
+    "canonical_string": "DG-CUSTODY-v1:39980dde-7173-45b5-bfef-448f8f525f39:50c2d510d50561f388d64349aa619245317b18b184f163bba84ee178e6f86893:0.10114314:1780134824.666",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v1:39980dde-7173-45b5-bfef-448f8f525f39:50c2d510d50561f388d64349aa619245317b18b184f163bba84ee178e6f86893:0.10114314:1780134824.666'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 10.11,
+    "evidence_level": null,
+    "model_agreement": null,
+    "model_used": null,
+    "device_used": null,
+    "analysis_time_seconds": null,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}

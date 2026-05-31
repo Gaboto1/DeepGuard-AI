@@ -1,0 +1,28 @@
+{
+  "chain_of_custody": {
+    "seal_version": "DG-CUSTODY-v2",
+    "task_id": "10b61253-4b6f-40cb-ac3a-f9ec8089bab2",
+    "file_sha256": "7daaf3ba5451e776fa8edb3e5aa7180932335d969d790657dad090fafa9ab6b9",
+    "filename": "Lionel-Messi-Argentina-Netherlands-World-Cup-Qatar-2022.webp",
+    "file_type": "image",
+    "final_score": 0.13781288,
+    "evidence_level": "Very Low Evidence",
+    "semantic_score": -1,
+    "timestamp_utc": "2026-05-30T20:08:39.726569+00:00",
+    "timestamp_unix": 1780171719.727,
+    "custody_token": "733bf7bd8a911a494ed5391a74521dc02ef87a125dc69e39306ea6631e7c4367",
+    "canonical_string": "DG-CUSTODY-v2:10b61253-4b6f-40cb-ac3a-f9ec8089bab2:7daaf3ba5451e776fa8edb3e5aa7180932335d969d790657dad090fafa9ab6b9:0.13781288:1780171719.727:sem=-1",
+    "analyst_note": "Análisis automatizado DeepGuard AI",
+    "verification_command": "python -c \"import hmac, hashlib; print(hmac.new(SIGNING_KEY, 'DG-CUSTODY-v2:10b61253-4b6f-40cb-ac3a-f9ec8089bab2:7daaf3ba5451e776fa8edb3e5aa7180932335d969d790657dad090fafa9ab6b9:0.13781288:1780171719.727:sem=-1'.encode(), hashlib.sha256).hexdigest())\""
+  },
+  "analysis_summary": {
+    "manipulation_probability": 13.8,
+    "evidence_level": "Very Low Evidence",
+    "model_agreement": "Medium Consensus",
+    "model_used": "prithivMLmods/Deep-Fake-Detector-v2-Model | Organika/sdxl-detector | CLIP ViT-L/14 + LR Probe (Advanced GenAI) | haywoodsloan/ai-image-detector-deploy | prithivMLmods/Deepfake-Detect-Siglip2",
+    "device_used": "NVIDIA GeForce RTX 4070 SUPER",
+    "analysis_time_seconds": 22.931,
+    "forensic_correction_type": null
+  },
+  "integrity_verified": true
+}
