@@ -15,28 +15,33 @@ export default function Navbar() {
 
     const check = async () => {
       try {
+        // mode:'no-cors' evita el error CORS en Render/Netlify.
+        // El browser envía la petición; si el servidor responde (con cualquier
+        // código, incluso sin cabecera CORS), la promesa resuelve con una
+        // respuesta opaca (res.type === 'opaque'). Solo lanza si el servidor
+        // está COMPLETAMENTE caído (timeout, DNS, conexión rechazada).
         const res = await fetch(`${BASE_URL}/api/v1/health`, {
           method: 'GET',
-          // Render free tier puede tardar hasta 30s en despertar tras inactividad
+          mode:   'no-cors',
           signal: AbortSignal.timeout(35_000),
           cache:  'no-store',
         });
-        if (!cancelled) setStatus(res.ok ? 'online' : 'offline');
-      } catch (err: unknown) {
-        if (cancelled) return;
-        // CORS bloqueado = API existe pero el origen no está autorizado aún.
-        // Mostramos "verificando" en lugar de "fuera de línea" para no confundir.
-        const msg = err instanceof TypeError ? err.message : String(err);
-        const isCors = msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS');
-        setStatus(isCors ? 'checking' : 'offline');
+        // opaque = CORS bloqueó lectura pero el servidor SÍ respondió
+        // ok     = CORS OK, respuesta normal
+        if (!cancelled) {
+          setStatus(res.type === 'opaque' || res.ok ? 'online' : 'offline');
+        }
+      } catch {
+        // Solo llega aquí si el servidor está caído de verdad
+        if (!cancelled) setStatus('offline');
       }
     };
 
-    // Primera comprobación con pequeño retardo (Render puede estar despertando)
-    const firstCheck = setTimeout(check, 1500);
-
-    // Re-verificar cada 45 segundos
+    // Primera verificación con retardo mínimo
+    const firstCheck = setTimeout(check, 800);
+    // Re-verificar cada 45s
     const interval = setInterval(check, 45_000);
+
     return () => {
       cancelled = true;
       clearTimeout(firstCheck);
@@ -44,20 +49,25 @@ export default function Navbar() {
     };
   }, []);
 
-  const badge = {
+  const badge: Record<ApiStatus, { label: string; dot: string; style: React.CSSProperties }> = {
     checking: {
-      label: 'CONECTANDO',
-      style: { color: '#1E63D4', borderColor: 'rgba(30,99,212,0.35)', background: 'rgba(30,99,212,0.07)' },
+      label: 'VERIFICANDO',
+      dot:   'animate-pulse',
+      style: { color: '#3d4f62', borderColor: '#1e2d42', background: 'transparent' },
     },
     online: {
       label: 'EN LÍNEA',
+      dot:   '',
       style: { color: '#1d7a45', borderColor: 'rgba(29,122,69,0.35)', background: 'rgba(29,122,69,0.07)' },
     },
     offline: {
       label: 'FUERA DE LÍNEA',
+      dot:   '',
       style: { color: '#c42b2b', borderColor: 'rgba(196,43,43,0.35)', background: 'rgba(196,43,43,0.07)' },
     },
-  }[status];
+  };
+
+  const b = badge[status];
 
   return (
     <header className="border-b border-border-subtle bg-bg-secondary sticky top-0 z-50">
@@ -90,17 +100,14 @@ export default function Navbar() {
           </a>
           <div className="w-px h-4 bg-border-subtle mx-1" />
 
-          {/* Badge de estado real de la API */}
           <span
-            className="px-2 py-1 border text-2xs font-mono font-semibold transition-colors"
-            style={badge.style}
+            className="px-2 py-1 border text-2xs font-mono font-semibold"
+            style={b.style}
             title={`API: ${BASE_URL}`}
           >
-            {status === 'checking' ? (
-              <span className="inline-flex items-center gap-1">
-                <span className="animate-pulse">·</span> {badge.label}
-              </span>
-            ) : badge.label}
+            {status === 'checking'
+              ? <span className="inline-flex items-center gap-1"><span className={b.dot}>·</span> {b.label}</span>
+              : b.label}
           </span>
         </nav>
       </div>
