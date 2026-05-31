@@ -27,7 +27,8 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS_CSV: str = (
         "http://localhost:3000,"
         "http://localhost:3001,"
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:3000,"
+        "https://deepguard-ai-inacap.netlify.app"
     )
 
     # ── Archivos ──────────────────────────────────────────────────────────────

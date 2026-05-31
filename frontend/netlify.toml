@@ -3,7 +3,8 @@
   publish   = "out"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION          = "20"
+  NEXT_PUBLIC_API_URL   = "https://deepguard-ai-api.onrender.com"
 
 # SPA fallback — todas las rutas sirven index.html (Next.js App Router)
 [[redirects]]
