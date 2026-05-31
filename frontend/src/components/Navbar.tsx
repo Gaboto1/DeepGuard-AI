@@ -16,31 +16,38 @@ export default function Navbar() {
     const check = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/v1/health`, {
-          method:  'GET',
-          signal:  AbortSignal.timeout(5000),
-          cache:   'no-store',
+          method: 'GET',
+          // Render free tier puede tardar hasta 30s en despertar tras inactividad
+          signal: AbortSignal.timeout(35_000),
+          cache:  'no-store',
         });
         if (!cancelled) setStatus(res.ok ? 'online' : 'offline');
-      } catch {
-        if (!cancelled) setStatus('offline');
+      } catch (err: unknown) {
+        if (cancelled) return;
+        // CORS bloqueado = API existe pero el origen no está autorizado aún.
+        // Mostramos "verificando" en lugar de "fuera de línea" para no confundir.
+        const msg = err instanceof TypeError ? err.message : String(err);
+        const isCors = msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS');
+        setStatus(isCors ? 'checking' : 'offline');
       }
     };
 
-    // Comprobación inicial
-    check();
+    // Primera comprobación con pequeño retardo (Render puede estar despertando)
+    const firstCheck = setTimeout(check, 1500);
 
-    // Re-verificar cada 30 segundos
-    const interval = setInterval(check, 30_000);
+    // Re-verificar cada 45 segundos
+    const interval = setInterval(check, 45_000);
     return () => {
       cancelled = true;
+      clearTimeout(firstCheck);
       clearInterval(interval);
     };
   }, []);
 
   const badge = {
     checking: {
-      label: 'VERIFICANDO',
-      style: { color: '#3d4f62', borderColor: '#1e2d42', background: 'transparent' },
+      label: 'CONECTANDO',
+      style: { color: '#1E63D4', borderColor: 'rgba(30,99,212,0.35)', background: 'rgba(30,99,212,0.07)' },
     },
     online: {
       label: 'EN LÍNEA',
