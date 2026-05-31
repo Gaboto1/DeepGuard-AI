@@ -103,13 +103,28 @@ def analyze_image_task(
     filename: str,
     *,
     include_heatmap: bool = True,
+    file_content_b64: str = "",
 ) -> dict:
-    """Análisis completo de imagen en worker GPU con cadena de custodia."""
+    """Análisis completo de imagen en worker GPU con cadena de custodia.
+
+    file_content_b64: contenido del archivo en base64. Obligatorio en arquitectura
+    híbrida (API en Render + worker GPU local) ya que no comparten sistema de archivos.
+    Si se provee, el archivo se escribe en el UPLOAD_DIR local antes de procesar.
+    """
     self.update_state(state="PROCESSING", meta={"progress": 0.05, "stage": "Iniciando"})
     t0 = time.time()
 
     try:
         path = Path(file_path)
+
+        # Arquitectura híbrida: la API (Render) envía el contenido del archivo
+        # en base64 porque su disco no es compartido con el worker GPU local.
+        if file_content_b64:
+            import base64 as _b64
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(_b64.b64decode(file_content_b64))
+            logger.info(f"Archivo recibido via payload ({len(file_content_b64)//1024} KB b64) → {path.name}")
+
         if not path.exists():
             raise FileNotFoundError(f"Archivo no encontrado: {file_path}")
 
@@ -232,13 +247,21 @@ def analyze_image_task(
     soft_time_limit=600,
     time_limit=900,
 )
-def analyze_video_task(self, task_id: str, file_path: str, filename: str) -> dict:
+def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, file_content_b64: str = "") -> dict:
     """Análisis completo de video: frame-by-frame + temporal Farneback."""
     self.update_state(state="PROCESSING", meta={"progress": 0.05, "stage": "Iniciando análisis"})
     t0 = time.time()
 
     try:
         path = Path(file_path)
+
+        # Arquitectura híbrida: reconstruir archivo desde payload base64
+        if file_content_b64:
+            import base64 as _b64
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(_b64.b64decode(file_content_b64))
+            logger.info(f"Video recibido via payload ({len(file_content_b64)//1024} KB b64) → {path.name}")
+
         if not path.exists():
             raise FileNotFoundError(f"Video no encontrado: {file_path}")
 

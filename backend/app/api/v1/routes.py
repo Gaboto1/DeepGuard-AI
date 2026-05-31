@@ -224,11 +224,17 @@ async def analyze_async(
     if file_type == "video":
         validate_video_size_async(len(content))
 
-    # Guardar en disco (Celery worker lo procesará)
+    # Guardar en disco local (útil en modo local; en Render el disco es efímero)
     task_id  = str(uuid.uuid4())
     safe_ext = Path(file.filename).suffix.lower()
     dest     = settings.UPLOAD_DIR / f"{task_id}{safe_ext}"
     dest.write_bytes(content)
+
+    # Codificar el contenido del archivo en base64 para enviarlo al worker GPU.
+    # En arquitectura híbrida (API en Render + worker local) el worker no tiene
+    # acceso al disco de Render — el archivo viaja directamente en el payload Celery.
+    import base64 as _b64
+    file_content_b64 = _b64.b64encode(content).decode("ascii")
 
     logger.info(f"v1: Dispatching {file_type} task {task_id[:8]}... ({len(content)/1e6:.1f}MB)")
 
@@ -263,14 +269,18 @@ async def analyze_async(
         # que puede tener una conexión previa activa.
         try:
             from app.tasks.analysis_tasks import analyze_image_task, analyze_video_task
+            # file_content_b64 viaja en el payload para que el worker GPU local
+            # reconstruya el archivo en su propio disco (arquitectura híbrida).
             if file_type == "image":
                 analyze_image_task.apply_async(
                     args=[task_id, str(dest), file.filename],
+                    kwargs={"file_content_b64": file_content_b64},
                     task_id=task_id,
                 )
             else:
                 analyze_video_task.apply_async(
                     args=[task_id, str(dest), file.filename],
+                    kwargs={"file_content_b64": file_content_b64},
                     task_id=task_id,
                 )
             dispatch_mode = "celery"
