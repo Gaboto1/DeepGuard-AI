@@ -471,26 +471,37 @@ async def health_v1() -> JSONResponse:
     except Exception as e:
         redis_info = f"No disponible: {type(e).__name__}"
 
-    # Estado del worker (solo si Redis está up)
-    workers_info = "N/A (requiere Redis)"
+    # Estado del worker — usa ping() en lugar de active() para detectar
+    # workers listos pero sin tareas en curso (IDLE = listo para procesar).
+    # active() solo devuelve workers con tareas en ejecución → badge incorrecto.
+    workers_info   = "N/A (requiere Redis)"
+    workers_online = False
     if redis_ok:
         try:
             from app.celery_app import celery_app
-            inspect = celery_app.control.inspect(timeout=2)
-            active  = inspect.active()
-            workers_info = f"{len(active)} worker(s) activos" if active else "Sin workers activos"
-        except Exception:
-            workers_info = "Celery no disponible"
+            inspect     = celery_app.control.inspect(timeout=3)
+            ping_result = inspect.ping()   # {worker_name: {'ok': 'pong'}} o None/{}
+            if ping_result:
+                n = len(ping_result)
+                workers_info   = f"{n} worker(s) GPU conectado(s) y listo(s)"
+                workers_online = True
+            else:
+                workers_info   = "Sin workers GPU activos"
+                workers_online = False
+        except Exception as e:
+            workers_info   = f"Celery no disponible: {type(e).__name__}"
+            workers_online = False
 
     return JSONResponse(content={
-        "version":        "enterprise-v1",
-        "status":         "ok",
-        "mode":           "api-only" if _cfg.API_ONLY else "full-gpu",
-        "cuda":           cuda_ok,
-        "gpu":            gpu_name,
-        "redis_status":   redis_ok,
-        "redis_info":     redis_info,
-        "workers_status": workers_info,
+        "version":         "enterprise-v1",
+        "status":          "ok",
+        "mode":            "api-only" if _cfg.API_ONLY else "full-gpu",
+        "cuda":            cuda_ok,
+        "gpu":             gpu_name,
+        "redis_status":    redis_ok,
+        "redis_info":      redis_info,
+        "workers_status":  workers_info,
+        "workers_online":  workers_online,   # bool — usado por el badge del Navbar
         "endpoints": {
             "analyze":  "POST /api/v1/analyze",
             "status":   "GET  /api/v1/tasks/{task_id}",

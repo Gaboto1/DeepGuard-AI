@@ -8,43 +8,58 @@ type ApiStatus = 'checking' | 'online' | 'offline';
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function Navbar() {
-  const [status, setStatus] = useState<ApiStatus>('checking');
+  const [status, setStatus]   = useState<ApiStatus>('checking');
+  const [tooltip, setTooltip] = useState('Verificando worker GPU...');
 
   useEffect(() => {
     let cancelled = false;
 
     const check = async () => {
       try {
-        // mode:'no-cors' evita el error CORS en Render/Netlify.
-        // El browser envía la petición; si el servidor responde (con cualquier
-        // código, incluso sin cabecera CORS), la promesa resuelve con una
-        // respuesta opaca (res.type === 'opaque'). Solo lanza si el servidor
-        // está COMPLETAMENTE caído (timeout, DNS, conexión rechazada).
+        // Fetch normal (sin no-cors) para poder leer el JSON de respuesta.
+        // CORS está configurado en Render para aceptar el dominio de Netlify.
         const res = await fetch(`${BASE_URL}/api/v1/health`, {
           method: 'GET',
-          mode:   'no-cors',
-          signal: AbortSignal.timeout(35_000),
+          signal: AbortSignal.timeout(40_000),   // 40s — ping() al worker tarda ~3s
           cache:  'no-store',
         });
-        // opaque = CORS bloqueó lectura pero el servidor SÍ respondió
-        // ok     = CORS OK, respuesta normal
-        if (!cancelled) {
-          setStatus(res.type === 'opaque' || res.ok ? 'online' : 'offline');
+
+        if (!cancelled && res.ok) {
+          const data: Record<string, unknown> = await res.json().catch(() => ({}));
+
+          // workers_online: true sólo si hay ≥1 worker GPU conectado y listo
+          const workerOnline = data.workers_online === true;
+          const workersInfo  = String(data.workers_status ?? 'desconocido');
+
+          if (workerOnline) {
+            setStatus('online');
+            setTooltip(workersInfo);
+          } else {
+            // API activa pero sin worker GPU → no puede procesar imágenes
+            setStatus('offline');
+            setTooltip(`Worker GPU no disponible: ${workersInfo}`);
+          }
+        } else if (!cancelled) {
+          setStatus('offline');
+          setTooltip('API no responde');
         }
       } catch {
-        // Solo llega aquí si el servidor está caído de verdad
-        if (!cancelled) setStatus('offline');
+        // Error de red, CORS o timeout → marcamos como offline
+        if (!cancelled) {
+          setStatus('offline');
+          setTooltip('Sin conexión con el servidor');
+        }
       }
     };
 
-    // Primera verificación con retardo mínimo
-    const firstCheck = setTimeout(check, 800);
-    // Re-verificar cada 45s
-    const interval = setInterval(check, 45_000);
+    // Primera verificación con pequeño retardo inicial
+    const first = setTimeout(check, 1000);
+    // Re-verificar cada 30s (los ping() al worker tardan ~3s en Render)
+    const interval = setInterval(check, 30_000);
 
     return () => {
       cancelled = true;
-      clearTimeout(firstCheck);
+      clearTimeout(first);
       clearInterval(interval);
     };
   }, []);
@@ -100,10 +115,11 @@ export default function Navbar() {
           </a>
           <div className="w-px h-4 bg-border-subtle mx-1" />
 
+          {/* Badge — verde solo cuando hay worker GPU listo */}
           <span
-            className="px-2 py-1 border text-2xs font-mono font-semibold"
+            className="px-2 py-1 border text-2xs font-mono font-semibold cursor-default"
             style={b.style}
-            title={`API: ${BASE_URL}`}
+            title={tooltip}
           >
             {status === 'checking'
               ? <span className="inline-flex items-center gap-1"><span className={b.dot}>·</span> {b.label}</span>
