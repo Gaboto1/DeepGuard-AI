@@ -13,6 +13,9 @@ import json
 import types
 import tempfile
 import hashlib
+
+# Proveer clave de test antes de importar custody_service (CRÍTICO-01 fix)
+os.environ.setdefault("DEEPGUARD_SIGNING_KEY", "test-key-for-unit-tests-only-not-for-production-use")
 import inspect
 from pathlib import Path
 from unittest.mock import MagicMock, patch, AsyncMock

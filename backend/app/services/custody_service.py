@@ -25,21 +25,35 @@ import hashlib
 import hmac
 import json
 import os
-import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
 from loguru import logger
 
-# Clave de firma. En producción: variable de entorno con clave larga y aleatoria.
-# Rotación periódica recomendada para seguridad a largo plazo.
-_SIGNING_KEY = os.getenv(
-    "DEEPGUARD_SIGNING_KEY",
-    "deepguard-forensic-chain-of-custody-v1-change-in-production-2026",
-).encode()
+from app.config import settings
 
-CUSTODY_REPORTS_DIR = Path(__file__).parent.parent.parent.parent / "reports" / "custody"
+# ── Clave de firma HMAC ───────────────────────────────────────────────────────
+# OBLIGATORIA: si DEEPGUARD_SIGNING_KEY no está definida, el servicio falla
+# inmediatamente en lugar de usar una clave pública conocida (CRÍTICO-01).
+# Generar clave segura: python -c "import secrets; print(secrets.token_hex(32))"
+_raw_key = settings.DEEPGUARD_SIGNING_KEY or os.getenv("DEEPGUARD_SIGNING_KEY", "")
+if not _raw_key:
+    # En modo API_ONLY (Render) no se generan sellos, por lo que no es crítico.
+    # En modo worker (local con GPU) sí es obligatoria.
+    if not settings.API_ONLY:
+        raise RuntimeError(
+            "DEEPGUARD_SIGNING_KEY no está definida. "
+            "La cadena de custodia forense requiere una clave secreta. "
+            "Generar con: python -c \"import secrets; print(secrets.token_hex(32))\" "
+            "y definirla como variable de entorno DEEPGUARD_SIGNING_KEY."
+        )
+    # En API_ONLY se usa placeholder — los sellos no se generan en la nube
+    _raw_key = "api-only-placeholder-no-seals-generated-here"
+
+_SIGNING_KEY: bytes = _raw_key.encode()
+
+CUSTODY_REPORTS_DIR = settings.CUSTODY_DIR
 CUSTODY_REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -48,20 +62,15 @@ CUSTODY_REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 def compute_file_sha256(file_path: Path, chunk_size: int = 65536) -> str:
     """
     Calcula SHA-256 en chunks para no cargar archivos grandes en memoria.
-    Compatible con videos de cientos de MB.
+    Lanza OSError/IOError si el archivo no puede leerse (ALTO-03):
+    retornar un string de error silencioso comprometería la cadena de custodia.
+    El caller debe manejar la excepción explícitamente.
     """
     sha256 = hashlib.sha256()
-    try:
-        with open(file_path, "rb") as f:
-            while True:
-                chunk = f.read(chunk_size)
-                if not chunk:
-                    break
-                sha256.update(chunk)
-        return sha256.hexdigest()
-    except Exception as e:
-        logger.error(f"SHA-256 computation failed for {file_path}: {e}")
-        return "ERROR_HASH_UNAVAILABLE"
+    with open(file_path, "rb") as f:   # Propaga IOError/PermissionError al caller
+        while chunk := f.read(chunk_size):
+            sha256.update(chunk)
+    return sha256.hexdigest()
 
 
 # ─── Sello de cadena de custodia ─────────────────────────────────────────────

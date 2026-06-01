@@ -123,45 +123,76 @@ def validate_not_empty(file_size: int, filename: str) -> None:
 
 def validate_mime_type(file_path: Path, expected_type: str) -> None:
     """
-    Validación profunda mediante magic bytes (solo si python-magic está instalado).
-    Detecta archivos renombrados (ej. un .txt con extensión .jpg).
+    Validación profunda mediante magic bytes.
+    Detecta archivos renombrados (ej. un ejecutable .py con extensión .jpg).
+    Usa python-magic si está disponible; si no, aplica validación de magic bytes
+    manual para los formatos más comunes (no requiere dependencias extra).
     """
-    if not _MAGIC_AVAILABLE:
+    mime: str | None = None
+
+    if _MAGIC_AVAILABLE:
+        try:
+            mime = _magic.from_file(str(file_path), mime=True)
+        except Exception as e:
+            logger.warning(f"python-magic falló, usando fallback de magic bytes: {e}")
+
+    # Fallback sin python-magic: verificar magic bytes manuales
+    if mime is None:
+        try:
+            with open(file_path, "rb") as fh:
+                header = fh.read(12)
+            # JPEG: FF D8 FF
+            if header[:3] == b"\xff\xd8\xff":
+                mime = "image/jpeg"
+            # PNG: 89 50 4E 47
+            elif header[:4] == b"\x89PNG":
+                mime = "image/png"
+            # WEBP: RIFF????WEBP
+            elif header[:4] == b"RIFF" and header[8:12] == b"WEBP":
+                mime = "image/webp"
+            # MP4/MOV: ftyp box en posición 4
+            elif header[4:8] in (b"ftyp", b"moov", b"mdat"):
+                mime = "video/mp4"
+            # MKV: EBML header
+            elif header[:4] == b"\x1a\x45\xdf\xa3":
+                mime = "video/x-matroska"
+            # WEBM (también EBML)
+            elif header[:4] == b"\x1a\x45\xdf\xa3":
+                mime = "video/webm"
+        except Exception as e:
+            logger.warning(f"Validación MIME manual omitida: {e}")
+
+    if mime is None:
+        logger.debug(f"MIME no determinado para {file_path.name} — omitiendo validación")
         return
 
-    try:
-        mime = _magic.from_file(str(file_path), mime=True)
-        logger.debug(f"MIME detectado: {mime} para {file_path.name}")
+    logger.debug(f"MIME detectado: {mime} para {file_path.name}")
 
-        if expected_type == "image" and mime not in ALLOWED_IMAGE_MIMES:
-            raise HTTPException(
-                status_code=415,
-                detail={
-                    "error":   "contenido_no_coincide",
-                    "mensaje": (
-                        f"El contenido del archivo es '{mime}', "
-                        "pero se esperaba una imagen válida. "
-                        "El archivo podría estar corrupto o su extensión ser incorrecta."
-                    ),
-                    "mime_detectado": mime,
-                    "tipo_esperado":  "imagen",
-                },
-            )
-        if expected_type == "video" and mime not in ALLOWED_VIDEO_MIMES:
-            raise HTTPException(
-                status_code=415,
-                detail={
-                    "error":   "contenido_no_coincide",
-                    "mensaje": (
-                        f"El contenido del archivo es '{mime}', "
-                        "pero se esperaba un video válido. "
-                        "El archivo podría estar corrupto o su extensión ser incorrecta."
-                    ),
-                    "mime_detectado": mime,
-                    "tipo_esperado":  "video",
-                },
-            )
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.warning(f"Verificación MIME omitida: {e}")
+    if expected_type == "image" and mime not in ALLOWED_IMAGE_MIMES:
+        raise HTTPException(
+            status_code=415,
+            detail={
+                "error":   "contenido_no_coincide",
+                "mensaje": (
+                    f"El contenido del archivo es '{mime}', "
+                    "pero se esperaba una imagen válida. "
+                    "El archivo podría estar corrupto o su extensión ser incorrecta."
+                ),
+                "mime_detectado": mime,
+                "tipo_esperado":  "imagen",
+            },
+        )
+    if expected_type == "video" and mime not in ALLOWED_VIDEO_MIMES:
+        raise HTTPException(
+            status_code=415,
+            detail={
+                "error":   "contenido_no_coincide",
+                "mensaje": (
+                    f"El contenido del archivo es '{mime}', "
+                    "pero se esperaba un video válido. "
+                    "El archivo podría estar corrupto o su extensión ser incorrecta."
+                ),
+                "mime_detectado": mime,
+                "tipo_esperado":  "video",
+            },
+        )

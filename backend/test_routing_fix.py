@@ -13,6 +13,9 @@ import os
 import json
 import ast
 import re
+
+# Proveer clave de test antes de importar custody_service (CRÍTICO-01 fix)
+os.environ.setdefault("DEEPGUARD_SIGNING_KEY", "test-key-for-unit-tests-only-not-for-production-use")
 from pathlib import Path
 
 if sys.platform == "win32":

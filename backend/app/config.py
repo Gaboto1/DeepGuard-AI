@@ -36,6 +36,15 @@ class Settings(BaseSettings):
     UPLOAD_DIR:       Path = Path("uploads")
     MODELS_DIR:       Path = Path("models")
 
+    # ── Reportes (una sola fuente de verdad para todos los módulos) ───────────
+    RESULTS_DIR: Path = Path("reports") / "tasks"
+    CUSTODY_DIR: Path = Path("reports") / "custody"
+
+    # ── Clave de firma HMAC (OBLIGATORIA en producción) ───────────────────────
+    # Generar con: python -c "import secrets; print(secrets.token_hex(32))"
+    # Definir como variable de entorno DEEPGUARD_SIGNING_KEY en Render y worker.
+    DEEPGUARD_SIGNING_KEY: str = ""
+
     # ── Modelos ───────────────────────────────────────────────────────────────
     MODEL_NAME: str = "dima806/deepfake_vs_real_image_detection"
     DEVICE:     str = "cuda"
@@ -61,7 +70,9 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# Ensure upload directory exists (models dir only needed on workers)
+# Crear directorios necesarios al arrancar
 settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+settings.RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+settings.CUSTODY_DIR.mkdir(parents=True, exist_ok=True)
 if not settings.API_ONLY:
     settings.MODELS_DIR.mkdir(parents=True, exist_ok=True)

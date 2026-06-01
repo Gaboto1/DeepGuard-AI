@@ -10,12 +10,15 @@ Endpoints asíncronos de grado comercial:
 FastAPI permanece ultra-ligero: solo valida, despacha a Celery y responde.
 TODO el procesamiento GPU ocurre exclusivamente en los workers de Celery.
 """
+import asyncio
+import base64
 import json
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, UploadFile
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 from loguru import logger
 
@@ -24,6 +27,13 @@ from app.utils.file_validator import (
     get_file_type, validate_file_size,
     validate_not_empty, validate_video_size_async, validate_mime_type,
 )
+
+# Pool dedicado para operaciones CPU-bound (base64, SHA-256) que no deben
+# bloquear el event loop de FastAPI. max_workers=2 limita el paralelismo CPU.
+_cpu_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="dg-cpu")
+
+# Pool para el sync_fallback (GPU local). max_workers=1 garantiza exclusividad GPU.
+_fallback_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="dg-fallback")
 
 router = APIRouter(prefix="/api/v1", tags=["enterprise-v1"])
 
@@ -109,8 +119,8 @@ def _enriquecer_estado(raw: dict) -> dict:
 
     return result
 
-RESULTS_DIR = Path(__file__).parent.parent.parent.parent.parent / "reports" / "tasks"
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+from app.config import settings as _route_settings
+RESULTS_DIR = _route_settings.RESULTS_DIR   # fuente única de verdad — config.py
 
 # ─── Helpers para Redis / Celery ──────────────────────────────────────────────
 
@@ -230,11 +240,16 @@ async def analyze_async(
     dest     = settings.UPLOAD_DIR / f"{task_id}{safe_ext}"
     dest.write_bytes(content)
 
-    # Codificar el contenido del archivo en base64 para enviarlo al worker GPU.
-    # En arquitectura híbrida (API en Render + worker local) el worker no tiene
-    # acceso al disco de Render — el archivo viaja directamente en el payload Celery.
-    import base64 as _b64
-    file_content_b64 = _b64.b64encode(content).decode("ascii")
+    # Validación MIME obligatoria — detecta archivos renombrados (P3)
+    validate_mime_type(dest, file_type)
+
+    # Codificar en Base64 en el thread pool — evita bloquear el event loop
+    # de FastAPI durante operaciones CPU-bound sobre archivos grandes (ALTO-01).
+    loop = asyncio.get_event_loop()
+    file_content_b64: str = await loop.run_in_executor(
+        _cpu_executor,
+        lambda: base64.b64encode(content).decode("ascii"),
+    )
 
     logger.info(f"v1: Dispatching {file_type} task {task_id[:8]}... ({len(content)/1e6:.1f}MB)")
 
@@ -571,10 +586,9 @@ def _process_sync_fallback(
 ) -> None:
     """
     Procesamiento síncrono en background cuando Redis/Celery no está disponible.
-    Ejecuta el pipeline completo incluyendo LLaVA (si está cargado) y
-    guarda el resultado en JSON para que GET /api/v1/tasks/{id} lo encuentre.
+    Usa _fallback_executor (max_workers=1) para garantizar exclusividad GPU
+    y evitar la creación de threads sin límite (ALTO-02).
     """
-    import threading
     import time as _time
 
     def _run():
@@ -764,4 +778,6 @@ def _process_sync_fallback(
             with open(RESULTS_DIR / f"{task_id}.json", "w", encoding="utf-8") as f:
                 json.dump(error_result, f)
 
-    threading.Thread(target=_run, daemon=True).start()
+    # ThreadPoolExecutor con max_workers=1 garantiza un solo análisis GPU
+    # concurrente y backpressure natural si llegan más requests (ALTO-02).
+    _fallback_executor.submit(_run)

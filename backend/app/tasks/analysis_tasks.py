@@ -22,8 +22,7 @@ from loguru import logger
 from app.celery_app import celery_app
 from app.config import settings
 
-RESULTS_DIR = Path(__file__).parent.parent.parent.parent / "reports" / "tasks"
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+RESULTS_DIR = settings.RESULTS_DIR   # fuente única de verdad — definida en config.py
 
 FILE_RETENTION_SECONDS = int(os.getenv("FILE_RETENTION_SECONDS", "3600"))
 
@@ -126,7 +125,14 @@ def analyze_image_task(
             logger.info(f"Archivo recibido via payload ({len(file_content_b64)//1024} KB b64) → {path.name}")
 
         if not path.exists():
-            raise FileNotFoundError(f"Archivo no encontrado: {file_path}")
+            # Si no hay Base64 Y el archivo no existe en disco, es un error de
+            # configuración (no transitorio) — no tiene sentido reintentar (ALTO-06).
+            if not file_content_b64:
+                raise ValueError(
+                    f"Archivo no encontrado y file_content_b64 vacío: {file_path}. "
+                    "Error de configuración — la API no envió el archivo correctamente."
+                )
+            raise FileNotFoundError(f"Archivo no encontrado tras decodificar Base64: {file_path}")
 
         # 1. SHA-256 antes de cualquier procesamiento
         self.update_state(state="PROCESSING", meta={"progress": 0.10, "stage": "Hash SHA-256"})
@@ -232,6 +238,11 @@ def analyze_image_task(
         _schedule_file_cleanup(path)
         return result
 
+    except ValueError as exc:
+        # ValueError = error de configuración no transitorio (e.g., Base64 vacío).
+        # No reintentar — el resultado no cambiará en un retry (ALTO-06).
+        logger.error(f"Image task {task_id[:8]} config error (no retry): {exc}")
+        raise
     except Exception as exc:
         logger.error(f"Image task {task_id[:8]} failed: {exc}")
         raise self.retry(exc=exc, countdown=30)
@@ -263,7 +274,12 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
             logger.info(f"Video recibido via payload ({len(file_content_b64)//1024} KB b64) → {path.name}")
 
         if not path.exists():
-            raise FileNotFoundError(f"Video no encontrado: {file_path}")
+            if not file_content_b64:
+                raise ValueError(
+                    f"Video no encontrado y file_content_b64 vacío: {file_path}. "
+                    "Error de configuración — no reintentar (ALTO-06)."
+                )
+            raise FileNotFoundError(f"Video no encontrado tras decodificar Base64: {file_path}")
 
         from app.services.custody_service import (
             compute_file_sha256, generate_custody_seal, persist_custody_report,
@@ -358,6 +374,9 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
         _schedule_file_cleanup(path)
         return result
 
+    except ValueError as exc:
+        logger.error(f"Video task {task_id[:8]} config error (no retry): {exc}")
+        raise
     except Exception as exc:
         logger.error(f"Video task {task_id[:8]} failed: {exc}")
         raise self.retry(exc=exc, countdown=60)

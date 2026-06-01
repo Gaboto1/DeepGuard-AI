@@ -1,70 +1,276 @@
-# ── Python ────────────────────────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
+# DeepGuard AI — .gitignore completo
+# Cubre: Python · FastAPI · Celery · Redis · Docker · Next.js · Node.js
+#        CUDA · PyTorch · HuggingFace · Windows · Linux · VSCode · JetBrains
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+# ── SECRETOS Y VARIABLES DE ENTORNO ──────────────────────────────────────────
+# NUNCA subir archivos con credenciales reales
+.env
+.env.local
+.env.*.local
+# Permitir SOLO los ejemplos documentados sin credenciales reales
+!.env.example
+!.env.production.example
+!.env.worker.example
+
+
+# ── DATOS SENSIBLES GENERADOS EN RUNTIME ─────────────────────────────────────
+# Archivos subidos por usuarios (privacidad + tamaño)
+backend/uploads/
+uploads/
+
+# Reportes forenses con datos de análisis reales
+reports/tasks/
+reports/custody/
+
+# Logs del sistema (pueden contener rutas, IPs, datos de debug)
+logs/
+*.log
+celery_*.log
+backend_*.log
+frontend_*.log
+
+
+# ── MODELOS DE IA (demasiado grandes para Git, usar HuggingFace Hub) ──────────
+# Total aproximado: 19+ GB — NUNCA en Git, se descargan automáticamente
+models/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.onnx
+# Caché de HuggingFace
+.cache/
+huggingface/
+
+
+# ── DATOS DE ENTRENAMIENTO (usar Git LFS o enlace externo) ───────────────────
+# Los CSV de FaceForensics++ son reproductibles desde el dataset original
+data/ff++_faces/train.csv
+data/ff++_faces/val.csv
+data/ff++_faces/test.csv
+# Mantener solo manifest.json de benchmarks si son pequeños (< 1MB)
+# data/
+
+
+# ── PYTHON ───────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*.so
+*.dylib
+.Python
+*.egg
 *.egg-info/
 dist/
 build/
-.Python
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+wheels/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
 
-# ── Entornos virtuales ────────────────────────────────────────────────────────
+
+# ── ENTORNOS VIRTUALES PYTHON ─────────────────────────────────────────────────
 venv/
 .venv/
 env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
 
-# ── Variables de entorno con secretos ────────────────────────────────────────
-.env
-.env.local
-.env.*.local
-!.env.production.example
-!.env.worker.example
 
-# ── Node / Next.js ────────────────────────────────────────────────────────────
+# ── CELERY ────────────────────────────────────────────────────────────────────
+celerybeat-schedule
+celerybeat-schedule.db
+celerybeat.pid
+*.pid
+
+
+# ── REDIS ─────────────────────────────────────────────────────────────────────
+dump.rdb
+*.rdb
+redis-server.log
+
+
+# ── PYTORCH / CUDA / NVIDIA ───────────────────────────────────────────────────
+# Pesos de modelos (ya cubiertos arriba)
+# Artefactos de compilación CUDA
+*.cubin
+*.ptx
+*.fatbin
+*.o
+
+
+# ── HUGGINGFACE ───────────────────────────────────────────────────────────────
+# Caché local de modelos descargados
+.cache/huggingface/
+hub/
+# Directorio de modelos descargados
+models--*/
+
+
+# ── NODE.JS ───────────────────────────────────────────────────────────────────
 node_modules/
-.next/
-frontend/out/
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+.npm
+.yarn-integrity
+*.tgz
 
-# ── Datos temporales ──────────────────────────────────────────────────────────
-backend/uploads/
-reports/tasks/
-reports/custody/
 
-# ── Logs ──────────────────────────────────────────────────────────────────────
-logs/
-*.log
+# ── NEXT.JS ───────────────────────────────────────────────────────────────────
+.next/
+out/
+frontend/.next/
+frontend/out/
+# Build info de TypeScript
+tsconfig.tsbuildinfo
+frontend/tsconfig.tsbuildinfo
+next-env.d.ts
+# Desactivar telemetría (no datos locales relevantes)
+.next/telemetry/
 
-# ── Modelos de IA (>GB — no van en Git) ──────────────────────────────────────
-models/
-*.bin
-*.safetensors
-*.pt
-*.pth
 
-# ── Archivos de imagen/video subidos ─────────────────────────────────────────
+# ── DOCKER ────────────────────────────────────────────────────────────────────
+# Imágenes exportadas (muy grandes)
+*.tar
+*.tar.gz
+docker-volumes/
+# Datos de contenedores locales
+postgres_data/
+redis_data/
+mysql_data/
+
+
+# ── BINARIOS GRANDES (usar Git LFS si son necesarios) ────────────────────────
+*.docx
+*.xlsx
+*.pptx
+*.pdf
+# Si necesitas incluir documentación Word, usa Git LFS:
+# git lfs track "*.docx"
+
+
+# ── ARCHIVOS DE MEDIA SUBIDOS ─────────────────────────────────────────────────
+# Imágenes y videos procesados por el sistema forense
 *.jpg
 *.jpeg
 *.png
 *.webp
+*.gif
+*.bmp
+*.tiff
 *.mp4
 *.mov
 *.mkv
 *.webm
+*.avi
+*.mpeg
+*.mpg
 
-# ── Caché de compilación TypeScript ──────────────────────────────────────────
-frontend/tsconfig.tsbuildinfo
 
-# ── IDEs ──────────────────────────────────────────────────────────────────────
+# ── MEMORIA DEL ASISTENTE IA ──────────────────────────────────────────────────
+# Carpeta de contexto del asistente — contiene conversaciones privadas
+.claude/
+
+
+# ── WINDOWS ───────────────────────────────────────────────────────────────────
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+[Dd]esktop.ini
+
+
+# ── LINUX / MACOS ────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+
+# ── VSCODE ────────────────────────────────────────────────────────────────────
+# Excluir configuración personal pero permitir configuración del workspace compartida
 .vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+.vscode/*.code-snippets
+.history/
+*.vsix
+# Permitir .vscode/extensions.json si se desea recomendar extensiones al equipo
+# !.vscode/extensions.json
+
+
+# ── JETBRAINS (PyCharm, WebStorm, IntelliJ) ──────────────────────────────────
 .idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+
+# ── ARCHIVOS TEMPORALES GENÉRICOS ────────────────────────────────────────────
+*.tmp
+*.temp
 *.swp
 *.swo
+*.bak
+*.orig
+*.rej
+*~
+.#*
+\#*#
 
-# ── OS ───────────────────────────────────────────────────────────────────────
-.DS_Store
-Thumbs.db
-desktop.ini
 
-# ── Docker ───────────────────────────────────────────────────────────────────
-*.tar
+# ── JUPYTER NOTEBOOKS (checkpoints) ──────────────────────────────────────────
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+profile_default/
+ipython_config.py
+
+
+# ── ARCHIVOS DE COBERTURA Y PROFILING ────────────────────────────────────────
+*.prof
+*.lprof
+.benchmarks/
