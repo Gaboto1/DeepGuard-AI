@@ -35,7 +35,8 @@ frontend_*.log
 
 # ── MODELOS DE IA (demasiado grandes para Git, usar HuggingFace Hub) ──────────
 # Total aproximado: 19+ GB — NUNCA en Git, se descargan automáticamente
-models/
+# /models/ solo ignora el directorio raíz (pesos HuggingFace), NO backend/app/models/
+/models/
 *.safetensors
 *.bin
 *.pt

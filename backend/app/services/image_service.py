@@ -11,10 +11,11 @@ from PIL import Image
 from loguru import logger
 
 from app.models.deepfake_detector import (
-    DeepfakeDetector, _model_a, _model_b, _model_c, _model_d, _model_e,
+    DeepfakeDetector, _model_a, _model_b, _model_c, _model_d, _model_e, _model_f,
     _calibrated_combine, _W_FACE, _W_NO_FACE,
 )
 from app.models.face_detector import FaceDetector
+from app.models.frequency_detector import predict_frequency
 from app.models.ood_detector import detect_ood, apply_ood_penalty
 from app.services.metadata_service import extract_metadata
 from app.services.osint_service import build_osint_result
@@ -29,6 +30,8 @@ _MODEL_DEFS = [
     ("c", "EfficientNet (FF++)"),
     ("d", "AI Art Detector"),
     ("e", "SigLIP Deepfake"),
+    ("f", "AI-Human Detector"),        # Nuevo: umm-maybe/AI-image-detector
+    ("freq", "Freq. Spectral"),        # Nuevo: análisis dominio de frecuencias
 ]
 
 
@@ -86,23 +89,32 @@ def _run_image_analysis(image_path: Path) -> dict:
     faces_count   = len(faces)
     face_detected = faces_count > 0
 
-    # Predict on full image
+    # Análisis de frecuencias (0 VRAM, ejecutar sobre imagen completa una sola vez)
+    freq_result = predict_frequency(image)
+    score_freq  = freq_result.get("fake_probability", 0.5)
+
+    # Predict on full image — 7 modelos
     def _predict_all(img: Image.Image, face: bool) -> tuple[list[Optional[float]], float]:
         ra = _model_a.predict(img)
         rb = _model_b.predict(img)
         rc = _model_c.predict(img)
         rd = _model_d.predict(img)
         re = _model_e.predict(img)
+        rf = _model_f.predict(img)
         scores_raw = [
-            ra["fake_probability"] if ra else None,
-            rb["fake_probability"] if rb else None,
-            rc["fake_probability"] if rc else None,
-            rd["fake_probability"] if rd else None,
-            re["fake_probability"] if re else None,
+            ra["fake_probability"]   if ra   else None,
+            rb["fake_probability"]   if rb   else None,
+            rc["fake_probability"]   if rc   else None,
+            rd["fake_probability"]   if rd   else None,
+            re["fake_probability"]   if re   else None,
+            rf["fake_probability"]   if rf   else None,  # Modelo F
+            score_freq,                                   # Frecuencias
         ]
         ens, _ = _calibrated_combine(
             scores_raw[0] or 0.5, scores_raw[1] or 0.5, scores_raw[2],
-            face=face, score_d=scores_raw[3], score_e=scores_raw[4],
+            face=face,
+            score_d=scores_raw[3], score_e=scores_raw[4],
+            score_f=scores_raw[5], score_freq=scores_raw[6],
         )
         return scores_raw, ens
 
@@ -171,7 +183,9 @@ def _run_image_analysis(image_path: Path) -> dict:
     # Get meta_info by calling combine with the already-computed scores (no extra model inference)
     _, _pm = _calibrated_combine(
         blend_scores[0] or 0.5, blend_scores[1] or 0.5, blend_scores[2],
-        face=use_face_mode, score_d=blend_scores[3], score_e=blend_scores[4],
+        face=use_face_mode,
+        score_d=blend_scores[3], score_e=blend_scores[4],
+        score_f=blend_scores[5], score_freq=blend_scores[6],
     )
     ens_meta = {
         "method":     _pm.get("ensemble_method", "unknown"),
@@ -191,11 +205,13 @@ def _run_image_analysis(image_path: Path) -> dict:
         "ensemble":         ensemble,
         "ensemble_meta":    ens_meta,
         "model_scores": {
-            "face_deepfake_vit": round(blend_scores[0], 4) if blend_scores[0] is not None else None,
-            "sdxl_detector":     round(blend_scores[1], 4) if blend_scores[1] is not None else None,
-            "efficientnet_ffpp": round(blend_scores[2], 4) if blend_scores[2] is not None else None,
-            "ai_art_detector":   round(blend_scores[3], 4) if blend_scores[3] is not None else None,
-            "siglip_deepfake":   round(blend_scores[4], 4) if blend_scores[4] is not None else None,
+            "face_deepfake_vit":  round(blend_scores[0], 4) if blend_scores[0] is not None else None,
+            "sdxl_detector":      round(blend_scores[1], 4) if blend_scores[1] is not None else None,
+            "efficientnet_ffpp":  round(blend_scores[2], 4) if blend_scores[2] is not None else None,
+            "ai_art_detector":    round(blend_scores[3], 4) if blend_scores[3] is not None else None,
+            "siglip_deepfake":    round(blend_scores[4], 4) if blend_scores[4] is not None else None,
+            "ai_human_detector":  round(blend_scores[5], 4) if blend_scores[5] is not None else None,
+            "frequency_spectral": round(blend_scores[6], 4) if blend_scores[6] is not None else None,
         },
         # Correcciones forenses
         "forensic_correction_type":        correction_type,
