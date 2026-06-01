@@ -258,16 +258,11 @@ async def analyze_async(
     est_secs  = int(size_mb * (3 if file_type == "video" else 0.5) + 5)
 
     # Verificar Redis disponible antes de intentar Celery.
-    # Timeout generoso (8s) para conexiones TLS remotas a Aiven/Upstash.
+    # Usa make_redis_client() que corrige el bug ssl_cert_reqs=CERT_NONE de redis-py 6.x.
     redis_available = False
     try:
-        import redis as _redis
-        _redis_url = __import__("os").getenv("REDIS_URL", "redis://localhost:6379/0")
-        _r = _redis.from_url(
-            _redis_url,
-            socket_connect_timeout=8,
-            socket_timeout=8,
-        )
+        from app.config import make_redis_client as _mkr
+        _r = _mkr(socket_connect_timeout=8, socket_timeout=8)
         _r.ping()
         redis_available = True
     except Exception as _e:
@@ -455,21 +450,23 @@ async def health_v1() -> JSONResponse:
         except ImportError:
             pass
 
-    # Estado de Redis (con timeout razonable para cloud)
+    # Estado de Redis — usa make_redis_client() que corrige el bug de
+    # redis-py 6.x con ssl_cert_reqs=CERT_NONE en la query string de la URL.
     redis_ok   = False
     redis_info = "No disponible"
+    r          = None
     try:
-        import redis as redis_lib
-        r = redis_lib.from_url(
-            __import__("os").getenv("REDIS_URL", "redis://localhost:6379/0"),
+        from app.config import make_redis_client
+        r = make_redis_client(
             socket_connect_timeout=4,
             socket_timeout=4,
+            decode_responses=True,
         )
         r.ping()
         redis_ok   = True
         redis_info = "Conectado"
     except Exception as e:
-        redis_info = f"No disponible: {type(e).__name__}"
+        redis_info = f"No disponible: {type(e).__name__}: {str(e)[:60]}"
 
     # Estado del worker — lee la clave de heartbeat que el worker escribe cada 30s.
     # Reemplaza inspect.ping() que fallaba por:

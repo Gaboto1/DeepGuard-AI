@@ -37,22 +37,19 @@ HEARTBEAT_INTERVAL = 30  # segundos entre escrituras
 def _heartbeat_loop() -> None:
     """
     Escribe periódicamente una clave en Redis para indicar que el worker está vivo.
-    Alternativa fiable a inspect.ping() que falla por:
-      - broker_transport_options: socket_timeout=2s (insuficiente para roundtrip intercontinental)
-      - Redis pub/sub de Celery (diferente canal que las colas de tareas)
-      - task_default_exchange personalizado que interfiere con el canal de control
+    Usa make_redis_client() que corrige el bug ssl_cert_reqs=CERT_NONE de redis-py 6.x.
     """
-    import redis as _redis
-    url  = settings.REDIS_URL
-    name = f"deepguard-worker@{socket.gethostname()}"
+    from app.config import make_redis_client
+    name  = f"deepguard-worker@{socket.gethostname()}"
     value = f'{{"worker":"{name}","pid":{os.getpid()}}}'
 
     while True:
         try:
-            r = _redis.from_url(url, socket_connect_timeout=5, socket_timeout=5, decode_responses=True)
+            r = make_redis_client(socket_connect_timeout=5, socket_timeout=5, decode_responses=True)
             r.setex(HEARTBEAT_KEY, HEARTBEAT_TTL, value)
+            logger.debug(f"Heartbeat escrito (TTL={HEARTBEAT_TTL}s)")
         except Exception as e:
-            logger.debug(f"Heartbeat write failed (no crítico): {e}")
+            logger.debug(f"Heartbeat write failed (no crítico): {type(e).__name__}: {e}")
         time.sleep(HEARTBEAT_INTERVAL)
 
 

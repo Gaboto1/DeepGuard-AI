@@ -1,4 +1,7 @@
+import ssl as _ssl
 from pathlib import Path
+from urllib.parse import urlparse, urlencode, parse_qs, urlunparse
+
 from pydantic_settings import BaseSettings
 
 
@@ -11,19 +14,13 @@ class Settings(BaseSettings):
     PORT: int  = 8000
 
     # ── Modo de operación ─────────────────────────────────────────────────────
-    # API_ONLY=true  → Render / cloud: SIN torch ni modelos. Solo valida y despacha.
-    # API_ONLY=false → Desarrollo local: carga modelos GPU en el lifespan.
     API_ONLY: bool = False
 
     # ── Redis / Celery ────────────────────────────────────────────────────────
-    # En producción: URL de Upstash o Aiven Redis con TLS
-    # Ejemplo Upstash: rediss://default:TOKEN@HOST:PORT
     REDIS_URL:     str = "redis://localhost:6379/0"
     REDIS_BACKEND: str = "redis://localhost:6379/1"
 
     # ── CORS ──────────────────────────────────────────────────────────────────
-    # CSV de orígenes permitidos.
-    # En producción añadir la URL de Vercel: "https://deepguard.vercel.app"
     ALLOWED_ORIGINS_CSV: str = (
         "http://localhost:3000,"
         "http://localhost:3001,"
@@ -36,13 +33,11 @@ class Settings(BaseSettings):
     UPLOAD_DIR:       Path = Path("uploads")
     MODELS_DIR:       Path = Path("models")
 
-    # ── Reportes (una sola fuente de verdad para todos los módulos) ───────────
+    # ── Reportes ──────────────────────────────────────────────────────────────
     RESULTS_DIR: Path = Path("reports") / "tasks"
     CUSTODY_DIR: Path = Path("reports") / "custody"
 
-    # ── Clave de firma HMAC (OBLIGATORIA en producción) ───────────────────────
-    # Generar con: python -c "import secrets; print(secrets.token_hex(32))"
-    # Definir como variable de entorno DEEPGUARD_SIGNING_KEY en Render y worker.
+    # ── Clave HMAC ────────────────────────────────────────────────────────────
     DEEPGUARD_SIGNING_KEY: str = ""
 
     # ── Modelos ───────────────────────────────────────────────────────────────
@@ -76,3 +71,44 @@ settings.RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 settings.CUSTODY_DIR.mkdir(parents=True, exist_ok=True)
 if not settings.API_ONLY:
     settings.MODELS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def make_redis_client(url: str = "", **kwargs):
+    """
+    Crea un cliente redis-py compatible con redis-py 6.x y URLs de Aiven/Upstash.
+
+    Problema: redis-py 6.x rechaza '?ssl_cert_reqs=CERT_NONE' en la URL con
+    'Invalid SSL Certificate Requirements Flag: CERT_NONE'.
+    Kombu (usado por Celery) parsea ese parámetro diferente — por eso las tareas
+    funcionan pero redis.from_url() directo falla.
+
+    Solución: strip del parámetro ssl_cert_reqs de la URL + pasarlo como objeto
+    ssl.CERT_NONE directamente a from_url().
+    """
+    import redis
+
+    if not url:
+        url = settings.REDIS_URL
+
+    parsed = urlparse(url)
+    qs     = parse_qs(parsed.query, keep_blank_values=True)
+
+    # Extraer ssl_cert_reqs de la query string y traducirlo a objeto Python
+    ssl_param = qs.pop("ssl_cert_reqs", [None])[0]
+    clean_url = urlunparse(parsed._replace(
+        query=urlencode({k: v[0] for k, v in qs.items()}) if qs else ""
+    ))
+
+    # Configurar SSL si la URL usa rediss://
+    if url.startswith("rediss://"):
+        _map = {
+            "CERT_NONE":     _ssl.CERT_NONE,
+            "none":          _ssl.CERT_NONE,
+            "CERT_OPTIONAL": _ssl.CERT_OPTIONAL,
+            "optional":      _ssl.CERT_OPTIONAL,
+            "CERT_REQUIRED": _ssl.CERT_REQUIRED,
+            "required":      _ssl.CERT_REQUIRED,
+        }
+        kwargs.setdefault("ssl_cert_reqs", _map.get(ssl_param or "CERT_NONE", _ssl.CERT_NONE))
+
+    return redis.from_url(clean_url, **kwargs)
