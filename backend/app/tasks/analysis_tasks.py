@@ -11,6 +11,8 @@ Flujo enterprise:
 """
 import json
 import os
+import socket
+import threading
 import time
 from pathlib import Path
 from typing import Optional
@@ -25,6 +27,33 @@ from app.config import settings
 RESULTS_DIR = settings.RESULTS_DIR   # fuente única de verdad — definida en config.py
 
 FILE_RETENTION_SECONDS = int(os.getenv("FILE_RETENTION_SECONDS", "3600"))
+
+# Clave Redis del heartbeat — el health endpoint del API la verifica
+HEARTBEAT_KEY = "deepguard:worker:heartbeat"
+HEARTBEAT_TTL = 90    # segundos — si el worker muere, la clave expira en 90s
+HEARTBEAT_INTERVAL = 30  # segundos entre escrituras
+
+
+def _heartbeat_loop() -> None:
+    """
+    Escribe periódicamente una clave en Redis para indicar que el worker está vivo.
+    Alternativa fiable a inspect.ping() que falla por:
+      - broker_transport_options: socket_timeout=2s (insuficiente para roundtrip intercontinental)
+      - Redis pub/sub de Celery (diferente canal que las colas de tareas)
+      - task_default_exchange personalizado que interfiere con el canal de control
+    """
+    import redis as _redis
+    url  = settings.REDIS_URL
+    name = f"deepguard-worker@{socket.gethostname()}"
+    value = f'{{"worker":"{name}","pid":{os.getpid()}}}'
+
+    while True:
+        try:
+            r = _redis.from_url(url, socket_connect_timeout=5, socket_timeout=5, decode_responses=True)
+            r.setex(HEARTBEAT_KEY, HEARTBEAT_TTL, value)
+        except Exception as e:
+            logger.debug(f"Heartbeat write failed (no crítico): {e}")
+        time.sleep(HEARTBEAT_INTERVAL)
 
 
 # ─── Carga de modelos al arrancar el worker ────────────────────────────────────
@@ -70,6 +99,12 @@ def init_worker_models(**kwargs) -> None:
     except Exception as e:
         logger.error(f"Worker model init FAILED: {e}")
         raise
+
+    # Iniciar hilo de heartbeat — escribe en Redis cada 30s para que el
+    # health endpoint pueda saber si el worker está vivo sin usar inspect.ping()
+    hb = threading.Thread(target=_heartbeat_loop, daemon=True, name="dg-heartbeat")
+    hb.start()
+    logger.info("Heartbeat iniciado (escribiendo en Redis cada 30s)")
 
 
 # ─── Base Task ────────────────────────────────────────────────────────────────

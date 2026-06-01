@@ -471,27 +471,33 @@ async def health_v1() -> JSONResponse:
     except Exception as e:
         redis_info = f"No disponible: {type(e).__name__}"
 
-    # Estado del worker — usa ping() en lugar de active() para detectar
-    # workers listos pero sin tareas en curso (IDLE = listo para procesar).
-    # active() solo devuelve workers con tareas en ejecución → badge incorrecto.
+    # Estado del worker — lee la clave de heartbeat que el worker escribe cada 30s.
+    # Reemplaza inspect.ping() que fallaba por:
+    #   - socket_timeout=2s en broker_transport_options (roundtrip intercontinental > 2s)
+    #   - Redis pub/sub del canal de control (diferente a las colas de tareas RPUSH/BLPOP)
+    #   - task_default_exchange personalizado que interfiere con el canal de control
+    # El heartbeat solo usa redis.EXISTS → mismo canal que el dispatch de tareas.
+    HEARTBEAT_KEY  = "deepguard:worker:heartbeat"
     workers_info   = "N/A (requiere Redis)"
     workers_online = False
     if redis_ok:
         try:
-            from app.celery_app import celery_app
-            # timeout=6s: el roundtrip Render→Aiven→worker local→Aiven→Render
-            # puede superar 3s con latencia TLS intercontinental (ALTO-01 anterior).
-            inspect     = celery_app.control.inspect(timeout=6)
-            ping_result = inspect.ping()   # {worker_name: {'ok': 'pong'}} o None/{}
-            if ping_result:
-                n = len(ping_result)
-                workers_info   = f"{n} worker(s) GPU conectado(s) y listo(s)"
+            hb_value = r.get(HEARTBEAT_KEY)         # r ya está conectado desde el ping anterior
+            hb_ttl   = r.ttl(HEARTBEAT_KEY) if hb_value else -1
+            if hb_value:
+                import json as _json
+                try:
+                    hb_data = _json.loads(hb_value)
+                    worker_name = hb_data.get("worker", "worker")
+                except Exception:
+                    worker_name = "worker"
+                workers_info   = f"{worker_name} activo (heartbeat caduca en {hb_ttl}s)"
                 workers_online = True
             else:
-                workers_info   = "Sin workers GPU activos"
+                workers_info   = "Sin workers GPU activos (no hay heartbeat en Redis)"
                 workers_online = False
         except Exception as e:
-            workers_info   = f"Celery no disponible: {type(e).__name__}"
+            workers_info   = f"Error verificando heartbeat: {type(e).__name__}"
             workers_online = False
 
     return JSONResponse(content={
