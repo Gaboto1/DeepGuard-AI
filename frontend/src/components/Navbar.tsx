@@ -2,13 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
+import axios from 'axios';
 
 type ApiStatus = 'checking' | 'online' | 'offline';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+// Cliente Axios independiente para el health check.
+// Axios maneja CORS correctamente; fetch con no-cors no permite leer el cuerpo.
+const _healthClient = axios.create({
+  baseURL: BASE_URL,
+  timeout: 50_000,   // 50s: 6s ping worker + latencia red + margen
+  validateStatus: (s) => s >= 200 && s < 600,  // no lanzar en 4xx/5xx
+});
+
 export default function Navbar() {
-  const [status, setStatus]   = useState<ApiStatus>('checking');
+  const [status,  setStatus]  = useState<ApiStatus>('checking');
   const [tooltip, setTooltip] = useState('Verificando worker GPU...');
 
   useEffect(() => {
@@ -16,46 +25,37 @@ export default function Navbar() {
 
     const check = async () => {
       try {
-        // Fetch normal (sin no-cors) para poder leer el JSON de respuesta.
-        // CORS está configurado en Render para aceptar el dominio de Netlify.
-        const res = await fetch(`${BASE_URL}/api/v1/health`, {
-          method: 'GET',
-          signal: AbortSignal.timeout(40_000),   // 40s — ping() al worker tarda ~3s
-          cache:  'no-store',
-        });
+        const { data, status: httpStatus } = await _healthClient.get<Record<string, unknown>>(
+          '/api/v1/health',
+        );
 
-        if (!cancelled && res.ok) {
-          const data: Record<string, unknown> = await res.json().catch(() => ({}));
+        if (cancelled) return;
 
-          // workers_online: true sólo si hay ≥1 worker GPU conectado y listo
-          const workerOnline = data.workers_online === true;
-          const workersInfo  = String(data.workers_status ?? 'desconocido');
+        if (httpStatus >= 200 && httpStatus < 300) {
+          // workers_online: true → al menos un worker GPU respondió al ping
+          const workerOnline  = data.workers_online === true;
+          const workersInfo   = String(data.workers_status ?? 'desconocido');
 
-          if (workerOnline) {
-            setStatus('online');
-            setTooltip(workersInfo);
-          } else {
-            // API activa pero sin worker GPU → no puede procesar imágenes
-            setStatus('offline');
-            setTooltip(`Worker GPU no disponible: ${workersInfo}`);
-          }
-        } else if (!cancelled) {
+          setStatus(workerOnline ? 'online' : 'offline');
+          setTooltip(
+            workerOnline
+              ? workersInfo
+              : `Worker GPU no disponible — ${workersInfo}`,
+          );
+        } else {
           setStatus('offline');
-          setTooltip('API no responde');
+          setTooltip(`API respondió con HTTP ${httpStatus}`);
         }
-      } catch {
-        // Error de red, CORS o timeout → marcamos como offline
-        if (!cancelled) {
-          setStatus('offline');
-          setTooltip('Sin conexión con el servidor');
-        }
+      } catch (err: unknown) {
+        if (cancelled) return;
+        const msg = err instanceof Error ? err.message : String(err);
+        setStatus('offline');
+        setTooltip(`Sin conexión: ${msg.slice(0, 60)}`);
       }
     };
 
-    // Primera verificación con pequeño retardo inicial
-    const first = setTimeout(check, 1000);
-    // Re-verificar cada 30s (los ping() al worker tardan ~3s en Render)
-    const interval = setInterval(check, 30_000);
+    const first    = setTimeout(check, 1200);
+    const interval = setInterval(check, 30_000);  // cada 30s
 
     return () => {
       cancelled = true;
@@ -64,20 +64,18 @@ export default function Navbar() {
     };
   }, []);
 
-  const badge: Record<ApiStatus, { label: string; dot: string; style: React.CSSProperties }> = {
+  const badge: Record<ApiStatus, { label: string; dot?: boolean; style: React.CSSProperties }> = {
     checking: {
       label: 'VERIFICANDO',
-      dot:   'animate-pulse',
+      dot:   true,
       style: { color: '#3d4f62', borderColor: '#1e2d42', background: 'transparent' },
     },
     online: {
       label: 'EN LÍNEA',
-      dot:   '',
       style: { color: '#1d7a45', borderColor: 'rgba(29,122,69,0.35)', background: 'rgba(29,122,69,0.07)' },
     },
     offline: {
       label: 'FUERA DE LÍNEA',
-      dot:   '',
       style: { color: '#c42b2b', borderColor: 'rgba(196,43,43,0.35)', background: 'rgba(196,43,43,0.07)' },
     },
   };
@@ -115,14 +113,14 @@ export default function Navbar() {
           </a>
           <div className="w-px h-4 bg-border-subtle mx-1" />
 
-          {/* Badge — verde solo cuando hay worker GPU listo */}
+          {/* Badge — verde solo cuando hay ≥1 worker GPU respondiendo al ping */}
           <span
-            className="px-2 py-1 border text-2xs font-mono font-semibold cursor-default"
+            className="px-2 py-1 border text-2xs font-mono font-semibold cursor-default select-none"
             style={b.style}
             title={tooltip}
           >
-            {status === 'checking'
-              ? <span className="inline-flex items-center gap-1"><span className={b.dot}>·</span> {b.label}</span>
+            {b.dot
+              ? <span className="inline-flex items-center gap-1"><span className="animate-pulse">·</span> {b.label}</span>
               : b.label}
           </span>
         </nav>

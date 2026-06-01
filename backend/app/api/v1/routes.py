@@ -479,7 +479,9 @@ async def health_v1() -> JSONResponse:
     if redis_ok:
         try:
             from app.celery_app import celery_app
-            inspect     = celery_app.control.inspect(timeout=3)
+            # timeout=6s: el roundtrip Render→Aiven→worker local→Aiven→Render
+            # puede superar 3s con latencia TLS intercontinental (ALTO-01 anterior).
+            inspect     = celery_app.control.inspect(timeout=6)
             ping_result = inspect.ping()   # {worker_name: {'ok': 'pong'}} o None/{}
             if ping_result:
                 n = len(ping_result)
