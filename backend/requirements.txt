@@ -59,3 +59,7 @@ python-magic>=0.4.27; sys_platform != "win32"
 
 # Performance monitoring
 psutil>=5.9.8
+
+# C2PA — Coalition for Content Provenance and Authenticity
+# Wheels disponibles para Python 3.8-3.12 (Rust bindings)
+c2pa-python>=0.5.0; python_version < "3.13"

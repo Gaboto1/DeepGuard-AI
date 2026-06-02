@@ -95,6 +95,33 @@ export interface TemporalAnalysis {
   analysis_time: number;
 }
 
+// ── C2PA — Coalition for Content Provenance and Authenticity ──────────────────
+export interface C2PAAction {
+  action: string;
+  when?: string | null;
+  software_agent?: string;
+}
+
+export interface C2PAHistoryEntry {
+  title: string;
+  format?: string;
+  relationship?: string;
+  date?: string | null;
+  tool?: string | null;
+  actions: C2PAAction[];
+}
+
+export interface C2PAProvenance {
+  has_c2pa: boolean;
+  active: boolean;
+  verified: boolean;
+  signed_by?: string | null;
+  claim_generator?: string | null;
+  issued_at?: string | null;
+  history_log: C2PAHistoryEntry[];
+  error?: string | null;
+}
+
 export interface AnalysisResult {
   task_id: string;
   status: TaskStatus;
@@ -164,6 +191,9 @@ export interface AnalysisResult {
 
   // Análisis semántico VLM (LLaVA-1.5-7b-hf)
   semantic_analysis?: SemanticAnalysis | null;
+
+  // Procedencia C2PA — Coalition for Content Provenance and Authenticity
+  c2pa_provenance?: C2PAProvenance | null;
 
   progress: number;
   error?: string;

@@ -173,6 +173,21 @@ def analyze_image_task(
         )
         sha256 = compute_file_sha256(path)
 
+        # 1b. C2PA — lectura pre-neural de procedencia criptográfica (0 VRAM, ~10-50ms)
+        self.update_state(state="PROCESSING", meta={"progress": 0.12, "stage": "Procedencia C2PA"})
+        from app.services.c2pa_service import read_c2pa_provenance as _read_c2pa
+        try:
+            _c2pa_size = path.stat().st_size
+            _c2pa_bytes = path.read_bytes() if _c2pa_size < 100 * 1024 * 1024 else b""
+            c2pa_provenance = _read_c2pa(_c2pa_bytes, filename)
+        except Exception as _c2pa_err:
+            logger.debug(f"C2PA skip (no crítico): {_c2pa_err}")
+            c2pa_provenance = {
+                "has_c2pa": False, "active": False, "verified": False,
+                "signed_by": None, "claim_generator": None, "issued_at": None,
+                "history_log": [], "error": str(_c2pa_err),
+            }
+
         # 2. Metadatos forenses EXIF/XMP
         self.update_state(state="PROCESSING", meta={"progress": 0.15, "stage": "Metadatos EXIF/XMP"})
         from app.services.forensic_metadata_service import (
@@ -261,6 +276,7 @@ def analyze_image_task(
                 "has_gps":                   forensic_meta["has_gps"],
             },
             "chain_of_custody": seal,
+            "c2pa_provenance": c2pa_provenance,
             "analysis_time": round(time.time() - t0, 3),
             "completed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
@@ -317,6 +333,20 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
             compute_file_sha256, generate_custody_seal, persist_custody_report,
         )
         sha256 = compute_file_sha256(path)
+
+        # C2PA — pre-neural, 0 VRAM (límite 100 MB para videos grandes)
+        from app.services.c2pa_service import read_c2pa_provenance as _read_c2pa
+        try:
+            _c2pa_size = path.stat().st_size
+            _c2pa_bytes = path.read_bytes() if _c2pa_size < 100 * 1024 * 1024 else b""
+            c2pa_provenance = _read_c2pa(_c2pa_bytes, filename)
+        except Exception as _c2pa_err:
+            logger.debug(f"C2PA video skip (no crítico): {_c2pa_err}")
+            c2pa_provenance = {
+                "has_c2pa": False, "active": False, "verified": False,
+                "signed_by": None, "claim_generator": None, "issued_at": None,
+                "history_log": [], "error": str(_c2pa_err),
+            }
 
         from app.services.forensic_metadata_service import (
             extract_forensic_metadata, apply_metadata_risk_to_score,
@@ -395,6 +425,7 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
                 "risk_reasons":          forensic_meta["risk_reasons"],
             },
             "chain_of_custody": seal,
+            "c2pa_provenance": c2pa_provenance,
             "progress": 1.0,
             "analysis_time": round(time.time() - t0, 3),
             "completed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

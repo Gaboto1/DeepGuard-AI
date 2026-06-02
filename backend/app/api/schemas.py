@@ -137,6 +137,40 @@ class FrameResult(BaseModel):
     face_detected: bool
 
 
+# ── C2PA — Coalition for Content Provenance and Authenticity ─────────────────
+class C2PAAction(BaseModel):
+    action: str = ""
+    when: Optional[str] = None
+    software_agent: str = ""
+
+
+class C2PAHistoryEntry(BaseModel):
+    title: str = ""
+    format: str = ""
+    relationship: str = ""
+    date: Optional[str] = None
+    tool: Optional[str] = None
+    actions: list[C2PAAction] = []
+
+
+class C2PAProvenance(BaseModel):
+    """
+    Resultado del análisis de procedencia C2PA.
+    Un manifiesto C2PA válido demuestra criptográficamente que:
+      - El archivo no fue alterado desde la firma (verified=True)
+      - El emisor es una autoridad reconocida (signed_by)
+      - La cadena de edición es trazable (history_log)
+    """
+    has_c2pa: bool = False
+    active: bool = False
+    verified: bool = False
+    signed_by: Optional[str] = None
+    claim_generator: Optional[str] = None
+    issued_at: Optional[str] = None
+    history_log: list[C2PAHistoryEntry] = []
+    error: Optional[str] = None
+
+
 # ── Main analysis result ───────────────────────────────────────────────────────
 class AnalysisResult(BaseModel):
     task_id: str
@@ -197,6 +231,9 @@ class AnalysisResult(BaseModel):
 
     # Cadena de custodia forense (enterprise)
     chain_of_custody: Optional[dict] = None      # sello criptográfico SHA-256 + HMAC
+
+    # Procedencia C2PA — Coalition for Content Provenance and Authenticity
+    c2pa_provenance: Optional[C2PAProvenance] = None
 
     # Internal
     progress: float = 0.0

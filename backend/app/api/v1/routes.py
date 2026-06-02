@@ -92,6 +92,7 @@ _ETAPAS_VIDEO: dict[str, str] = {
     "Ensemble 5 modelos":         "Ejecutando ensemble de 5 modelos IA...",
     "Sello de custodia":          "Generando sello criptográfico de custodia...",
     "Iniciando análisis de video":"Iniciando análisis forense del video...",
+    "Procedencia C2PA":           "Verificando procedencia criptográfica C2PA...",
     "Generando sello":            "Generando sello de cadena de custodia...",
 }
 
@@ -626,6 +627,20 @@ def _process_sync_fallback(
             # ── 1. SHA-256 del archivo original ───────────────────────────────
             sha256 = compute_file_sha256(file_path)
 
+            # ── 1b. C2PA — procedencia pre-neural (0 VRAM, ~10-50ms) ──────────
+            from app.services.c2pa_service import read_c2pa_provenance as _read_c2pa
+            try:
+                _c2pa_size = file_path.stat().st_size
+                _c2pa_bytes = file_path.read_bytes() if _c2pa_size < 100 * 1024 * 1024 else b""
+                c2pa_provenance = _read_c2pa(_c2pa_bytes, filename)
+            except Exception as _c2pa_err:
+                logger.debug(f"C2PA sync_fallback skip: {_c2pa_err}")
+                c2pa_provenance = {
+                    "has_c2pa": False, "active": False, "verified": False,
+                    "signed_by": None, "claim_generator": None, "issued_at": None,
+                    "history_log": [], "error": str(_c2pa_err),
+                }
+
             # ── 2. Metadatos forenses EXIF/XMP ────────────────────────────────
             forensic_meta = extract_forensic_metadata(file_path)
 
@@ -766,6 +781,7 @@ def _process_sync_fallback(
                     "inconsistencies":           forensic_meta["inconsistencies"],
                 },
                 "chain_of_custody":        seal,
+                "c2pa_provenance":         c2pa_provenance,
                 "dispatch_mode":           "sync_fallback",
                 "analysis_time":           round(_time.time() - t0, 3),
                 "progress":                1.0,

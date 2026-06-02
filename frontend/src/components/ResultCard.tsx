@@ -8,6 +8,7 @@ import type { AnalysisResult, EvidenceLevel, ModelAgreement } from '@/types';
 import ForensicPanel from './ForensicPanel';
 import MetadataPanel from './MetadataPanel';
 import OsintPanel from './OsintPanel';
+import C2PAPanel from './C2PAPanel';
 
 // ── Evidence level labels ─────────────────────────────────────────────────────
 const EVIDENCE_ES: Record<EvidenceLevel, { label: string; labelCorto: string; color: string }> = {
@@ -26,7 +27,7 @@ function scoreColor(pct: number): string {
   return '#1d7a45';
 }
 
-const TABS = ['Resumen', 'Ensemble', 'Metadatos', 'Verificación', 'Mapa de Atención'] as const;
+const TABS = ['Resumen', 'Ensemble', 'Metadatos', 'Verificación', 'Procedencia C2PA', 'Mapa de Atención'] as const;
 type Tab = (typeof TABS)[number];
 
 interface Props {
@@ -405,10 +406,11 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
           style={{ background: '#05080f', borderColor: '#1a2030' }}
         >
           {(TABS as readonly Tab[]).filter(t => {
-            if (t === 'Mapa de Atención' && !result.heatmap)          return false;
-            if (t === 'Metadatos'        && !result.metadata_analysis) return false;
-            if (t === 'Verificación'     && !result.osint)             return false;
-            if (t === 'Ensemble'         && !result.ensemble)          return false;
+            if (t === 'Mapa de Atención'  && !result.heatmap)          return false;
+            if (t === 'Metadatos'         && !result.metadata_analysis) return false;
+            if (t === 'Verificación'      && !result.osint)             return false;
+            if (t === 'Ensemble'          && !result.ensemble)          return false;
+            if (t === 'Procedencia C2PA'  && !result.c2pa_provenance)   return false;
             return true;
           }).map(tab => (
             <button
@@ -537,6 +539,11 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
               {/* ── Verificación ────────────────────────────────────────────── */}
               {activeTab === 'Verificación' && result.osint && (
                 <OsintPanel osint={result.osint} />
+              )}
+
+              {/* ── Procedencia C2PA ────────────────────────────────────────── */}
+              {activeTab === 'Procedencia C2PA' && result.c2pa_provenance && (
+                <C2PAPanel provenance={result.c2pa_provenance} />
               )}
 
               {/* ── Heatmap ─────────────────────────────────────────────────── */}
