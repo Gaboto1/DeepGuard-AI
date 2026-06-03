@@ -152,12 +152,16 @@ def _run_image_analysis(image_path: Path) -> dict:
         )
 
     # ── Correcciones forenses post-hoc ────────────────────────────────────────
+    # Todos los 8 modelos disponibles para las reglas de corrección.
     model_scores_for_correction = {
-        "face_deepfake_vit": blend_scores[0],
-        "sdxl_detector":     blend_scores[1],
-        "efficientnet_ffpp": blend_scores[2],
-        "ai_art_detector":   blend_scores[3],
-        "siglip_deepfake":   blend_scores[4],
+        "face_deepfake_vit":  blend_scores[0],
+        "sdxl_detector":      blend_scores[1],
+        "efficientnet_ffpp":  blend_scores[2],
+        "ai_art_detector":    blend_scores[3],
+        "siglip_deepfake":    blend_scores[4],
+        "ai_human_detector":  blend_scores[5],   # necesario para OOD bypass v2
+        "frequency_spectral": blend_scores[6],
+        "srm_noise_detector": blend_scores[7],   # necesario para OOD bypass v2
     }
     final_score, correction_type, correction_details = apply_forensic_corrections(
         final_score, model_scores_for_correction, ood_result
