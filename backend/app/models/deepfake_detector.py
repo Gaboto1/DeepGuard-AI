@@ -84,22 +84,23 @@ MODEL_C_FILE = "efficientnet_b0_ffpp_c23.pth"
 _IMAGENET_MEAN = [0.485, 0.456, 0.406]
 _IMAGENET_STD  = [0.229, 0.224, 0.225]
 
-# ─── Ensemble weights (v2 — 7 modelos) ───────────────────────────────────────
-# Order: [A, B, C, D, E, F, freq]
-#   A = Face-Deepfake ViT       (face-swap specialist)
-#   B = SDXL Detector           (strongest general AI, F1=85.7%)
-#   C = CLIP ViT-L/14 + Probe   (EfficientNet-FF++ reemplazado)
-#   D = AI Art Detector         (Midjourney, DALL-E, Firefly)
-#   E = SigLIP Deepfake         (deepfake general)
-#   F = AI-Human Detector       (umm-maybe, distribución diferente a A-E)
-#   freq = Frequency Spectral   (dominio de frecuencias, sin VRAM extra)
+# ─── Ensemble weights (v3 — 8 modelos) ───────────────────────────────────────
+# Order: [A, B, C, D, E, F, freq, SRM]
+#   A    = Face-Deepfake ViT       (face-swap specialist)
+#   B    = SDXL Detector           (strongest general AI, F1=85.7%)
+#   C    = CLIP ViT-L/14 + Probe   (EfficientNet-FF++ reemplazado)
+#   D    = AI Art Detector         (Midjourney, DALL-E, Firefly)
+#   E    = SigLIP Deepfake         (deepfake general)
+#   F    = AI-Human Detector       (umm-maybe, distribución diferente a A-E)
+#   freq = Frequency Spectral      (dominio frecuencias FFT, 0 VRAM)
+#   SRM  = Noise Residual SRM      (residuos espaciales, ortogonal a freq, 0 VRAM)
 #
-# No-face: B domina, F y freq aportan perspectiva ortogonal
-# Face:    A lidera, B y D aportan, F y freq como soporte
-# freq recibe peso mínimo (0.03) — pendiente recalibración con golden set propio.
-# model_f (umm-maybe) recibe peso moderado — validado en test de descarga.
-_W_NO_FACE = [0.10, 0.47, 0.03, 0.12, 0.03, 0.22, 0.03]
-_W_FACE    = [0.30, 0.21, 0.03, 0.18, 0.05, 0.20, 0.03]
+# Pesos: suma = 1.0 exacto en ambos modos.
+# No-face: B domina; F y SRM aportan perspectiva ortogonal.
+# Face:    A lidera; B y D aportan; F, freq y SRM como soporte.
+# freq y SRM reciben peso conservador (0.03) — señales auxiliares validadas parcialmente.
+_W_NO_FACE = [0.10, 0.44, 0.03, 0.11, 0.03, 0.21, 0.03, 0.05]
+_W_FACE    = [0.29, 0.20, 0.03, 0.17, 0.05, 0.19, 0.03, 0.04]
 
 
 # ─── HuggingFace model wrapper ────────────────────────────────────────────────
@@ -341,8 +342,9 @@ def _calibrated_combine(
     face: bool,
     score_d: Optional[float] = None,
     score_e: Optional[float] = None,
-    score_f: Optional[float] = None,      # Nuevo: AI-Human Detector (umm-maybe)
-    score_freq: Optional[float] = None,   # Nuevo: Frequency Spectral Detector
+    score_f: Optional[float] = None,     # AI-Human Detector (umm-maybe)
+    score_freq: Optional[float] = None,  # Frequency Spectral Detector (FFT)
+    score_srm: Optional[float] = None,   # SRM Noise Residual Detector
 ) -> tuple[float, dict]:
     """
     Meta-ensemble v2 — 7 modelos.
@@ -360,24 +362,30 @@ def _calibrated_combine(
         "efficientnet_ffpp":   score_c,
         "ai_art_detector":     score_d,
         "siglip_deepfake":     score_e,
-        "ai_human_detector":   score_f,     # Nuevo
-        "frequency_spectral":  score_freq,  # Nuevo
+        "ai_human_detector":   score_f,
+        "frequency_spectral":  score_freq,
+        "srm_noise_detector":  score_srm,
     }
 
     # XGBoost meta-model (usa solo los 3 features confiables — no se retrenó)
     combined, meta_info = meta.predict(scores_dict, face=face)
 
-    # Incorporar señales F y freq como corrección post-meta si ambas tienen score alto
-    # Solo aplica si ambas señales nuevas están disponibles y alineadas con el meta
+    # ── Corrección post-meta: señales auxiliares ortogonales ─────────────────
+    # Modelo F + freq (señales de distribución diferente al XGBoost principal).
+    # Solo activa si divergencia > 35% — corrección máxima del 10%.
     if score_f is not None:
-        # Model F (umm-maybe) es la señal nueva más confiable.
-        # freq tiene peso mínimo hasta recalibración con golden set propio.
-        freq_w   = 0.15 if score_freq is not None else 0.0
-        new_sig  = (1 - freq_w) * score_f + freq_w * (score_freq or score_f)
-        # Corrección conservadora: solo si divergencia > 35%, mover 10%
+        freq_w  = 0.15 if score_freq is not None else 0.0
+        new_sig = (1 - freq_w) * score_f + freq_w * (score_freq or score_f)
         if abs(new_sig - combined) > 0.35:
             combined = combined * 0.90 + new_sig * 0.10
-        combined = float(np.clip(combined, 0.0, 1.0))
+
+    # SRM Noise Residual — señal espacial ortogonal a FFT.
+    # Umbral más conservador (40%) y corrección mínima (5%) — señal auxiliar.
+    if score_srm is not None:
+        if abs(score_srm - combined) > 0.40:
+            combined = combined * 0.95 + score_srm * 0.05
+
+    combined = float(np.clip(combined, 0.0, 1.0))
 
     per_model = {
         **{k: round(v, 4) if v is not None else None for k, v in scores_dict.items()},
@@ -467,9 +475,12 @@ class DeepfakeDetector:
         rc_list = _model_c.predict_batch(images)
         rd_list = _model_d.predict_batch(images)
         re_list = _model_e.predict_batch(images)
+        rf_list = _model_f.predict_batch(images)   # Model F incluido en batch
 
         out = []
-        for ra, rb, rc, rd, re, face in zip(ra_list, rb_list, rc_list, rd_list, re_list, face_flags):
+        for ra, rb, rc, rd, re, rf, face in zip(
+            ra_list, rb_list, rc_list, rd_list, re_list, rf_list, face_flags
+        ):
             fake, _ = _calibrated_combine(
                 ra["fake_probability"] if ra else 0.5,
                 rb["fake_probability"] if rb else 0.5,
@@ -477,6 +488,8 @@ class DeepfakeDetector:
                 face=face,
                 score_d=rd["fake_probability"] if rd else None,
                 score_e=re["fake_probability"] if re else None,
+                score_f=rf["fake_probability"] if rf else None,
+                # freq y SRM se añaden en el llamador (video_service) por frame
             )
             out.append({"fake_probability": fake, "real_probability": 1.0 - fake})
         return out

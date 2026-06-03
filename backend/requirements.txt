@@ -26,7 +26,6 @@ aiofiles==23.2.1
 
 # AI / ML (PyTorch installed separately with CUDA)
 transformers>=4.40.0
-accelerate>=0.29.0
 huggingface-hub>=0.22.0
 timm>=0.9.12
 
