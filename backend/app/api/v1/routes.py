@@ -13,6 +13,7 @@ TODO el procesamiento GPU ocurre exclusivamente en los workers de Celery.
 import asyncio
 import base64
 import json
+import re
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -22,11 +23,36 @@ from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 from loguru import logger
 
+_UUID_RE = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+    re.IGNORECASE,
+)
+
+
+def _validate_task_id(task_id: str) -> None:
+    """Rechaza task_ids que no sean UUID v4 — previene path traversal."""
+    if not _UUID_RE.match(task_id):
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error":   "task_id_invalido",
+                "mensaje": "El task_id debe ser un UUID válido (formato: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).",
+            },
+        )
+
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
 from app.config import settings
 from app.utils.file_validator import (
     get_file_type, validate_file_size,
     validate_not_empty, validate_video_size_async, validate_mime_type,
 )
+
+# Rate limiter para este router. El mismo key_func que main.py para que los
+# contadores sean coherentes entre routers. El límite de /analyze es más
+# estricto que el global (GPU-bound — previene DoS).
+_limiter = Limiter(key_func=get_remote_address)
 
 # Pool dedicado para operaciones CPU-bound (base64, SHA-256) que no deben
 # bloquear el event loop de FastAPI. max_workers=2 limita el paralelismo CPU.
@@ -203,6 +229,7 @@ def _get_task_result(task_id: str) -> Optional[dict]:
 # ─── POST /api/v1/analyze ─────────────────────────────────────────────────────
 
 @router.post("/analyze", status_code=202)
+@_limiter.limit("20/minute")
 async def analyze_async(
     request: Request,
     file: UploadFile = File(...),
@@ -367,6 +394,7 @@ async def get_task_status(task_id: str) -> JSONResponse:
       pending | processing | completed | failed
     HTTP 202 mientras está en cola o procesando, 200 al completar.
     """
+    _validate_task_id(task_id)
     result = _get_task_result(task_id)
     if result is None:
         raise HTTPException(404, f"Tarea '{task_id}' no encontrada")
@@ -400,6 +428,7 @@ async def verify_custody(task_id: str) -> JSONResponse:
     Endpoint para auditorías forenses: confirma que el resultado
     no fue alterado después del análisis.
     """
+    _validate_task_id(task_id)
     result = _get_task_result(task_id)
     if result is None:
         raise HTTPException(404, f"Tarea '{task_id}' no encontrada")
@@ -413,7 +442,8 @@ async def verify_custody(task_id: str) -> JSONResponse:
         from app.services.custody_service import verify_custody_seal
         is_valid = verify_custody_seal(seal)
     except Exception as e:
-        raise HTTPException(500, f"Error verificando sello: {e}")
+        logger.error(f"Custody verification error for {task_id[:8]}: {e}")
+        raise HTTPException(500, "Error interno al verificar el sello de custodia.")
 
     return JSONResponse(content={
         "task_id":          task_id,
@@ -559,6 +589,7 @@ async def get_history_v1(limit: int = 20) -> JSONResponse:
 @router.delete("/tasks/{task_id}")
 async def delete_task_v1(task_id: str) -> JSONResponse:
     """Elimina el resultado persistido en disco de una tarea."""
+    _validate_task_id(task_id)
     disk_path = RESULTS_DIR / f"{task_id}.json"
     if not disk_path.exists():
         raise HTTPException(404, f"Tarea '{task_id}' no encontrada en disco")
@@ -566,7 +597,8 @@ async def delete_task_v1(task_id: str) -> JSONResponse:
         disk_path.unlink()
         return JSONResponse(content={"message": f"Tarea {task_id} eliminada"})
     except Exception as e:
-        raise HTTPException(500, f"Error al eliminar: {e}")
+        logger.error(f"Delete task error {task_id[:8]}: {e}")
+        raise HTTPException(500, "Error interno al eliminar la tarea.")
 
 
 # ─── Fallback síncrono (sin Redis) ────────────────────────────────────────────

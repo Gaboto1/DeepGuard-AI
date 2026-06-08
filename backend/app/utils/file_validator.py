@@ -150,15 +150,22 @@ def validate_mime_type(file_path: Path, expected_type: str) -> None:
             # WEBP: RIFF????WEBP
             elif header[:4] == b"RIFF" and header[8:12] == b"WEBP":
                 mime = "image/webp"
+            # BMP: 42 4D ("BM")
+            elif header[:2] == b"BM":
+                mime = "image/bmp"
             # MP4/MOV: ftyp box en posición 4
             elif header[4:8] in (b"ftyp", b"moov", b"mdat"):
                 mime = "video/mp4"
-            # MKV: EBML header
+            # MKV y WEBM comparten el mismo header EBML (1A 45 DF A3).
+            # Los diferenciamos leyendo el DocType del segmento EBML:
+            # "webm" → video/webm, "matroska" o ausente → video/x-matroska
             elif header[:4] == b"\x1a\x45\xdf\xa3":
-                mime = "video/x-matroska"
-            # WEBM (también EBML)
-            elif header[:4] == b"\x1a\x45\xdf\xa3":
-                mime = "video/webm"
+                try:
+                    with open(file_path, "rb") as fh2:
+                        ebml_header = fh2.read(64)
+                    mime = "video/webm" if b"webm" in ebml_header else "video/x-matroska"
+                except Exception:
+                    mime = "video/x-matroska"
         except Exception as e:
             logger.warning(f"Validación MIME manual omitida: {e}")
 

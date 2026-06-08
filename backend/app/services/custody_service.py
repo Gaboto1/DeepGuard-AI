@@ -117,25 +117,18 @@ def generate_custody_seal(
     ).hexdigest()
 
     seal = {
-        "seal_version":    seal_version,
-        "task_id":         task_id,
-        "file_sha256":          file_sha256,
-        "filename":             filename,
-        "file_type":            file_type,
-        "final_score":          round(final_score, 8),
-        "evidence_level":       evidence_level,
-        "semantic_score":       sem_score_val,          # score LLaVA integrado en sello v2
-        "timestamp_utc":        timestamp_iso,
-        "timestamp_unix":       round(timestamp_unix, 3),
-        "custody_token":        custody_token,
-        "canonical_string":     canonical,
-        "analyst_note":         analyst_note,
-        "verification_command": (
-            f"python -c \""
-            f"import hmac, hashlib; "
-            f"print(hmac.new(SIGNING_KEY, '{canonical}'.encode(), hashlib.sha256).hexdigest())"
-            f"\""
-        ),
+        "seal_version":  seal_version,
+        "task_id":       task_id,
+        "file_sha256":   file_sha256,
+        "filename":      filename,
+        "file_type":     file_type,
+        "final_score":   round(final_score, 8),
+        "evidence_level":  evidence_level,
+        "semantic_score":  sem_score_val,
+        "timestamp_utc":   timestamp_iso,
+        "timestamp_unix":  round(timestamp_unix, 3),
+        "custody_token":   custody_token,
+        "analyst_note":    analyst_note,
     }
 
     logger.info(

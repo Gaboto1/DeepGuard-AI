@@ -8,7 +8,6 @@ En modo API_ONLY=true (Render/cloud):
 En modo local con GPU:
   - Comportamiento completo con carga de modelos e inferencia in-process.
 """
-import os
 import uuid
 from pathlib import Path
 
@@ -87,11 +86,8 @@ async def analyze_file(
         dest.write_bytes(content)
         logger.info(f"[API-ONLY] Despachando tarea {task_id[:8]}... a Celery")
         try:
-            import redis as _redis
-            _r = _redis.from_url(
-                os.getenv("REDIS_URL", "redis://localhost:6379/0"),
-                socket_connect_timeout=2, socket_timeout=2,
-            )
+            from app.config import make_redis_client as _mkr
+            _r = _mkr(socket_connect_timeout=2, socket_timeout=2)
             _r.ping()
             from app.tasks.analysis_tasks import analyze_image_task, analyze_video_task
             if file_type == "image":

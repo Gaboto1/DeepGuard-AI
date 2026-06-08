@@ -21,6 +21,8 @@ from loguru import logger
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 
 from app.api.routes import router
 from app.api.v1.routes import router as router_v1
@@ -74,6 +76,24 @@ async def lifespan(app: FastAPI):
 # Rate limiter
 limiter = Limiter(key_func=get_remote_address, default_limits=["100/minute"])
 
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """
+    Añade cabeceras de seguridad HTTP a todas las respuestas.
+    Previene clickjacking, sniffing de MIME, XSS reflejado y
+    establece una CSP mínima para una API JSON pura.
+    """
+    async def dispatch(self, request: Request, call_next) -> Response:
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"]  = "nosniff"
+        response.headers["X-Frame-Options"]         = "DENY"
+        response.headers["X-XSS-Protection"]        = "1; mode=block"
+        response.headers["Referrer-Policy"]         = "strict-origin-when-cross-origin"
+        response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'"
+        response.headers["Permissions-Policy"]      = "camera=(), microphone=(), geolocation=()"
+        return response
+
+
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.VERSION,
@@ -88,6 +108,9 @@ app = FastAPI(
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Security headers — se aplica a todas las respuestas antes del CORS
+app.add_middleware(SecurityHeadersMiddleware)
 
 # CORS — acepta orígenes de producción (Vercel) + desarrollo local
 app.add_middleware(

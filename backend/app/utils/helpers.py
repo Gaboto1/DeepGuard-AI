@@ -3,7 +3,7 @@ Funciones utilitarias forenses — v3.0 (100% español técnico)
 Interpretación basada en evidencia, sin etiquetas binarias.
 """
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 import numpy as np
@@ -16,7 +16,7 @@ def new_task_id() -> str:
 
 
 def now() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 # ─── Nivel de evidencia ───────────────────────────────────────────────────────
