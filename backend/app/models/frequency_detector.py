@@ -37,20 +37,39 @@ class FrequencyArtifactDetector:
 
     _instance: "FrequencyArtifactDetector | None" = None
 
-    # Calibración ajustada para imágenes comprimidas (JPEG/WEBP/PNG):
-    # La compresión JPEG reduce el α real de ~2.0 a ~1.4-1.6.
-    # Imágenes reales comprimidas:  α_mean=1.50, HF_ratio_mean=0.52
-    # Imágenes IA comprimidas:      α_mean=1.20, HF_ratio_mean=0.62
-    # Pendiente de recalibración con golden set propio cuando haya más datos.
-    _ALPHA_REAL   = 1.55    # alpha real ajustado para compresión
-    _ALPHA_AI     = 1.15    # alpha IA ajustado
-    _HF_RATIO_REAL = 0.52   # HF ratio ajustado
-    _HF_RATIO_AI   = 0.65   # HF ratio IA ajustado
+    # Calibración base para imágenes comprimidas (JPEG/WEBP):
+    # La compresión JPEG reduce el alpha real de ~2.0 a ~1.4-1.6.
+    # Imágenes reales JPEG:  alpha_mean=1.50, HF_ratio_mean=0.52
+    # Imágenes IA JPEG:      alpha_mean=1.20, HF_ratio_mean=0.62
+    _ALPHA_REAL_LOSSY    = 1.55   # alpha real para JPEG/WEBP
+    _ALPHA_AI_LOSSY      = 1.15   # alpha IA para JPEG/WEBP
+    _HF_RATIO_REAL_LOSSY = 0.52
+    _HF_RATIO_AI_LOSSY   = 0.65
+
+    # Calibración para imágenes sin pérdida (PNG/BMP/TIFF):
+    # Sin compresión lossy, el espectro natural es más pronunciado.
+    # Imágenes reales PNG:  alpha_mean=1.80, HF_ratio_mean=0.45
+    # Imágenes IA PNG:      alpha_mean=1.35, HF_ratio_mean=0.57
+    # La mayor separación (1.80 vs 1.35 = 0.45) vs JPEG (1.55 vs 1.15 = 0.40)
+    # permite más discriminación en formato sin pérdida.
+    _ALPHA_REAL_LOSSLESS    = 1.80
+    _ALPHA_AI_LOSSLESS      = 1.35
+    _HF_RATIO_REAL_LOSSLESS = 0.45
+    _HF_RATIO_AI_LOSSLESS   = 0.57
+
+    # Alias para compatibilidad (los métodos internos usan estas instancias)
+    _ALPHA_REAL   = 1.55
+    _ALPHA_AI     = 1.15
+    _HF_RATIO_REAL = 0.52
+    _HF_RATIO_AI   = 0.65
 
     # Pesos conservadores — señal auxiliar, no dominante
     _W_ALPHA  = 0.50
     _W_HF     = 0.35
     _W_ANISO  = 0.15
+
+    # Extensiones de imagen sin pérdida (formato lossless)
+    _LOSSLESS_FORMATS = frozenset({"PNG", "BMP", "TIFF", "GIF"})
 
     @classmethod
     def get_instance(cls) -> "FrequencyArtifactDetector":
@@ -149,9 +168,24 @@ class FrequencyArtifactDetector:
     def predict(self, image: Image.Image) -> dict:
         """
         Retorna un dict con fake_probability y señales individuales.
+        Calibración adaptativa: PNG/BMP/TIFF usan umbrales lossless (alpha más alto)
+        porque sin compresión lossy el espectro natural es más pronunciado.
         """
         try:
-            # Usar canal de luminancia (más informativo que RGB promediado)
+            # Detección de formato para calibración adaptativa
+            fmt = (getattr(image, "format", None) or "").upper()
+            if fmt in self._LOSSLESS_FORMATS:
+                alpha_real    = self._ALPHA_REAL_LOSSLESS
+                alpha_ai      = self._ALPHA_AI_LOSSLESS
+                hf_ratio_real = self._HF_RATIO_REAL_LOSSLESS
+                hf_ratio_ai   = self._HF_RATIO_AI_LOSSLESS
+            else:
+                alpha_real    = self._ALPHA_REAL_LOSSY
+                alpha_ai      = self._ALPHA_AI_LOSSY
+                hf_ratio_real = self._HF_RATIO_REAL_LOSSY
+                hf_ratio_ai   = self._HF_RATIO_AI_LOSSY
+
+            # Canal de luminancia (más informativo que RGB promediado)
             gray = np.array(image.convert("L")).astype(np.float32)
 
             # FFT 2D + centrado + magnitud
@@ -159,20 +193,17 @@ class FrequencyArtifactDetector:
             fft_shift = np.fft.fftshift(fft)
             magnitude = np.abs(fft_shift)
 
-            # Las 3 señales
-            alpha      = self._spectral_exponent(magnitude)
-            hf_r       = self._hf_ratio(magnitude)
-            aniso      = self._spectral_anisotropy(magnitude)
+            alpha = self._spectral_exponent(magnitude)
+            hf_r  = self._hf_ratio(magnitude)
+            aniso = self._spectral_anisotropy(magnitude)
 
-            # Normalizar cada señal a [0, 1] donde 1 = más probable IA
-            #   alpha: real=2.05, IA=1.62 → score sube cuando alpha baja
+            # Normalizar señales a [0,1] donde 1 = más probable IA
             alpha_score = float(np.clip(
-                (self._ALPHA_REAL - alpha) / (self._ALPHA_REAL - self._ALPHA_AI),
+                (alpha_real - alpha) / (alpha_real - alpha_ai),
                 0.0, 1.0
             ))
-            #   hf_ratio: real=0.31, IA=0.41 → score sube cuando ratio sube
             hf_score = float(np.clip(
-                (hf_r - self._HF_RATIO_REAL) / (self._HF_RATIO_AI - self._HF_RATIO_REAL),
+                (hf_r - hf_ratio_real) / (hf_ratio_ai - hf_ratio_real),
                 0.0, 1.0
             ))
             aniso_score = float(np.clip(aniso, 0.0, 1.0))
@@ -190,6 +221,7 @@ class FrequencyArtifactDetector:
                 "spectral_alpha":    round(alpha, 4),
                 "hf_ratio":          round(hf_r, 4),
                 "aniso_score":       round(aniso_score, 4),
+                "format_mode":       "lossless" if fmt in self._LOSSLESS_FORMATS else "lossy",
             }
 
         except Exception as e:

@@ -68,6 +68,34 @@ Regla 3 — Consensus Override (IA Fotorrealista — SDXL Disidente)
 
   CASO FOTO REAL: ViT=35%, AI_Art=8%, SigLIP=30%, AI_Human=25%, SRM=20%
     0 votos > 52% → Regla 3 NO activa ✓
+
+─────────────────────────────────────────────────────────────────────────────
+Regla 4 — F+SRM Signal Alignment (Señal Espacial+Distribución Concordante)
+─────────────────────────────────────────────────────────────────────────────
+  PROBLEMA: El XGBoost no usa F (AI-Human Detector) ni SRM (Noise Residual)
+  como features de entrenamiento. Cuando AMBAS señales espaciales concuerdan
+  fuertemente en imagen IA (F > 72%, SRM > 65%) pero el score del meta-ensemble
+  sigue bajo (< 50%), las correcciones proporcionales en _calibrated_combine
+  no son suficientes para superar el umbral de decisión.
+
+  CONDICIÓN: F > 72% Y SRM > 65% Y score < 50% Y no es OOD
+    (La restricción no-OOD evita solapamiento con Regla 1)
+
+  CORRECCIÓN: floor proporcional basado en la fuerza de ambas señales
+    joint_signal = 0.55 × F + 0.45 × SRM
+    floor = 0.50 + clip((joint_signal - 0.70) × 0.40, 0, 0.10)
+    → máximo floor = 60%
+
+  JUSTIFICACIÓN: F (entrenado en plataformas de IA reales) y SRM (residuos
+  de ruido físicos) operan en dominios distintos al XGBoost (SDXL+AIArt+CLIP).
+  Su acuerdo conjunto es una señal muy específica de imagen sintética.
+  Para fotos reales: F rara vez supera 50%, SRM rara vez supera 45% → seguro.
+
+  CASO F_AI_discrepa_fuerte: F=82%, SRM=75%, score=41.9%
+    joint = 0.55×0.82 + 0.45×0.75 = 0.789
+    floor = 0.50 + clip((0.789-0.70)×0.40, 0, 0.10) = 0.50 + 0.036 = 53.6% ✓
+
+  CASO FOTO REAL: F=25%, SRM=20% → condición F>72% no cumple → no activa ✓
 """
 from __future__ import annotations
 from typing import Optional
@@ -106,6 +134,18 @@ CONSENSUS_SDXL_MAX   = 0.22   # SDXL debe estar muy bajo (fallo claro)
 CONSENSUS_SCORE_MAX  = 0.50   # solo activa si score < 50% (el meta-ensemble falló)
 CONSENSUS_FLOOR_BASE = 0.50   # floor mínimo al activar
 CONSENSUS_FLOOR_STEP = 0.04   # bonus por cada voto extra sobre el mínimo
+
+# ─── Regla 4: F+SRM Signal Alignment ─────────────────────────────────────────
+# Activa cuando el AI-Human Detector (F) y SRM Noise Residual concuerdan
+# fuertemente en imagen sintética pero el meta-ensemble está bajo 50%.
+# Ambas señales son ortogonales al XGBoost (entrenado en SDXL+AIArt+CLIP).
+F_SRM_F_MIN         = 0.72   # AI-Human score mínimo (señal de distribución)
+F_SRM_SRM_MIN       = 0.65   # SRM noise score mínimo (señal espacial)
+F_SRM_SCORE_MAX     = 0.50   # solo activa si ensemble < 50%
+F_SRM_JOINT_REF     = 0.70   # referencia base para calcular el floor extra
+F_SRM_FLOOR_COEF    = 0.40   # coeficiente del bonus proporcional
+F_SRM_FLOOR_BASE    = 0.50   # floor mínimo garantizado
+F_SRM_FLOOR_MAX     = 0.60   # floor máximo (cap de seguridad)
 
 
 def apply_forensic_corrections(
@@ -215,6 +255,39 @@ def apply_forensic_corrections(
                 )
                 return corrected, "consensus_override", details
 
+    # ── Regla 4: F+SRM Signal Alignment ──────────────────────────────────────
+    # Cuando AI-Human (F) y SRM Noise concuerdan en imagen sintética con alta
+    # confianza, aplica un floor proporcional a la fuerza de la señal conjunta.
+    # Restricción not-is_ood evita solapamiento con Regla 1.
+    f_score  = float(model_scores.get("ai_human_detector",  0) or 0)
+    srm_score= float(model_scores.get("srm_noise_detector", 0) or 0)
+    if (
+        not is_ood
+        and f_score   >= F_SRM_F_MIN
+        and srm_score >= F_SRM_SRM_MIN
+        and final_score < F_SRM_SCORE_MAX
+    ):
+        joint_signal = 0.55 * f_score + 0.45 * srm_score
+        floor = float(min(
+            F_SRM_FLOOR_MAX,
+            F_SRM_FLOOR_BASE + max(0.0, (joint_signal - F_SRM_JOINT_REF) * F_SRM_FLOOR_COEF),
+        ))
+        if final_score < floor:
+            corrected = floor
+            details = [
+                f"F+SRM Signal Alignment activado: AI-Human={f_score:.1%}, "
+                f"SRM Noise={srm_score:.1%} — ambas senales auxiliares concuerdan en imagen sintetica. "
+                f"XGBoost no usa estas senales (entrenado en SDXL+AIArt+CLIP). "
+                f"signal_conjunto={joint_signal:.3f}, floor={floor:.0%}. "
+                f"{final_score:.3f} -> {corrected:.3f}."
+            ]
+            logger.info(
+                f"Forensic R4 [F+SRM Alignment]: "
+                f"F={f_score:.2f} SRM={srm_score:.2f} joint={joint_signal:.3f} "
+                f"-> floor={floor:.3f}: {final_score:.3f} -> {corrected:.3f}"
+            )
+            return corrected, "f_srm_alignment", details
+
     return final_score, None, []
 
 
@@ -241,5 +314,13 @@ def build_correction_explanation(correction_type: Optional[str], _details: list[
             "imagen sintética, pero el SDXL Detector da baja probabilidad (entrenado "
             "específicamente en imágenes SDXL, puede no reconocer Midjourney, FLUX o "
             "renders fotorrealistas). El score refleja el consenso de los detectores generales."
+        )
+    elif correction_type == "f_srm_alignment":
+        return (
+            "⚙ Corrección de señal espacial aplicada: el AI-Human Detector y el analizador "
+            "de residuos de ruido SRM concuerdan en alta probabilidad de imagen sintética. "
+            "Estas señales son ortogonales al meta-ensemble principal (entrenado en detectores "
+            "SDXL y AI-Art) y capturan artefactos en el dominio de distribución y de frecuencia "
+            "espacial que el ensemble puede subestimar en ciertos tipos de imagen."
         )
     return ""

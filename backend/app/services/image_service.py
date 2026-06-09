@@ -17,6 +17,7 @@ from app.models.deepfake_detector import (
 from app.models.face_detector import FaceDetector
 from app.models.frequency_detector import predict_frequency
 from app.models.srm_detector import predict_srm
+from app.models.ela_detector import predict_ela
 from app.models.ood_detector import detect_ood, apply_ood_penalty
 from app.services.metadata_service import extract_metadata
 from app.services.osint_service import build_osint_result
@@ -98,7 +99,12 @@ def _run_image_analysis(image_path: Path) -> dict:
     srm_result  = predict_srm(image)
     score_srm   = srm_result.get("fake_probability", 0.5)
 
-    # ── Predict — 8 modelos ───────────────────────────────────────────────────
+    # ELA: re-compresión JPEG para detectar uniformidad del historial de compresión.
+    # Solo imágenes (no video). Latencia: ~15-40ms CPU.
+    ela_result = predict_ela(image)
+    score_ela  = ela_result.get("fake_probability", 0.5)
+
+    # ── Predict — 8 modelos GPU + 3 señales CPU (freq, SRM, ELA) ────────────
     def _predict_all(img: Image.Image, face: bool) -> tuple[list[Optional[float]], float]:
         ra = _model_a.predict(img)
         rb = _model_b.predict(img)
@@ -115,13 +121,14 @@ def _run_image_analysis(image_path: Path) -> dict:
             rf["fake_probability"] if rf else None,
             score_freq,   # slot 6: freq spectral
             score_srm,    # slot 7: SRM noise residual
+            score_ela,    # slot 8: ELA compression history
         ]
         ens, _ = _calibrated_combine(
             scores_raw[0] or 0.5, scores_raw[1] or 0.5, scores_raw[2],
             face=face,
             score_d=scores_raw[3], score_e=scores_raw[4],
             score_f=scores_raw[5], score_freq=scores_raw[6],
-            score_srm=scores_raw[7],
+            score_srm=scores_raw[7], score_ela=scores_raw[8],
         )
         return scores_raw, ens
 
@@ -152,16 +159,17 @@ def _run_image_analysis(image_path: Path) -> dict:
         )
 
     # ── Correcciones forenses post-hoc ────────────────────────────────────────
-    # Todos los 8 modelos disponibles para las reglas de corrección.
+    # Todos los modelos disponibles para las reglas de corrección.
     model_scores_for_correction = {
         "face_deepfake_vit":  blend_scores[0],
         "sdxl_detector":      blend_scores[1],
         "efficientnet_ffpp":  blend_scores[2],
         "ai_art_detector":    blend_scores[3],
         "siglip_deepfake":    blend_scores[4],
-        "ai_human_detector":  blend_scores[5],   # necesario para OOD bypass v2
+        "ai_human_detector":  blend_scores[5],   # necesario para OOD bypass v2 y R4
         "frequency_spectral": blend_scores[6],
-        "srm_noise_detector": blend_scores[7],   # necesario para OOD bypass v2
+        "srm_noise_detector": blend_scores[7],   # necesario para OOD bypass v2 y R4
+        "ela_detector":       blend_scores[8],
     }
     final_score, correction_type, correction_details = apply_forensic_corrections(
         final_score, model_scores_for_correction, ood_result
@@ -192,7 +200,7 @@ def _run_image_analysis(image_path: Path) -> dict:
         face=use_face_mode,
         score_d=blend_scores[3], score_e=blend_scores[4],
         score_f=blend_scores[5], score_freq=blend_scores[6],
-        score_srm=blend_scores[7],
+        score_srm=blend_scores[7], score_ela=blend_scores[8],
     )
     ens_meta = {
         "method":     _pm.get("ensemble_method", "unknown"),
@@ -223,6 +231,7 @@ def _run_image_analysis(image_path: Path) -> dict:
             "ai_human_detector":  _r(blend_scores[5]),
             "frequency_spectral": _r(blend_scores[6]),
             "srm_noise_detector": _r(blend_scores[7]),
+            "ela_detector":       _r(blend_scores[8]),
         },
         "forensic_correction_type":        correction_type,
         "forensic_correction_details":     correction_details,

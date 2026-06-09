@@ -345,12 +345,12 @@ def _calibrated_combine(
     score_f: Optional[float] = None,     # AI-Human Detector (umm-maybe)
     score_freq: Optional[float] = None,  # Frequency Spectral Detector (FFT)
     score_srm: Optional[float] = None,   # SRM Noise Residual Detector
+    score_ela: Optional[float] = None,   # ELA Detector (Error Level Analysis)
 ) -> tuple[float, dict]:
     """
-    Meta-ensemble v2 — 7 modelos.
+    Meta-ensemble v3 — 8 modelos GPU + 3 señales CPU auxiliares.
     El XGBoost usa los 3 features más confiables (sdxl, aiart, clip).
-    Los nuevos modelos F y freq se integran via weighted fallback:
-    aportan señales ortogonales sin degradar los features del XGBoost calibrado.
+    F, freq, SRM y ELA aportan señales ortogonales como correcciones post-meta.
     """
     from app.models.meta_ensemble import MetaEnsemble
     meta = MetaEnsemble.get_instance()
@@ -365,25 +365,51 @@ def _calibrated_combine(
         "ai_human_detector":   score_f,
         "frequency_spectral":  score_freq,
         "srm_noise_detector":  score_srm,
+        "ela_detector":        score_ela,
     }
 
     # XGBoost meta-model (usa solo los 3 features confiables — no se retrenó)
     combined, meta_info = meta.predict(scores_dict, face=face)
 
     # ── Corrección post-meta: señales auxiliares ortogonales ─────────────────
-    # Modelo F + freq (señales de distribución diferente al XGBoost principal).
-    # Solo activa si divergencia > 35% — corrección máxima del 10%.
+    # Modelo F + freq — umbral reducido a 0.20 (antes 0.35) para capturar más
+    # casos de divergencia real. Peso proporcional al desacuerdo, cap 0.18.
     if score_f is not None:
         freq_w  = 0.15 if score_freq is not None else 0.0
         new_sig = (1 - freq_w) * score_f + freq_w * (score_freq or score_f)
-        if abs(new_sig - combined) > 0.35:
-            combined = combined * 0.90 + new_sig * 0.10
+        disc_f  = abs(new_sig - combined)
+        if disc_f > 0.20:
+            alpha_f  = min(0.18, disc_f * 0.35)
+            combined = combined * (1.0 - alpha_f) + new_sig * alpha_f
 
-    # SRM Noise Residual — señal espacial ortogonal a FFT.
-    # Umbral más conservador (40%) y corrección mínima (5%) — señal auxiliar.
+    # SRM Noise Residual — umbral reducido a 0.25 (antes 0.40).
+    # Peso proporcional, cap 0.10. Señal espacial ortogonal al FFT global.
     if score_srm is not None:
-        if abs(score_srm - combined) > 0.40:
-            combined = combined * 0.95 + score_srm * 0.05
+        disc_srm = abs(score_srm - combined)
+        if disc_srm > 0.25:
+            alpha_srm = min(0.10, disc_srm * 0.20)
+            combined  = combined * (1.0 - alpha_srm) + score_srm * alpha_srm
+
+    # Señal conjunta F+SRM — cuando ambas señales auxiliares coinciden con fuerza
+    # alta (F > 0.72, SRM > 0.65) y el ensemble está por debajo de 0.50,
+    # el acuerdo entre residuos espaciales (SRM) y la firma de distribución (F)
+    # justifica una corrección adicional. Peso cap 0.20.
+    if score_f is not None and score_srm is not None:
+        if score_f > 0.72 and score_srm > 0.65:
+            joint_ai   = 0.55 * score_f + 0.45 * score_srm
+            disc_joint = abs(joint_ai - combined)
+            if disc_joint > 0.18:
+                alpha_joint = min(0.20, disc_joint * 0.40)
+                combined    = combined * (1.0 - alpha_joint) + joint_ai * alpha_joint
+
+    # ELA (Error Level Analysis) — señal de historial de compresión.
+    # Umbral 0.22: solo corrige cuando la uniformidad ELA discrepa notablemente.
+    # Peso proporcional, cap 0.08 — señal nueva con calibración conservadora.
+    if score_ela is not None:
+        disc_ela = abs(score_ela - combined)
+        if disc_ela > 0.22:
+            alpha_ela = min(0.08, disc_ela * 0.15)
+            combined  = combined * (1.0 - alpha_ela) + score_ela * alpha_ela
 
     combined = float(np.clip(combined, 0.0, 1.0))
 
