@@ -24,6 +24,7 @@ uploads/
 # Reportes forenses con datos de análisis reales
 reports/tasks/
 reports/custody/
+backend/reports/
 
 # Logs del sistema (pueden contener rutas, IPs, datos de debug)
 logs/

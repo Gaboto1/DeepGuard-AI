@@ -46,10 +46,24 @@ export function WorkerStatusProvider({ children }: { children: React.ReactNode }
         if (cancelled) return;
 
         if (httpStatus >= 200 && httpStatus < 300) {
-          const workerOnline = data.workers_online === true;
-          const info         = String(data.workers_status ?? 'desconocido');
-          setStatus(workerOnline ? 'online' : 'offline');
-          setTooltip(workerOnline ? info : `Worker GPU no disponible — ${info}`);
+          const mode = String(data.mode ?? '');
+
+          if (mode === 'full-gpu') {
+            // Modo local: el propio backend procesa con su GPU (sync_fallback),
+            // no depende de un worker remoto vía heartbeat en Redis.
+            const cudaOk = data.cuda === true;
+            setStatus(cudaOk ? 'online' : 'offline');
+            setTooltip(
+              cudaOk
+                ? `GPU local disponible — ${String(data.gpu ?? '')}`
+                : 'Modo local sin GPU — procesando en CPU',
+            );
+          } else {
+            const workerOnline = data.workers_online === true;
+            const info         = String(data.workers_status ?? 'desconocido');
+            setStatus(workerOnline ? 'online' : 'offline');
+            setTooltip(workerOnline ? info : `Worker GPU no disponible — ${info}`);
+          }
         } else {
           setStatus('offline');
           setTooltip(`API respondió con HTTP ${httpStatus}`);

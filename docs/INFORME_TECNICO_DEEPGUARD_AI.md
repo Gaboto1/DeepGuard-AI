@@ -721,9 +721,8 @@ PROYECTO TITULO FINAL/
 │                                    #          reports/, .next/, out/, __pycache__/
 ├── 📄 ESTRUCTURA_PROYECTO.md        # Árbol visual del proyecto para la comisión
 ├── 📄 INFORME_TECNICO_DEEPGUARD_AI.md  # Este documento
-├── 📄 start-backend.bat             # Arranque rápido FastAPI local
-├── 📄 start-frontend.bat            # Arranque rápido Next.js local
-├── 📄 START CELERY WORKER.bat       # Arranque del worker GPU con verificación Redis
+├── 📄 INICIAR LOCAL.bat             # Arranque rápido de FastAPI + Next.js local
+├── 📄 INICIAR PAGINA WEB.bat        # Arranque del worker GPU con verificación Redis
 │
 ├── 📁 frontend/                     # Capa de Presentación (Next.js 14)
 │   ├── 📁 src/

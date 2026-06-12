@@ -89,10 +89,9 @@ PROYECTO TITULO FINAL/
 │
 ├── models/                          # Pesos de modelos descargados (en .gitignore, >GB)
 │
-├── START CELERY WORKER.bat          # Script para arrancar el worker GPU local
-├── start-backend.bat                # Script para arrancar FastAPI local
-├── start-frontend.bat               # Script para arrancar Next.js local
-├── generar_informe.py               # Generador del informe Word (.docx)
+├── INICIAR PAGINA WEB.bat           # Script para arrancar el worker GPU local (produccion)
+├── INICIAR LOCAL.bat                # Script para arrancar stack completo en localhost
+├── tools/generar_informe.py         # Generador del informe Word (.docx)
 ├── .gitignore                       # Reglas Git: venv, .env, models, uploads, etc.
 └── ESTRUCTURA_PROYECTO.md           # Este archivo
 ```
@@ -123,7 +122,7 @@ PROYECTO TITULO FINAL/
        ▼
   PC Local (GPU) ─────────────────── Worker Celery GPU
   RTX 4070 SUPER 12 GB VRAM          5 modelos + LLaVA 4-bit (~6.8 GB VRAM)
-  START CELERY WORKER.bat            Procesa y guarda resultado en Aiven
+  INICIAR PAGINA WEB.bat              Procesa y guarda resultado en Aiven
 ```
 
 ---

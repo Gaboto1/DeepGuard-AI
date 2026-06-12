@@ -28,9 +28,9 @@ El backend opera en dos modos controlados por la variable `API_ONLY` (`backend/.
 | Resultados/historial | Reports JSON en `reports/tasks/` + custodia en `reports/custody/` | Igual — mismos directorios locales, sin tocar datos de producción |
 | Frontend | `NEXT_PUBLIC_API_URL` apunta a la API de Render (`frontend/.env.production`) | `NEXT_PUBLIC_API_URL=http://localhost:8000` (`frontend/.env.local`) |
 
-Esto permite levantar el stack completo en `localhost` (`START DEEPGUARD.bat` o `uvicorn` + `npm run dev`) sin depender de Redis/Celery en la nube ni afectar las colas o el historial de producción — el endpoint `/` y `/api/v1/health` exponen el campo `mode` para verificar en qué modo está corriendo la instancia.
+Esto permite levantar el stack completo en `localhost` (`INICIAR LOCAL.bat` o `uvicorn` + `npm run dev`) sin depender de Redis/Celery en la nube ni afectar las colas o el historial de producción — el endpoint `/` y `/api/v1/health` exponen el campo `mode` para verificar en qué modo está corriendo la instancia.
 
-El worker GPU local (`START CELERY WORKER.bat`) siempre usa `API_ONLY=false` y se conecta al Redis de producción (Aiven Valkey) para consumir tareas reales — es el componente de cómputo del despliegue en producción, no un modo de prueba.
+El worker GPU local (`INICIAR PAGINA WEB.bat`) siempre usa `API_ONLY=false` y se conecta al Redis de producción (Aiven Valkey) para consumir tareas reales — es el componente de cómputo del despliegue en producción, no un modo de prueba.
 
 ---
 
@@ -54,13 +54,10 @@ El worker GPU local (`START CELERY WORKER.bat`) siempre usa `API_ONLY=false` y s
 # 1. Open PowerShell as Administrator and run:
 powershell -ExecutionPolicy Bypass -File setup.ps1
 
-# 2. Start backend (Terminal 1):
-.\start-backend.bat
+# 2. Start the full local stack (backend + frontend):
+.\"INICIAR LOCAL.bat"
 
-# 3. Start frontend (Terminal 2):
-.\start-frontend.bat
-
-# 4. Open browser:
+# 3. Open browser:
 # http://localhost:3000
 ```
 
