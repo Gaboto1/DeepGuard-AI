@@ -57,9 +57,10 @@ class FrequencyArtifactDetector:
     _HF_RATIO_REAL_LOSSLESS = 0.45
     _HF_RATIO_AI_LOSSLESS   = 0.57
 
-    # Alias para compatibilidad (los métodos internos usan estas instancias)
-    _ALPHA_REAL   = 1.55
-    _ALPHA_AI     = 1.15
+    # Valores de fallback cuando el cálculo espectral no es viable
+    # (usados por _spectral_exponent y _hf_ratio ante señal insuficiente)
+    _ALPHA_REAL    = 1.55
+    _ALPHA_AI      = 1.15
     _HF_RATIO_REAL = 0.52
     _HF_RATIO_AI   = 0.65
 

@@ -86,21 +86,6 @@ export async function getTask(taskId: string): Promise<AnalysisResult> {
   return normalizeV1Response(data);
 }
 
-// ─── Historial ────────────────────────────────────────────────────────────────
-
-export async function getHistory(limit = 20): Promise<AnalysisResult[]> {
-  const { data } = await client.get<Record<string, unknown>[]>('/api/v1/history', {
-    params: { limit },
-  });
-  return data.map(normalizeV1Response);
-}
-
-// ─── Eliminación ─────────────────────────────────────────────────────────────
-
-export async function deleteTask(taskId: string): Promise<void> {
-  await client.delete(`/api/v1/tasks/${taskId}`);
-}
-
 // ─── Salud del sistema ────────────────────────────────────────────────────────
 
 export async function getHealth(): Promise<HealthResponse> {

@@ -201,7 +201,6 @@ export interface AnalysisResult {
 
   // Backward compat — raw 0–1
   fake_probability?: number;
-  real_probability?: number;
 }
 
 export interface UploadResponse {
