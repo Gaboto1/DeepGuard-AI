@@ -20,12 +20,13 @@ const BAR_LEN = 20;
 
 interface Props {
   progress:     number;
+  currentStage?: string;   // etapa real reportada por el worker (ej. "Ensemble 5 modelos")
   fileType:     'image' | 'video';
   previewUrl?:  string;
   previewType?: 'image' | 'video';
 }
 
-export default function AnalysisProgress({ progress, fileType, previewUrl, previewType }: Props) {
+export default function AnalysisProgress({ progress, currentStage, fileType, previewUrl, previewType }: Props) {
   const startRef   = useRef(Date.now());
   const [tick, setTick] = useState(0);
 
@@ -130,6 +131,10 @@ export default function AnalysisProgress({ progress, fileType, previewUrl, previ
             }
 
             if (active) {
+              // Si el worker reporta una etapa real (vía polling), se muestra
+              // en lugar de la etiqueta cosmética — evita narrar una etapa
+              // ficticia mientras el backend ya está en otra distinta.
+              const label = currentStage && currentStage.trim() ? currentStage : stage.label;
               return (
                 <div key={stage.id} className="flex items-baseline gap-2">
                   <span className="flex-shrink-0 text-2xs" style={{ color: '#b86a1a', minWidth: '7rem' }}>
@@ -139,7 +144,7 @@ export default function AnalysisProgress({ progress, fileType, previewUrl, previ
                     {stageTs(i)}
                   </span>
                   <span className="text-2xs" style={{ color: 'var(--fg-primary)' }}>
-                    {stage.label}
+                    {label}
                     <span style={{ color: '#1E63D4', opacity: showCursor ? 1 : 0 }}>█</span>
                   </span>
                 </div>

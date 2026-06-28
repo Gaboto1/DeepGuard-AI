@@ -192,6 +192,7 @@ export default function Page() {
             <motion.div key="analyzing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <AnalysisProgress
                 progress={result?.progress ?? 0.02}
+                currentStage={result?.etapa}
                 fileType={(result?.file_type ?? filePreview?.type ?? 'image') as 'image' | 'video'}
                 previewUrl={filePreview?.url}
                 previewType={filePreview?.type}

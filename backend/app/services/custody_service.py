@@ -34,17 +34,25 @@ from loguru import logger
 from app.config import settings
 
 # ── Clave de firma HMAC ───────────────────────────────────────────────────────
-# OBLIGATORIA: si DEEPGUARD_SIGNING_KEY no está definida, el servicio falla
-# inmediatamente en lugar de usar una clave pública conocida (CRÍTICO-01).
+# OBLIGATORIA: si DEEPGUARD_SIGNING_KEY no está definida —o es uno de los
+# valores de ejemplo/placeholder conocidos que aparecen en los .env.example
+# y en docker-compose.prod.yml—, el servicio falla inmediatamente en lugar
+# de firmar la cadena de custodia con una clave pública/adivinable (CRÍTICO-01).
 # Generar clave segura: python -c "import secrets; print(secrets.token_hex(32))"
+_INSECURE_PLACEHOLDERS = {
+    "change-me-in-production",
+    "cambia-esto-por-una-clave-aleatoria-larga",
+    "reemplazar-con-output-de-secrets.token_hex(32)",
+}
 _raw_key = settings.DEEPGUARD_SIGNING_KEY or os.getenv("DEEPGUARD_SIGNING_KEY", "")
-if not _raw_key:
+if not _raw_key or _raw_key.strip().lower() in _INSECURE_PLACEHOLDERS:
     # En modo API_ONLY (Render) no se generan sellos, por lo que no es crítico.
     # En modo worker (local con GPU) sí es obligatoria.
     if not settings.API_ONLY:
         raise RuntimeError(
-            "DEEPGUARD_SIGNING_KEY no está definida. "
-            "La cadena de custodia forense requiere una clave secreta. "
+            "DEEPGUARD_SIGNING_KEY no está definida o usa un valor de ejemplo "
+            "inseguro (p. ej. 'change-me-in-production'). "
+            "La cadena de custodia forense requiere una clave secreta real. "
             "Generar con: python -c \"import secrets; print(secrets.token_hex(32))\" "
             "y definirla como variable de entorno DEEPGUARD_SIGNING_KEY."
         )

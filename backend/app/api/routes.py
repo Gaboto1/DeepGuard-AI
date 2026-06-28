@@ -8,6 +8,7 @@ En modo API_ONLY=true (Render/cloud):
 En modo local con GPU:
   - Comportamiento completo con carga de modelos e inferencia in-process.
 """
+import base64
 import uuid
 from pathlib import Path
 
@@ -90,10 +91,22 @@ async def analyze_file(
             _r = _mkr(socket_connect_timeout=2, socket_timeout=2)
             _r.ping()
             from app.tasks.analysis_tasks import analyze_image_task, analyze_video_task
+            # file_content_b64 viaja en el payload para que el worker GPU local
+            # reconstruya el archivo (Render y el worker no comparten filesystem).
+            # Sin esto, el worker lanza FileNotFoundError/ValueError (ver /api/v1/analyze).
+            file_content_b64 = base64.b64encode(content).decode("ascii")
             if file_type == "image":
-                analyze_image_task.apply_async(args=[task_id, str(dest), file.filename], task_id=task_id)
+                analyze_image_task.apply_async(
+                    args=[task_id, str(dest), file.filename],
+                    kwargs={"file_content_b64": file_content_b64},
+                    task_id=task_id,
+                )
             else:
-                analyze_video_task.apply_async(args=[task_id, str(dest), file.filename], task_id=task_id)
+                analyze_video_task.apply_async(
+                    args=[task_id, str(dest), file.filename],
+                    kwargs={"file_content_b64": file_content_b64},
+                    task_id=task_id,
+                )
         except Exception as e:
             logger.warning(f"Celery dispatch failed: {e}")
         return UploadResponse(

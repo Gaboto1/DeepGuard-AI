@@ -128,6 +128,7 @@ export interface AnalysisResult {
   file_type: FileType;
   filename: string;
   created_at: string;
+  etapa?: string;   // etapa real del pipeline backend (en español), ej. "Ensemble 5 modelos"
 
   // Core forensic result
   manipulation_probability?: number;  // 0–100 for display

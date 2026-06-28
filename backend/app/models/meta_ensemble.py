@@ -135,8 +135,8 @@ class MetaEnsemble:
         Ejemplo que provocaba el bug:
           SDXL=0.01, AI_Art=0.10 → robust_mean=0.055
           Meta-LightGBM dice 0.68 (por SigLIP=0.96 + ViT=0.65)
-          Con VETO_STRENGTH=0.65:
-            final = 0.055 * 0.65 + 0.68 * 0.35 = 0.036 + 0.238 = 0.27
+          Con VETO_STRENGTH=0.60 (valor actual):
+            final = 0.055 * 0.60 + 0.68 * 0.40 = 0.033 + 0.272 = 0.305
         """
         robust_vals = [
             scores[k] for k in ROBUST_KEYS if scores.get(k) is not None

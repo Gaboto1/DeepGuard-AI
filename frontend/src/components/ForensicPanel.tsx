@@ -59,12 +59,48 @@ function scoreColor(pct: number): string {
   return '#1d7a45';
 }
 
-// ── Etapas del log de cadena de custodia ─────────────────────────────────────
-const CUSTODY_LOG = [
-  { n: '1', label: 'Origen del Archivo',      detail: 'Captura de Medios Verificada' },
-  { n: '2', label: 'Integridad de Bloques',   detail: 'Metadatos Criptográficos Intactos' },
-  { n: '3', label: 'Registro Local',          detail: 'Huella SHA-256 calculada en el cliente' },
-] as const;
+function withAlpha(hex: string, alpha: number): string {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ── Veredicto del bloque superior — depende del resultado real del análisis ──
+// (antes mostraba siempre "Contenido Auténtico / VÁLIDO" sin relación al score)
+type VerdictTier = 'fake' | 'uncertain' | 'real' | 'invalid';
+
+const VERDICT: Record<VerdictTier, { icon: string; color: string; title: string; subtitle: string; badge: string }> = {
+  invalid: {
+    icon:     '⚠',
+    color:    '#c42b2b',
+    title:    'Sello de Custodia Inválido',
+    subtitle: 'No fue posible verificar la integridad criptográfica del resultado — tratar con precaución',
+    badge:    'ALERTA',
+  },
+  fake: {
+    icon:     '✕',
+    color:    '#c42b2b',
+    title:    'Alta Probabilidad de Manipulación',
+    subtitle: 'El ensemble forense detectó fuertes indicios de contenido generado o alterado por IA',
+    badge:    'RIESGO ALTO',
+  },
+  uncertain: {
+    icon:     '!',
+    color:    '#b86a1a',
+    title:    'Evidencia No Concluyente',
+    subtitle: 'Señales mixtas entre modelos — se recomienda revisión manual adicional',
+    badge:    'REVISAR',
+  },
+  real: {
+    icon:     '✓',
+    color:    '#10b981',
+    title:    'Sin Indicios de Manipulación',
+    subtitle: 'El ensemble forense no detectó evidencia significativa de alteración por IA',
+    badge:    'BAJO RIESGO',
+  },
+};
 
 export default function ForensicPanel({
   ensemble, agreement, agreementStd, facesDetected, semanticAnalysis, chainOfCustody,
@@ -73,81 +109,92 @@ export default function ForensicPanel({
   // Datos del ensemble vivos en memoria (no renderizados como tabla para reducir ruido visual)
   const modelCount   = ensemble.models.length;
   const finalProbPct = (ensemble.final_probability * 100).toFixed(1);
+  const pct          = parseFloat(finalProbPct);
+
+  const custodyOk = chainOfCustody?.integrity_valid !== false;
+  const tier: VerdictTier = !custodyOk ? 'invalid' : pct >= 65 ? 'fake' : pct >= 42 ? 'uncertain' : 'real';
+  const v = VERDICT[tier];
+
+  const custodyLog = [
+    { n: '1', label: 'Origen del Archivo',    detail: 'Captura de medios procesada',            ok: true },
+    { n: '2', label: 'Integridad de Bloques', detail: custodyOk ? 'Sello HMAC-SHA256 verificado' : 'Sello HMAC-SHA256 NO coincide', ok: custodyOk },
+    { n: '3', label: 'Registro Local',        detail: 'Huella SHA-256 calculada en el servidor', ok: true },
+  ] as const;
 
   return (
     <div className="space-y-4 font-mono text-xs">
 
-      {/* ── Bloque de Verificación Criptográfica ────────────────────────────── */}
-      {/* Reemplaza la tabla de modelos — datos del ensemble siguen vivos en props */}
+      {/* ── Bloque de Veredicto Forense ──────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
-        className="overflow-hidden shadow-[0_0_25px_rgba(16,185,129,0.05)]"
+        className="overflow-hidden"
         style={{
-          border:     '1px solid rgba(16,185,129,0.18)',
+          boxShadow:  `0 0 25px ${withAlpha(v.color, 0.05)}`,
+          border:     `1px solid ${withAlpha(v.color, 0.18)}`,
           background: '#020408',
         }}
       >
-        {/* Badge principal — firma de autoridad */}
+        {/* Badge principal — veredicto real del ensemble */}
         <div
           className="flex items-center gap-3 px-3 py-2.5 border-b"
           style={{
-            borderColor: 'rgba(16,185,129,0.12)',
-            background:  'rgba(16,185,129,0.04)',
+            borderColor: withAlpha(v.color, 0.12),
+            background:  withAlpha(v.color, 0.04),
           }}
         >
-          {/* Escudo */}
+          {/* Icono de estado */}
           <div
             className="flex items-center justify-center flex-shrink-0"
             style={{
               width:   30,
               height:  30,
-              border:  '1px solid rgba(16,185,129,0.30)',
-              background: 'rgba(16,185,129,0.08)',
+              border:  `1px solid ${withAlpha(v.color, 0.30)}`,
+              background: withAlpha(v.color, 0.08),
             }}
           >
-            <span style={{ color: '#10b981', fontSize: 15, lineHeight: 1 }}>✓</span>
+            <span style={{ color: v.color, fontSize: 15, lineHeight: 1 }}>{v.icon}</span>
           </div>
 
           {/* Texto */}
           <div className="flex-1 min-w-0">
             <p
               className="text-xs font-bold uppercase tracking-wider"
-              style={{ color: '#10b981' }}
+              style={{ color: v.color }}
             >
-              Contenido Auténtico
+              {v.title}
             </p>
-            <p className="text-2xs mt-0.5" style={{ color: 'rgba(16,185,129,0.55)' }}>
-              Firma Digital Validada por Autoridad: SIGMA
+            <p className="text-2xs mt-0.5" style={{ color: withAlpha(v.color, 0.65) }}>
+              {v.subtitle}
             </p>
           </div>
 
-          {/* Badge VÁLIDO */}
+          {/* Badge de severidad */}
           <span
             className="flex-shrink-0 text-2xs px-2 py-0.5 uppercase tracking-wider font-bold"
             style={{
-              color:      '#10b981',
-              border:     '1px solid rgba(16,185,129,0.30)',
-              background: 'rgba(16,185,129,0.06)',
+              color:      v.color,
+              border:     `1px solid ${withAlpha(v.color, 0.30)}`,
+              background: withAlpha(v.color, 0.06),
             }}
           >
-            VÁLIDO
+            {v.badge}
           </span>
         </div>
 
         {/* Log cronológico de cadena de custodia */}
         <div className="px-3 py-2.5 space-y-2">
-          {CUSTODY_LOG.map(({ n, label, detail }) => (
+          {custodyLog.map(({ n, label, detail, ok }) => (
             <div key={n} className="flex items-start gap-3">
               <span
                 className="text-2xs flex-shrink-0 tabular-nums"
-                style={{ color: 'rgba(16,185,129,0.35)', fontFamily: 'monospace', paddingTop: 1 }}
+                style={{ color: withAlpha(v.color, 0.35), fontFamily: 'monospace', paddingTop: 1 }}
               >
                 {n}.
               </span>
               <div className="flex-1 min-w-0">
-                <span className="text-2xs font-semibold" style={{ color: 'rgba(16,185,129,0.65)' }}>
+                <span className="text-2xs font-semibold" style={{ color: withAlpha(v.color, 0.65) }}>
                   {label}:{' '}
                 </span>
                 <span className="text-2xs" style={{ color: '#3d4f62' }}>
@@ -156,9 +203,9 @@ export default function ForensicPanel({
               </div>
               <span
                 className="text-2xs flex-shrink-0 font-bold tabular-nums"
-                style={{ color: '#10b981', fontFamily: 'monospace' }}
+                style={{ color: ok ? '#10b981' : '#c42b2b', fontFamily: 'monospace' }}
               >
-                [OK]
+                {ok ? '[OK]' : '[FALLO]'}
               </span>
             </div>
           ))}
@@ -167,7 +214,7 @@ export default function ForensicPanel({
         {/* Metadata compacta del ensemble — datos vivos, presentación mínima */}
         <div
           className="px-3 py-1.5 border-t flex items-center gap-4"
-          style={{ borderColor: 'rgba(16,185,129,0.08)', background: '#010205' }}
+          style={{ borderColor: withAlpha(v.color, 0.08), background: '#010205' }}
         >
           <span className="text-2xs" style={{ color: '#1a2436' }}>
             Ensemble:{' '}
@@ -175,7 +222,7 @@ export default function ForensicPanel({
           </span>
           <span className="text-2xs" style={{ color: '#1a2436' }}>
             Score consolidado:{' '}
-            <span style={{ color: scoreColor(parseFloat(finalProbPct)) }}>{finalProbPct}%</span>
+            <span style={{ color: scoreColor(pct) }}>{finalProbPct}%</span>
           </span>
           {facesDetected != null && (
             <span className="text-2xs" style={{ color: '#1a2436' }}>
