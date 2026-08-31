@@ -1,5 +1,5 @@
 """
-Celery Application — DeepGuard AI Enterprise
+Celery Application — DeepScan Enterprise
 =============================================
 Workers exclusivos para procesamiento GPU pesado.
 FastAPI solo recibe peticiones y despacha tareas.
@@ -24,7 +24,7 @@ REDIS_URL     = settings.REDIS_URL
 REDIS_BACKEND = settings.REDIS_BACKEND
 
 celery_app = Celery(
-    "deepguard",
+    "deepscan",
     broker=REDIS_URL,
     backend=REDIS_BACKEND,
     include=["app.tasks.analysis_tasks"],
@@ -55,7 +55,7 @@ celery_app.conf.update(
         Queue("default", routing_key="default.#"),
     ),
     task_default_queue="default",
-    task_default_exchange="deepguard",
+    task_default_exchange="deepscan",
     task_default_routing_key="default.task",
 
     # Performance

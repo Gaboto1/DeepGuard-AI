@@ -61,7 +61,7 @@ def init_worker_models(**kwargs) -> None:
     Ejecutado UNA VEZ por proceso worker al arrancar.
     Carga los 5 modelos + face detector + meta-ensemble en GPU.
     """
-    logger.info("=== Worker DeepGuard: inicializando modelos GPU ===")
+    logger.info("=== Worker DeepScan: inicializando modelos GPU ===")
     try:
         os.environ["TRANSFORMERS_CACHE"]              = str(settings.MODELS_DIR)
         os.environ["HF_HOME"]                         = str(settings.MODELS_DIR)
@@ -106,7 +106,7 @@ def init_worker_models(**kwargs) -> None:
 
 # ─── Base Task ────────────────────────────────────────────────────────────────
 
-class DeepGuardTask(Task):
+class DeepScanTask(Task):
     abstract = True
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -121,7 +121,7 @@ class DeepGuardTask(Task):
 
 @celery_app.task(
     bind=True,
-    base=DeepGuardTask,
+    base=DeepScanTask,
     name="app.tasks.analysis_tasks.analyze_image_task",
     max_retries=2,
     soft_time_limit=120,
@@ -300,7 +300,7 @@ def analyze_image_task(
 
 @celery_app.task(
     bind=True,
-    base=DeepGuardTask,
+    base=DeepScanTask,
     name="app.tasks.analysis_tasks.analyze_video_task",
     max_retries=1,
     soft_time_limit=600,

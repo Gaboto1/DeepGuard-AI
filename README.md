@@ -1,4 +1,4 @@
-# DeepGuard AI — Deepfake Detection System
+# DeepScan — Deepfake Detection System
 
 Professional deepfake detection for images and videos. Powered by Vision Transformer (ViT) AI, CUDA GPU acceleration, and a modern Next.js frontend.
 
@@ -24,13 +24,15 @@ El backend opera en dos modos controlados por la variable `API_ONLY` (`backend/.
 | | `API_ONLY=true` (Producción — Render) | `API_ONLY=false` (Local — desarrollo) |
 |---|---|---|
 | Modelos GPU | No se cargan (cero imports de PyTorch) | Se cargan en el lifespan de FastAPI |
-| Procesamiento | Despacha a Celery → workers GPU vía Redis (Aiven Valkey) | Intenta Celery si hay Redis disponible; si no, ejecuta el análisis en el mismo proceso (`sync_fallback`) |
+| Procesamiento | Despacha a Celery → workers GPU vía Redis (Upstash) | Intenta Celery si hay Redis disponible; si no, ejecuta el análisis en el mismo proceso (`sync_fallback`) |
 | Resultados/historial | Reports JSON en `reports/tasks/` + custodia en `reports/custody/` | Igual — mismos directorios locales, sin tocar datos de producción |
 | Frontend | `NEXT_PUBLIC_API_URL` apunta a la API de Render (`frontend/.env.production`) | `NEXT_PUBLIC_API_URL=http://localhost:8000` (`frontend/.env.local`) |
 
 Esto permite levantar el stack completo en `localhost` (`INICIAR LOCAL.bat` o `uvicorn` + `npm run dev`) sin depender de Redis/Celery en la nube ni afectar las colas o el historial de producción — el endpoint `/` y `/api/v1/health` exponen el campo `mode` para verificar en qué modo está corriendo la instancia.
 
-El worker GPU local (`INICIAR PAGINA WEB.bat`) siempre usa `API_ONLY=false` y se conecta al Redis de producción (Aiven Valkey) para consumir tareas reales — es el componente de cómputo del despliegue en producción, no un modo de prueba.
+El worker GPU local (`INICIAR PAGINA WEB.bat`) siempre usa `API_ONLY=false` y se conecta al Redis de producción (Upstash) para consumir tareas reales — es el componente de cómputo del despliegue en producción, no un modo de prueba.
+
+Si el worker o la API reportan que Redis no responde, ver `docs/RUNBOOK_REDIS_DOWN.md` para el procedimiento de recuperación.
 
 ---
 

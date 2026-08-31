@@ -34,7 +34,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <ShieldCheck size={16} className="text-accent-blue" strokeWidth={2} />
           <span className="text-sm font-semibold text-fg-primary tracking-tight">
-            DeepGuard<span className="text-fg-secondary font-normal"> AI</span>
+            DeepScan
           </span>
           <span className="hidden sm:inline text-2xs text-fg-muted mono px-1.5 py-0.5 rounded border border-border-subtle ml-1">
             FORENSE

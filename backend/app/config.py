@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "DeepGuard AI"
+    APP_NAME: str = "DeepScan"
     VERSION:  str = "6.0.0"
     DEBUG:    bool = False
 
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
         "http://localhost:3000,"
         "http://localhost:3001,"
         "http://127.0.0.1:3000,"
-        "https://deepguard-ai-inacap.netlify.app"
+        "https://gaboto1.github.io"
     )
 
     # ── Archivos ──────────────────────────────────────────────────────────────

@@ -15,7 +15,7 @@ Un manifiesto C2PA válido demuestra:
   2. El firmante (issuer) es una autoridad conocida y de confianza
   3. La cadena de edición (ingredientes) está vinculada criptográficamente
 
-Señal forense para DeepGuard:
+Señal forense para DeepScan:
   verified=True  + emisor reconocido → señal fuerte de autenticidad
   has_c2pa=True  pero verified=False → ALTERADO → señal de alta manipulación
   has_c2pa=False → sin señal (la mayoría de archivos no tienen C2PA)

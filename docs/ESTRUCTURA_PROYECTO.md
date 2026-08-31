@@ -1,7 +1,7 @@
-# DeepGuard AI — Estructura del Proyecto
+# DeepScan — Estructura del Proyecto
 
 Plataforma forense de detección de deepfakes con arquitectura híbrida:
-API en la nube (Render) + Worker GPU local (RTX 4070 SUPER) + Frontend estático (Netlify).
+API en la nube (Render) + Worker GPU local (RTX 4070 SUPER) + Frontend estático (Render Static Site).
 
 ---
 
@@ -29,12 +29,12 @@ PROYECTO TITULO FINAL/
 │   │   └── types/
 │   │       └── index.ts             # Interfaces TypeScript del dominio forense
 │   ├── public/
-│   │   └── _redirects               # SPA fallback para Netlify
+│   │   └── _redirects               # SPA fallback (compatible Netlify, Cloudflare y Render Static Site)
 │   ├── next.config.js               # output:'export' para despliegue estático
-│   ├── netlify.toml                 # Build config Netlify + env vars
+│   ├── netlify.toml                 # Build config legado de Netlify (ya no es el hosting activo)
 │   ├── .env.local                   # URL API local (localhost:8000)
 │   ├── .env.production              # URL API Render (NO subir si tiene secretos)
-│   ├── .env.production.example      # Template documentado para Netlify
+│   ├── .env.production.example      # Template de variables de build (Render Static Site)
 │   ├── tailwind.config.ts           # Paleta forense personalizada
 │   └── Dockerfile                   # Imagen nginx para despliegue Docker alternativo
 │
@@ -104,8 +104,8 @@ PROYECTO TITULO FINAL/
   Usuario (navegador)
        │
        ▼
-  Netlify CDN ──────────────────── Frontend estático (Next.js export)
-  deepguard-ai-inacap.netlify.app   HTML + CSS + JS puro, sin servidor
+  GitHub Pages ───────────────────── Frontend estático (Next.js export)
+  gaboto1.github.io/DeepGuard-AI    HTML + CSS + JS puro, sin servidor
        │
        │  POST /api/v1/analyze
        │  GET  /api/v1/tasks/{id}
@@ -115,15 +115,17 @@ PROYECTO TITULO FINAL/
        │
        │  Celery dispatch
        ▼
-  Aiven Valkey ───────────────────── Message Broker Redis TLS
-  valkey-3b64...aivencloud.com:13419 Cola de tareas asíncronas
+  Upstash Redis ──────────────────── Message Broker Redis TLS (plan Free permanente)
+  *.upstash.io:6379                  Cola de tareas asíncronas
        │
        │  Task received
        ▼
   PC Local (GPU) ─────────────────── Worker Celery GPU
-  RTX 4070 SUPER 12 GB VRAM          5 modelos + LLaVA 4-bit (~6.8 GB VRAM)
-  INICIAR PAGINA WEB.bat              Procesa y guarda resultado en Aiven
+  RTX 4070 SUPER 12 GB VRAM          8 señales + LLaVA 4-bit (~7.1 GB VRAM)
+  INICIAR PAGINA WEB.bat              Procesa y guarda resultado en Upstash
 ```
+
+> **Nota histórica:** el frontend se hosteaba originalmente en Netlify y el broker en Aiven Valkey. Se migró a Render Static Site + Upstash en junio de 2026 tras quedarse sin créditos gratuitos (Netlify) y expirar el plan trial (Aiven) — ver `docs/RUNBOOK_REDIS_DOWN.md`.
 
 ---
 
@@ -134,14 +136,14 @@ PROYECTO TITULO FINAL/
 | Frontend | Next.js + React + TypeScript | 14.0.4 |
 | Estilos | Tailwind CSS + Framer Motion | 3.x |
 | API | FastAPI + Uvicorn | 0.104.1 |
-| Cola | Celery + Aiven Valkey (Redis) | 5.3+ |
+| Cola | Celery + Upstash Redis | 5.3+ |
 | ML | PyTorch + CUDA | 2.x + cu124 |
 | VLM | LLaVA-1.5-7b-hf (4-bit NF4) | bitsandbytes 0.43+ |
 | Meta-ensemble | XGBoost + T-Scaling (T=0.581) | 2.x |
 | Custodia | SHA-256 + HMAC-SHA256 v2 | stdlib |
 | Hosting API | Render (free tier) | — |
-| Hosting Web | Netlify (free tier) | — |
-| Broker | Aiven Valkey (free tier) | 7.2.4 |
+| Hosting Web | GitHub Pages (gratuito permanente) | — |
+| Broker | Upstash Redis (free tier permanente) | 8.x |
 
 ---
 

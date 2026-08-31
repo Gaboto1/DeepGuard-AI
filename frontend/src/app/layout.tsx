@@ -3,9 +3,9 @@ import './globals.css';
 import { WorkerStatusProvider } from '@/components/WorkerStatusProvider';
 
 export const metadata: Metadata = {
-  title: 'DeepGuard AI — Análisis Forense Digital',
+  title: 'DeepScan — Análisis Forense Digital',
   description:
-    'Plataforma de análisis de autenticidad digital. Detección de manipulación en imágenes y videos mediante inteligencia artificial.',
+    'Plataforma de análisis forense de autenticidad digital. Detección de deepfakes e imágenes manipuladas mediante inteligencia artificial.',
   keywords: ['deepfake', 'forense digital', 'autenticidad', 'análisis de imagen', 'IA'],
 };
 

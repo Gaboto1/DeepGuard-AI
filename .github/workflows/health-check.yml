@@ -1,0 +1,60 @@
+name: Monitoreo de salud — API + Redis
+
+# Verifica periodicamente que la API en Render y el broker Redis (Upstash/Aiven)
+# esten realmente alcanzables. Si redis_status es false o la API no responde,
+# el job falla y GitHub notifica por correo/web a quien tenga notificaciones
+# de Actions activadas (ver Settings > Notifications > Actions en GitHub).
+#
+# Por que existe: el broker Redis anterior (Aiven free trial) expiro sin
+# aviso y el sistema quedo roto durante dias sin que nadie lo notara hasta
+# intentar usarlo. Este workflow detecta esa caida en minutos, no en dias.
+
+on:
+  schedule:
+    # Cada 3 horas. Ajustar si se necesita mayor o menor frecuencia.
+    - cron: "0 */3 * * *"
+  workflow_dispatch: {}   # permite ejecutarlo manualmente desde la pestaña Actions
+
+jobs:
+  check-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consultar /api/v1/health en Render
+        run: |
+          set -e
+          URL="https://deepguard-ai-api.onrender.com/api/v1/health"
+          echo "Consultando $URL ..."
+
+          # Render free tier puede tardar en despertar tras estar inactivo —
+          # reintenta hasta 3 veces con espera entre intentos.
+          BODY=""
+          for i in 1 2 3; do
+            BODY=$(curl -s -m 30 -w '\n%{http_code}' "$URL" || true)
+            CODE=$(echo "$BODY" | tail -n1)
+            if [ "$CODE" = "200" ]; then
+              break
+            fi
+            echo "Intento $i: HTTP $CODE — reintentando en 20s..."
+            sleep 20
+          done
+
+          JSON=$(echo "$BODY" | sed '$d')
+          CODE=$(echo "$BODY" | tail -n1)
+
+          echo "HTTP status: $CODE"
+          echo "Respuesta: $JSON"
+
+          if [ "$CODE" != "200" ]; then
+            echo "::error::La API no respondio HTTP 200 tras 3 intentos (codigo: $CODE)."
+            exit 1
+          fi
+
+          REDIS_OK=$(echo "$JSON" | jq -r '.redis_status')
+          if [ "$REDIS_OK" != "true" ]; then
+            REDIS_INFO=$(echo "$JSON" | jq -r '.redis_info // "sin detalle"')
+            echo "::error::redis_status=false — el broker Redis no es alcanzable. Detalle: $REDIS_INFO"
+            echo "Accion sugerida: ver docs/RUNBOOK_REDIS_DOWN.md"
+            exit 1
+          fi
+
+          echo "OK — API y Redis responden correctamente."
