@@ -266,9 +266,24 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
               )}
             </div>
 
-            <p className="text-xs leading-relaxed italic" style={{ color: 'var(--fg-muted)' }}>
-              {result.explanation}
-            </p>
+            {result.explanation && (
+              <div
+                className="text-xs leading-relaxed px-3 py-2.5 border-l-2"
+                style={{
+                  color: 'var(--fg-primary)',
+                  borderColor: color,
+                  background: `${color}0d`,
+                }}
+              >
+                <span
+                  className="block text-2xs uppercase tracking-widest mb-1"
+                  style={{ color: color, opacity: 0.85 }}
+                >
+                  Análisis forense
+                </span>
+                {result.explanation}
+              </div>
+            )}
           </div>
         </div>
       </div>

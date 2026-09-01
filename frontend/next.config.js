@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-// Cuando se construye para GitHub Pages, las rutas deben incluir el
-// nombre del repositorio como base path (ej. /DeepGuard-AI/).
-// Se activa pasando GITHUB_PAGES=true en el entorno de build.
+// GitHub Pages sirve desde /RepoName/, no desde la raíz.
+// GITHUB_PAGES=true lo activa solo en el workflow de CI — en local no tiene efecto.
 const isGithubPages = process.env.GITHUB_PAGES === 'true';
 const repoName = 'DeepGuard-AI';
 
