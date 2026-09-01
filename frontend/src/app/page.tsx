@@ -237,7 +237,7 @@ export default function Page() {
       <footer className="mt-16 py-5 px-4" style={{ borderTop: '1px solid #1a2030' }}>
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-2xs mono" style={{ color: '#253348' }}>
           <div className="flex items-center gap-3">
-            <span style={{ color: '#1a2436' }}>DeepGuard AI</span>
+            <span style={{ color: '#1a2436' }}>DeepScan</span>
             <span style={{ color: '#1a2030' }}>·</span>
             <span style={{ color: '#1a2436' }}>Análisis Forense Digital v6.0</span>
           </div>
