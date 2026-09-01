@@ -69,12 +69,12 @@ export default function Page() {
             </span>
             <span className="text-2xs mono" style={{ color: '#1a2436' }}>v6.0</span>
           </div>
-          <h1 className="text-xl font-semibold" style={{ color: 'var(--fg-primary)' }}>
-            Autenticidad de Imagen y Video
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--fg-primary)', fontFamily: 'system-ui, sans-serif' }}>
+            ¿Esta imagen o video es real?
           </h1>
-          <p className="text-sm mt-2 leading-relaxed" style={{ color: 'var(--fg-secondary)' }}>
-            Detección de manipulación digital mediante ensemble probabilístico de 7 modelos de IA.
-            Resultados no deterministas — sujetos a interpretación pericial.
+          <p className="text-sm mt-2 leading-relaxed" style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui, sans-serif' }}>
+            Sube una imagen o video y nuestro sistema de inteligencia artificial
+            analizará si fue generado o manipulado por IA.
           </p>
           {/* System tags — agrupados por categoría */}
           <div className="flex flex-wrap gap-1.5 mt-3">

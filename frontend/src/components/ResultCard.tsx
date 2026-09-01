@@ -137,6 +137,34 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
         </div>
       </div>
 
+      {/* ── Verdict banner — lo más importante, primero ─────────────────────── */}
+      <div
+        className="px-5 py-4 border"
+        style={{ background: `${color}0a`, borderColor: `${color}35` }}
+      >
+        <div className="flex items-center gap-4">
+          <div
+            className="flex-shrink-0 w-12 h-12 flex items-center justify-center border-2 text-2xl font-bold"
+            style={{ borderColor: color, color, background: `${color}12`, borderRadius: 0 }}
+          >
+            {pctR >= 65 ? '✕' : pctR >= 42 ? '!' : '✓'}
+          </div>
+          <div>
+            <p className="text-lg font-bold" style={{ color, fontFamily: 'system-ui,sans-serif', lineHeight: 1.2 }}>
+              {pctR >= 65
+                ? 'Alta probabilidad de manipulación'
+                : pctR >= 42
+                ? 'Resultado no concluyente'
+                : 'Sin indicios de manipulación detectables'}
+            </p>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif' }}>
+              {pctR.toFixed(1)}% de probabilidad de ser IA
+              {evInfo ? ` — ${evInfo.label}` : ''}
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* ── Preview ─────────────────────────────────────────────────────────── */}
       {previewUrl && (
         <div className="border overflow-hidden" style={{ borderColor: '#1a2030', background: '#05080f' }}>
@@ -268,15 +296,17 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
 
             {result.explanation && (
               <div
-                className="text-xs leading-relaxed px-3 py-2.5 border-l-2"
+                className="leading-relaxed px-3 py-2.5 border-l-2"
                 style={{
                   color: 'var(--fg-primary)',
                   borderColor: color,
                   background: `${color}0d`,
+                  fontFamily: 'system-ui, sans-serif',
+                  fontSize: '0.82rem',
                 }}
               >
                 <span
-                  className="block text-2xs uppercase tracking-widest mb-1"
+                  className="block text-2xs uppercase tracking-widest mb-1.5 font-mono"
                   style={{ color: color, opacity: 0.85 }}
                 >
                   Análisis forense
@@ -586,11 +616,17 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
 
       {/* ── Disclaimer ───────────────────────────────────────────────────────── */}
       <div
-        className="px-3 py-2 text-2xs border"
-        style={{ background: '#05080f', borderColor: '#1a2030', color: '#253348' }}
+        className="px-4 py-3 border text-xs leading-relaxed"
+        style={{
+          background: '#05080f',
+          borderColor: '#1a2030',
+          color: 'var(--fg-muted)',
+          fontFamily: 'system-ui, sans-serif',
+        }}
       >
-        Análisis probabilístico. No constituye evidencia forense definitiva ni equivale a peritaje legal.
-        Los resultados deben interpretarse en contexto y verificarse con fuentes independientes.
+        <span className="font-semibold" style={{ color: 'var(--fg-secondary)' }}>Aviso: </span>
+        Este análisis es probabilístico y no constituye evidencia forense definitiva ni equivale a
+        un peritaje legal. Siempre contraste los resultados con otras fuentes antes de tomar decisiones.
       </div>
 
       <button
