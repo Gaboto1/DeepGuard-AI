@@ -114,11 +114,14 @@ OOD_BYPASS_MIN              = 0.38   # límite inferior del rango objetivo
 OOD_BYPASS_MAX              = 0.68   # límite superior (subido de 0.50)
 
 # ─── Regla 2: Compression Veto ───────────────────────────────────────────────
-COMPRESSION_VETO_AIART_MAX  = 0.05
+# AI Art subido de 5% → 20%: fotos reales de deportistas/celebridades
+# suelen puntuar 10-20% en AI Art Detector. El threshold de 5% era demasiado
+# estricto y dejaba pasar falsos positivos como una foto real de Messi.
+COMPRESSION_VETO_AIART_MAX  = 0.20
 COMPRESSION_VETO_SDXL_MAX   = 0.50
 COMPRESSION_VETO_MIN_SCORE  = 0.20
-COMPRESSION_VETO_BASE       = 0.10
-COMPRESSION_VETO_AIART_COEF = 0.40
+COMPRESSION_VETO_BASE       = 0.08
+COMPRESSION_VETO_AIART_COEF = 0.35
 
 # ─── Regla 3: Consensus Override ─────────────────────────────────────────────
 CONSENSUS_MODELS     = [
