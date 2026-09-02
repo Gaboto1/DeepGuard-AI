@@ -8,7 +8,7 @@ const STAGES = [
   { id: 'exif',      label: 'Extrayendo metadatos forenses EXIF/XMP/IPTC...' },
   { id: 'ood',       label: 'Evaluando señales detector Out-of-Distribution...' },
   { id: 'ensemble',  label: 'Inferencia ensemble 5 modelos (ViT · SDXL · CLIP · AiArt · SigLIP)...' },
-  { id: 'xgboost',   label: 'Meta-ensemble XGBoost + calibración temperatura T=0.581...' },
+  { id: 'lgbm',      label: 'Meta-ensemble LightGBM + calibración temperatura T=0.4828...' },
   { id: 'llava',     label: 'Análisis semántico LLaVA-1.5-7b-hf (4-bit NF4)...' },
   { id: 'fusion',    label: 'Fusión semántica + correcciones forenses post-hoc...' },
   { id: 'custody',   label: 'Generando sello HMAC-SHA256 cadena de custodia v2...' },

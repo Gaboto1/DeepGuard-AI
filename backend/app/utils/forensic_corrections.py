@@ -39,10 +39,11 @@ Regla 2 — Compression Veto (Foto Real Comprimida por Redes Sociales)
   hacen que ViT y EfficientNet suban a 46-60% en fotos perfectamente reales.
   SDXL y AI Art detectan correctamente la autenticidad.
 
-  CONDICIÓN: score > 20% AND AI_Art < 5% AND SDXL < 50%
-  CORRECCIÓN: corrected = 10% + AI_Art × 40%
+  CONDICIÓN: score > 20% AND AI_Art < 20% AND SDXL < 50%
+  CORRECCIÓN: corrected = 8% + AI_Art × 35%
 
-  CASO MESSI (foto real comprimida): AI_Art=0.5%, SDXL=40% → 10.2% ✓
+  CASO MESSI (foto real comprimida): AI_Art=12%, SDXL=40% → 12.2% ✓
+  (threshold subido de 5% → 20%: fotos de deportistas/celebridades puntúan 10-20% en AI Art)
 
 ─────────────────────────────────────────────────────────────────────────────
 Regla 3 — Consensus Override (IA Fotorrealista — SDXL Disidente)
