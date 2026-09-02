@@ -4,6 +4,9 @@ from urllib.parse import urlparse, urlencode, parse_qs, urlunparse
 
 from pydantic_settings import BaseSettings
 
+# Directorio raíz del proyecto (backend/app/config.py → ../.. → ROOT)
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+
 
 class Settings(BaseSettings):
     APP_NAME: str = "DeepScan"
@@ -31,7 +34,8 @@ class Settings(BaseSettings):
     # ── Archivos ──────────────────────────────────────────────────────────────
     MAX_FILE_SIZE_MB: int  = 500
     UPLOAD_DIR:       Path = Path("uploads")
-    MODELS_DIR:       Path = Path("models")
+    # Apunta a ROOT/models/ independientemente del cwd (el worker arranca desde backend/)
+    MODELS_DIR:       Path = _PROJECT_ROOT / "models"
 
     # ── Reportes ──────────────────────────────────────────────────────────────
     RESULTS_DIR: Path = Path("reports") / "tasks"
