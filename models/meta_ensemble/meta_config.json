@@ -1,0 +1,71 @@
+{
+  "use_meta_ensemble": true,
+  "best_method": "Logistic Regression",
+  "best_f1": 1.0,
+  "temperature": 0.05,
+  "feature_cols": [
+    "sdxl_detector",
+    "ai_art_detector",
+    "efficientnet_ffpp",
+    "sdxl_x_aiart",
+    "robust_mean",
+    "reliable_std"
+  ],
+  "optimal_weights": [
+    0.3,
+    0.2,
+    0.0,
+    0.2,
+    0.3
+  ],
+  "comparison": {
+    "logistic_regression": {
+      "model": "Logistic Regression",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "brier": 0.0,
+      "tp": 256,
+      "tn": 256,
+      "fp": 0,
+      "fn": 0,
+      "ece": 0.0
+    },
+    "xgboost": {
+      "model": "XGBoost (max_depth=2)",
+      "f1": 0.998,
+      "precision": 1.0,
+      "recall": 0.9961,
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0039,
+      "brier": 0.0018,
+      "tp": 255,
+      "tn": 256,
+      "fp": 0,
+      "fn": 1,
+      "ece": 0.0022
+    },
+    "lightgbm": {
+      "model": "LightGBM regularz. (depth=2)",
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "brier": 0.0,
+      "tp": 256,
+      "tn": 256,
+      "fp": 0,
+      "fn": 0,
+      "ece": 0.0
+    }
+  }
+}
