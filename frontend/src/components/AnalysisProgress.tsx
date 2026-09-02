@@ -88,7 +88,7 @@ export default function AnalysisProgress({ progress, currentStage, fileType, pre
           style={{ background: '#080c15' }}
         >
           <span style={{ color: 'var(--fg-muted)' }} className="text-2xs uppercase tracking-widest">
-            deepguard@forensic-node — pipeline de análisis
+            deepscan@forensic-node — pipeline de análisis
           </span>
           <span style={{ color: 'var(--fg-muted)' }} className="text-2xs">
             {fileType === 'video' ? 'VIDEO' : 'IMAGE'} · {pct}%
@@ -97,7 +97,7 @@ export default function AnalysisProgress({ progress, currentStage, fileType, pre
 
         {/* Command line */}
         <div className="px-3 pt-2 pb-1" style={{ color: '#3d4f62' }}>
-          <span style={{ color: '#1d7a45' }}>deepguard</span>
+          <span style={{ color: '#1d7a45' }}>deepscan</span>
           <span>@forensic</span>
           <span style={{ color: '#1E63D4' }}>:~$</span>
           <span style={{ color: 'var(--fg-secondary)' }}> analyze --pipeline=full --type={fileType}</span>

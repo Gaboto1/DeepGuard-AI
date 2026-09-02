@@ -24,7 +24,6 @@ from slowapi.util import get_remote_address
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
-from app.api.routes import router
 from app.api.v1.routes import router as router_v1
 from app.config import settings
 
@@ -98,7 +97,7 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.VERSION,
     description=(
-        "DeepGuard AI — Plataforma forense de detección de deepfakes. "
+        "DeepScan — Plataforma forense de detección de deepfakes. "
         "Arquitectura híbrida: API en la nube + workers GPU locales via Celery/Redis."
     ),
     lifespan=lifespan,
@@ -122,7 +121,6 @@ app.add_middleware(
 )
 
 # Routes
-app.include_router(router)
 app.include_router(router_v1)
 
 

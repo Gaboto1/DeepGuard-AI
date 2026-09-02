@@ -5,11 +5,12 @@ import type { OsintResult } from '@/types';
 
 interface Props { osint: OsintResult }
 
+const FUENTES_PRIORITARIAS = [
+  'Reuters', 'Associated Press', 'Getty Images', 'AFP', 'BBC', 'Wikimedia Commons',
+  'Sitios gubernamentales', 'Instituciones académicas',
+];
+
 export default function OsintPanel({ osint }: Props) {
-  const FUENTES_PRIORITARIAS = [
-    'Reuters', 'Associated Press', 'Getty Images', 'AFP', 'BBC', 'Wikimedia Commons',
-    'Sitios gubernamentales', 'Instituciones académicas',
-  ];
 
   return (
     <div className="space-y-4">

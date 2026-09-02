@@ -151,11 +151,6 @@ RESULTS_DIR = _route_settings.RESULTS_DIR   # fuente única de verdad — config
 
 # ─── Helpers para Redis / Celery ──────────────────────────────────────────────
 
-def _get_celery_and_redis():
-    """Obtiene el app Celery y verifica que Redis esté disponible."""
-    from app.celery_app import celery_app
-    return celery_app
-
 
 def _get_task_result(task_id: str) -> Optional[dict]:
     """

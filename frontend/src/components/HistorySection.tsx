@@ -41,7 +41,12 @@ function evidenceLabel(level?: EvidenceLevel): string {
 }
 
 export default function HistorySection({ currentId }: { currentId?: string }) {
-  const [history, setHistory] = useState<AnalysisResult[]>([]);
+  const [history, setHistory] = useState<AnalysisResult[]>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  });
 
   useEffect(() => {
     const load = () => {

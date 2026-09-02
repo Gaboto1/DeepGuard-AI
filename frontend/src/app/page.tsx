@@ -9,6 +9,8 @@ import ResultCard from '@/components/ResultCard';
 import HistorySection, { saveToHistory } from '@/components/HistorySection';
 import type { AnalysisResult } from '@/types';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 type Stage = 'idle' | 'analyzing' | 'done' | 'error';
 
 interface FilePreview {
@@ -218,7 +220,7 @@ export default function Page() {
                 <p className="text-xs text-fg-secondary mb-4">{result?.error ?? 'Error desconocido'}</p>
                 <p className="text-2xs text-fg-muted mb-5">
                   Verifique que el backend esté activo en {' '}
-                  <span className="mono text-fg-secondary">http://localhost:8000</span>
+                  <span className="mono text-fg-secondary">{API_URL}</span>
                 </p>
                 <button onClick={handleReset}
                   className="px-4 py-2 rounded border border-border-strong text-xs text-fg-secondary hover:text-fg-primary transition-colors">

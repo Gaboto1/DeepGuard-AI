@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, HealthResponse, UploadResponse, TaskStatus } from '@/types';
+import type { AnalysisResult, UploadResponse, TaskStatus } from '@/types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -84,13 +84,6 @@ export async function getTask(taskId: string): Promise<AnalysisResult> {
     `/api/v1/tasks/${taskId}`,
   );
   return normalizeV1Response(data);
-}
-
-// ─── Salud del sistema ────────────────────────────────────────────────────────
-
-export async function getHealth(): Promise<HealthResponse> {
-  const { data } = await client.get<HealthResponse>('/api/v1/health');
-  return data;
 }
 
 // ─── Polling ──────────────────────────────────────────────────────────────────

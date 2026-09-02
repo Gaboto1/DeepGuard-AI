@@ -41,16 +41,13 @@ class Settings(BaseSettings):
     DEEPGUARD_SIGNING_KEY: str = ""
 
     # ── Modelos ───────────────────────────────────────────────────────────────
-    MODEL_NAME: str = "dima806/deepfake_vs_real_image_detection"
-    DEVICE:     str = "cuda"
+    DEVICE: str = "cuda"
 
     # ── Video ─────────────────────────────────────────────────────────────────
-    MAX_FRAMES:          int = 50
-    VIDEO_FRAME_INTERVAL:int = 10
+    MAX_FRAMES: int = 50
 
     # ── Misc ──────────────────────────────────────────────────────────────────
-    FILE_CLEANUP_DELAY:    int = 3600
-    RATE_LIMIT_PER_MINUTE: int = 20
+    FILE_CLEANUP_DELAY: int = 3600
 
     @property
     def ALLOWED_ORIGINS(self) -> list[str]:

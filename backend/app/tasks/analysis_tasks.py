@@ -26,7 +26,7 @@ from app.config import settings
 
 RESULTS_DIR = settings.RESULTS_DIR   # fuente única de verdad — definida en config.py
 
-FILE_RETENTION_SECONDS = int(os.getenv("FILE_RETENTION_SECONDS", "3600"))
+FILE_RETENTION_SECONDS = settings.FILE_CLEANUP_DELAY
 
 # Clave Redis del heartbeat — el health endpoint del API la verifica
 HEARTBEAT_KEY = "deepguard:worker:heartbeat"
@@ -230,7 +230,35 @@ def analyze_image_task(
         elif meta_note:
             explanation += f" {meta_note}."
 
-        # 6. Sello de custodia
+        # 6. Análisis semántico LLaVA (si el modelo fue cargado)
+        self.update_state(state="PROCESSING", meta={"progress": 0.80, "stage": "Coherencia semántica LLaVA"})
+        semantic_obj = None
+        try:
+            from app.services.semantic_inspection_service import (
+                analyze_semantic_coherence, apply_semantic_fusion,
+            )
+            semantic_result = analyze_semantic_coherence(path)
+            face_detected   = (raw.get("faces_detected") or 0) > 0
+            fused, fusion_type, fusion_note = apply_semantic_fusion(prob, semantic_result, face_detected)
+            if fused != prob:
+                prob = fused
+            sem_score = semantic_result.get("risk_score", -1)
+            if sem_score >= 0:
+                semantic_obj = {
+                    "risk_score":            sem_score,
+                    "risk_score_normalized": semantic_result.get("risk_score_normalized"),
+                    "semantic_observations": semantic_result.get("semantic_observations", ""),
+                    "model_used":            semantic_result.get("model_used", ""),
+                    "quantization":          semantic_result.get("quantization", ""),
+                    "analysis_time":         semantic_result.get("analysis_time", 0.0),
+                    "fusion_type":           fusion_type,
+                    "fusion_note":           fusion_note,
+                    "available":             True,
+                }
+        except Exception as _e_sem:
+            logger.debug(f"Semantic analysis skip (no crítico): {_e_sem}")
+
+        # 7. Sello de custodia
         self.update_state(state="PROCESSING", meta={"progress": 0.90, "stage": "Sello de custodia"})
         seal = generate_custody_seal(
             task_id=task_id, file_sha256=sha256, filename=filename,
@@ -275,6 +303,7 @@ def analyze_image_task(
                 "raw_software_tag":          forensic_meta["raw_software_tag"],
                 "has_gps":                   forensic_meta["has_gps"],
             },
+            "semantic_analysis": semantic_obj,
             "chain_of_custody": seal,
             "c2pa_provenance": c2pa_provenance,
             "analysis_time": round(time.time() - t0, 3),

@@ -90,7 +90,7 @@ def generate_custody_seal(
     file_type: str,
     final_score: float,
     evidence_level: str,
-    analyst_note: str = "Análisis automatizado DeepGuard AI",
+    analyst_note: str = "Análisis automatizado DeepScan",
     semantic_score: Optional[int] = None,
 ) -> dict:
     """
