@@ -470,6 +470,13 @@ class DeepfakeDetector:
         rc = _model_c.predict(image)
         rd = _model_d.predict(image)
         re = _model_e.predict(image)
+        rf = _model_f.predict(image)
+
+        # freq se usa como señal auxiliar de model_f (blend 85%/15% dentro de _calibrated_combine).
+        # SRM y ELA omitidos aquí: calibrados para imágenes de cámara sin comprimir;
+        # en datos FF++ (video-comprimidos) dan scores invertidos y aumentarían el FPR.
+        from app.models.frequency_detector import predict_frequency
+        rfreq = predict_frequency(image)
 
         fake, per_model = _calibrated_combine(
             ra["fake_probability"] if ra else 0.5,
@@ -478,6 +485,8 @@ class DeepfakeDetector:
             face=face_detected,
             score_d=rd["fake_probability"] if rd else None,
             score_e=re["fake_probability"] if re else None,
+            score_f=rf["fake_probability"] if rf else None,
+            score_freq=rfreq.get("fake_probability"),
         )
         return {
             "fake_probability": fake,

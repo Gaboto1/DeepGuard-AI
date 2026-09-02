@@ -164,7 +164,7 @@ export default function Page() {
                 {/* Métricas del sistema — strip de 4 columnas */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
-                    { val: '7 modelos',   sub: 'meta-ensemble LightGBM' },
+                    { val: '7 modelos',   sub: 'meta-ensemble XGBoost' },
                     { val: 'GPU CUDA',    sub: 'RTX 4070 SUPER 12GB' },
                     { val: 'C2PA',        sub: 'procedencia criptográfica' },
                     { val: 'HMAC-SHA256', sub: 'cadena de custodia' },
