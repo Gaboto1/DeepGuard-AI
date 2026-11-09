@@ -49,7 +49,7 @@ DEBE_APARECER = [
     ("INFORME", "0,990", 2),
     ("INFORME", "60.000 imágenes", 3),
     ("INFORME", "nueve fuentes", 3),
-    ("INFORME", "78 pruebas", 3),
+    ("INFORME", "81 pruebas", 3),
     ("INFORME", "realizada en noviembre de 2026", 1),
     ("INFORME", "frente al 12,5 % de septiembre de 2026", 1),
     ("INFORME", "y de un 49,9 % en septiembre de 2026", 1),
@@ -57,7 +57,7 @@ DEBE_APARECER = [
     ("INFORME", "ELSA multigenerador", 1),
     ("INFORME", "Nueve fuentes independientes", 1),
     ("INFORME", "peso del track facial", 1),
-    ("GUION", "Setenta y ocho pruebas", 1),
+    ("GUION", "Ochenta y una pruebas", 1),
     ("GUION", "Sesenta mil imágenes", 1),
     ("GUION", "nueve fuentes independientes", 1),
     ("GUION", "0,992", 1),
@@ -65,7 +65,7 @@ DEBE_APARECER = [
     ("GUION", "5,7 % con pesos fijos y 12,5 % en septiembre de 2026", 1),
     ("DEFENSA", "0,992", 1),
     ("DEFENSA", "0,35 a 0,99", 1),
-    ("DEFENSA", "78", 1),
+    ("DEFENSA", "81", 1),
     # Cuarta pasada: la tabla de cifras del guion y la lamina 13 seguian
     # diciendo 14.000 imagenes y 6 fuentes mientras el cuerpo del guion ya
     # decia "Sesenta mil". Eran celdas con la cifra sola, que un barrido del
@@ -92,12 +92,17 @@ NO_DEBE_QUEDAR = [
     ("DEFENSA", "0,53 a 0,86", "rango anterior"),
     ("DEFENSA", "Ningún detector aislado cubre todas las técnicas",
      "afirmacion que las mediciones fuera de muestra no sostienen"),
-    # El recuento real de la suite es 78 (pytest, 2026-11-09). Declarar 75 es
-    # tan falso como declarar 80: tres pruebas se anadieron despues de que los
-    # documentos se actualizaran por tercera vez.
-    ("INFORME", "75 pruebas", "recuento desactualizado: la suite da 78"),
+    # El recuento real de la suite es 81 (pytest, 2026-11-09, quinta pasada).
+    # Declarar 75 o 78 es tan falso como declarar 90: la suite crece cada vez
+    # que una regresion se guarda con una prueba, y el entregable tiene que
+    # seguirla. Las tres ultimas llegaron con
+    # backend/tests/test_config_independiente_del_cwd.py.
+    ("INFORME", "75 pruebas", "recuento de la tercera pasada"),
     ("GUION", "Setenta y cinco", "mismo recuento, escrito con letras"),
     ("DEFENSA", "75 pruebas", "mismo recuento en la lamina de estado"),
+    ("INFORME", "78 pruebas", "recuento de la cuarta pasada: la suite da 81"),
+    ("GUION", "Setenta y ocho", "recuento de la cuarta pasada, con letras"),
+    ("DEFENSA", "78 pruebas", "recuento de la cuarta pasada en la lamina 17"),
     ("GUION", "14.000", "tamano anterior en la tabla de cifras de consulta"),
     ("DEFENSA", "14.000", "tamano anterior en la lamina de evidencia"),
     ("DEFENSA", "6 fuentes", "numero de fuentes anterior"),

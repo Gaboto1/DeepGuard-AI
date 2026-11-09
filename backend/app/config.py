@@ -61,7 +61,17 @@ class Settings(BaseSettings):
     def max_file_size_bytes(self) -> int:
         return self.MAX_FILE_SIZE_MB * 1024 * 1024
 
-    model_config = {"env_file": ".env", "extra": "ignore"}
+    # La ruta del .env se ancla al archivo, no al directorio de trabajo.
+    # Con ".env" relativo, pydantic lo busca en el cwd: un guion lanzado desde
+    # la raiz del proyecto no encontraba backend/.env y caia en los valores por
+    # defecto, es decir broker en redis://localhost en lugar de Upstash y
+    # DEEPGUARD_SIGNING_KEY vacia. Paso el 9 de noviembre de 2026: la prueba
+    # extremo a extremo encolo diez tareas en el Redis local, donde nadie las
+    # consume, y se quedo esperando resultados que no podian llegar.
+    model_config = {
+        "env_file": str(Path(__file__).resolve().parent.parent / ".env"),
+        "extra": "ignore",
+    }
 
 
 settings = Settings()

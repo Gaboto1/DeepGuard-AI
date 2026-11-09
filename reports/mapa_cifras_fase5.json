@@ -1,0 +1,38 @@
+{
+  "nota__": "QUINTA PASADA. Solo corrige el recuento de pruebas: de 78 a 81. No toca ninguna otra cifra, porque el reentrenamiento del pipeline de esta tarde se descarto y las metricas del sistema son las mismas que validaron las pasadas anteriores (ver reports/MEJORA_ENSEMBLE_v4.md seccion 10).",
+
+  "nota_por_que__": "La suite paso de 78 a 81 pruebas al anadir backend/tests/test_config_independiente_del_cwd.py, que guarda una regresion real: Settings declaraba env_file como ruta relativa, de modo que un guion lanzado desde la raiz del proyecto no encontraba backend/.env y caia en los valores por defecto -broker en redis://localhost en vez de Upstash-. La prueba extremo a extremo encolo diez tareas en el Redis local, donde nadie las consume, y parecia funcionar.",
+
+  "nota_ubicaciones__": "El '78' suelto vive en dos sitios que se leen de un vistazo: la tabla de cifras del guion (t39, fila 9) y la lamina 13 de la presentacion. El informe NO lleva '78' suelto que deba cambiar: los dos que tiene estan en la bibliografia -paginas 785-794 del articulo de XGBoost y 7890-7899 del de Durall- y cambiarlos falsearia dos referencias. Por eso las reglas del '78' suelto van acotadas por docs y ubicacion, y nunca alcanzan al informe.",
+
+  "nota_docs__": "CUIDADO con docs: la comparacion es por subcadena del nombre de archivo, y el guion se llama 'Guion_Defensa', de modo que docs ['Defensa'] casaria TAMBIEN con el guion. Para la presentacion hay que usar 'Defensa_DeepScan'.",
+
+  "nota_concordancia__": "En el guion la cifra va escrita con letras y 'pruebas' es femenino: 'Ochenta y una pruebas', no 'Ochenta y uno'.",
+
+  "78 pruebas": {
+    "nuevo": "81 pruebas",
+    "veces": 4,
+    "nota": "3 en el informe (justificacion SMART del KPI en t17.r6.c3, celda de valor en t17.r6.c4 y tabla del plan de pruebas en t24.r1.c4) + 1 en la lamina 17 de la presentacion"
+  },
+
+  "Setenta y ocho pruebas": {
+    "nuevo": "Ochenta y una pruebas",
+    "docs": ["Guion"],
+    "veces": 1
+  },
+
+  "78": [
+    {
+      "nuevo": "81",
+      "docs": ["Guion"],
+      "ubicaciones": ["#t39"],
+      "veces": 1
+    },
+    {
+      "nuevo": "81",
+      "docs": ["Defensa_DeepScan"],
+      "ubicaciones": ["#sl13"],
+      "veces": 1
+    }
+  ]
+}
