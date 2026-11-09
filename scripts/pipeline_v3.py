@@ -40,6 +40,12 @@ def etapa(num, nombre, cmd, timeout_min=600):
     log("=" * 68)
     t0 = time.time()
     salida = REPORTS / f"pipeline_v3_etapa{num}.log"
+    # -u fuerza el volcado inmediato. Sin el, Python agrupa la salida en
+    # bloques cuando no escribe a una consola, y el log de la etapa queda
+    # vacio aunque lleve una hora trabajando: imposible saber si avanza o se
+    # colgo. Paso en la etapa 4 del 9 de noviembre de 2026.
+    if cmd and cmd[0] == str(PY) and "-u" not in cmd:
+        cmd = [cmd[0], "-u", *cmd[1:]]
     try:
         with open(salida, "w", encoding="utf-8") as f:
             r = subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT,
