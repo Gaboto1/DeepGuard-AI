@@ -51,9 +51,9 @@ PROYECTO TITULO FINAL/
 │   │   │       └── routes.py        # API enterprise /api/v1/* (producción cloud)
 │   │   │
 │   │   ├── models/
-│   │   │   ├── deepfake_detector.py # 5 modelos ensemble (ViT, SDXL, CLIP, AiArt, SigLIP)
+│   │   │   ├── deepfake_detector.py # 6 detectores (ViT, SDXL, probe CLIP, AiArt, SigLIP2, umm-maybe)
 │   │   │   ├── face_detector.py     # MTCNN para detección y crop de rostros
-│   │   │   ├── meta_ensemble.py     # XGBoost + Temperature Scaling (T=0.581)
+│   │   │   ├── meta_ensemble.py     # 3 cabezales: full/noart logreg + face XGBoost
 │   │   │   └── ood_detector.py      # Detector Out-of-Distribution (5 señales)
 │   │   │
 │   │   ├── services/
@@ -139,7 +139,7 @@ PROYECTO TITULO FINAL/
 | Cola | Celery + Upstash Redis | 5.3+ |
 | ML | PyTorch + CUDA | 2.x + cu124 |
 | VLM | LLaVA-1.5-7b-hf (4-bit NF4) | bitsandbytes 0.43+ |
-| Meta-ensemble | XGBoost + T-Scaling (T=0.581) | 2.x |
+| Meta-ensemble | 3 cabezales (full/noart logreg, face XGBoost), umbral 0.8764 | 2.x |
 | Custodia | SHA-256 + HMAC-SHA256 v2 | stdlib |
 | Hosting API | Render (free tier) | — |
 | Hosting Web | GitHub Pages (gratuito permanente) | — |

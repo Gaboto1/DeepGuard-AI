@@ -2,6 +2,24 @@
 ## DeepGuard AI — Sistema Global de Detección de Deepfakes
 ### Proyecto de Título · Ingeniería en Informática · INACAP
 
+
+> ### ⚠ Estado del documento — revisado el 9 de noviembre de 2026
+>
+> Este documento conserva su contenido original con fecha. Describe el sistema
+> tal como era, y partes de su descripcion del meta-ensemble han quedado
+> superadas. Lo que cambio, en terminos estructurales:
+>
+> | Lo que dice el documento | Lo vigente |
+> |---|---|
+> | Meta-clasificador XGBoost unico | **Tres cabezales**: `full` y `noart` son **regresion logistica**; solo el cabezal facial es XGBoost |
+> | Temperatura T=0.581 | Umbral de produccion **0.8764** (cabezal `full`); cada cabezal tiene el suyo |
+> | 5 modelos de vision | **Seis** detectores (A ViT, B sdxl-detector, C probe CLIP ViT-L/14, D detector de arte IA, E SigLIP2, F umm-maybe) |
+> | El meta usa 3 features | El cabezal `full` usa **7** |
+>
+> Las metricas vigentes, cada una con su procedencia declarada (dentro o fuera
+> de muestra), estan en [`reports/MEJORA_ENSEMBLE_v4.md`](../reports/MEJORA_ENSEMBLE_v4.md). No se copian aqui para no crear otra
+> copia que envejezca.
+
 ---
 
 | Campo | Detalle |
@@ -112,7 +130,13 @@ La arquitectura seleccionada sigue el principio de **Separación de Responsabili
 
 ### 1.3 Modelo de IA: Ensemble de 5 Modelos Especializados
 
-El corazón del sistema es un **meta-ensemble** XGBoost que combina las predicciones de cinco modelos de Deep Learning, cada uno especializado en un subtipo de manipulación:
+El corazón del sistema es un **meta-ensemble** XGBoost que combina las predicciones de cinco modelos de Deep Learning <!-- SUPERADO nov-2026: ver reports/MEJORA_ENSEMBLE_v4.md -->
+
+> **[Superado en noviembre de 2026]** El meta-ensemble tiene ahora tres
+> cabezales: `full` y `noart` son regresion logistica y solo el cabezal
+> facial es XGBoost. Los detectores son seis, no cinco. Ver
+> `reports/MEJORA_ENSEMBLE_v4.md`.
+, cada uno especializado en un subtipo de manipulación:
 
 | ID | Modelo | Arquitectura | Especialización |
 |----|--------|-------------|-----------------|
@@ -132,7 +156,12 @@ _W_FACE    = [0.30, 0.20, 0.20, 0.15, 0.15]  # ViT tiene mayor peso
 _W_NO_FACE = [0.20, 0.25, 0.20, 0.20, 0.15]  # SDXL tiene mayor peso
 ```
 
-Sobre los scores del ensemble opera un **XGBoost** (profundidad=2, regularización L2) con **Temperature Scaling** calibrado a T=0.581, obteniendo:
+Sobre los scores del ensemble opera un **XGBoost** (profundidad=2, regularización L2) con **Temperature Scaling** calibrado a T=0.581 <!-- SUPERADO nov-2026: ver reports/MEJORA_ENSEMBLE_v4.md -->
+
+> **[Superado en noviembre de 2026]** El cabezal principal es una
+> regresion logistica con umbral de produccion 0.8764. Ver
+> `reports/MEJORA_ENSEMBLE_v4.md`.
+, obteniendo:
 
 | Métrica | Valor | Condición de evaluación |
 |---------|-------|------------------------|

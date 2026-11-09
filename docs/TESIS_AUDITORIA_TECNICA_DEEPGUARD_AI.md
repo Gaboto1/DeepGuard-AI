@@ -2,6 +2,24 @@
 
 **Documentación técnica exhaustiva del sistema, generada mediante análisis estático completo del repositorio**
 
+
+> ### ⚠ Estado del documento — revisado el 9 de noviembre de 2026
+>
+> Este documento conserva su contenido original con fecha. Describe el sistema
+> tal como era, y partes de su descripcion del meta-ensemble han quedado
+> superadas. Lo que cambio, en terminos estructurales:
+>
+> | Lo que dice el documento | Lo vigente |
+> |---|---|
+> | Meta-clasificador XGBoost unico | **Tres cabezales**: `full` y `noart` son **regresion logistica**; solo el cabezal facial es XGBoost |
+> | Temperatura T=0.581 | Umbral de produccion **0.8764** (cabezal `full`); cada cabezal tiene el suyo |
+> | 5 modelos de vision | **Seis** detectores (A ViT, B sdxl-detector, C probe CLIP ViT-L/14, D detector de arte IA, E SigLIP2, F umm-maybe) |
+> | El meta usa 3 features | El cabezal `full` usa **7** |
+>
+> Las metricas vigentes, cada una con su procedencia declarada (dentro o fuera
+> de muestra), estan en [`reports/MEJORA_ENSEMBLE_v4.md`](../reports/MEJORA_ENSEMBLE_v4.md). No se copian aqui para no crear otra
+> copia que envejezca.
+
 ---
 
 ## Portada
@@ -471,7 +489,7 @@ No se identifica un uso deliberado de Domain-Driven Design (no hay agregados, en
 | 3 | Ausencia de autenticación en toda la API | **Alta** | Cualquiera con la URL puede consumir GPU local sin límite de identidad; inadecuado para un eventual uso pericial/legal | Implementar API key o JWT mínimo, ya propuesto en auditoría previa (DOC-02) |
 | 4 | TLS sin verificación de certificado en Redis (`CERT_NONE`) | **Alta** | Riesgo de interceptación del canal que transporta archivos y la clave HMAC | Configurar CA real de Aiven, ya propuesto en auditoría previa (DOC-01) |
 | 5 | Mismo Dockerfile "sin GPU/torch" reutilizado para el servicio `worker` (que requiere CUDA) en `docker-compose.prod.yml` | **Media** | El compose de producción, tal como está documentado en el repositorio, no sería funcional para el servicio worker sin una imagen alternativa no incluida | Crear un `Dockerfile.worker` explícito con CUDA/PyTorch, distinto del de la API |
-| 6 | Métrica F1=94.7% del informe técnico final no es trazable a ningún benchmark documentado | **Media** | Afecta la solidez de las afirmaciones de rendimiento citadas en la documentación oficial del proyecto | Documentar la metodología exacta y el dataset usado para esa cifra, o corregirla al valor verificable más reciente (88.7% XGBoost en validación cruzada sobre 512 imágenes) |
+| 6 | Métrica F1=94.7% del informe técnico final no es trazable a ningún benchmark documentado — **confirmado y resuelto en noviembre de 2026**: ese 94,7 % se calculaba sobre el cabezal facial aislado y no sobre el sistema, que mezcla ese cabezal con el track completo; medido por la via de produccion daba un 11 %. Ver `reports/MEJORA_ENSEMBLE_v4.md` §4.1 | **Media** | Afecta la solidez de las afirmaciones de rendimiento citadas en la documentación oficial del proyecto | Documentar la metodología exacta y el dataset usado para esa cifra, o corregirla al valor verificable más reciente (88.7% XGBoost en validación cruzada sobre 512 imágenes) |
 | 7 | `README.md` raíz describe el sistema original de un solo modelo, no el ensemble de 8 señales actual | **Media** | Desorienta a cualquier nuevo colaborador o evaluador que lea primero el README | Reescribir el README para reflejar la arquitectura v6.0.0 (parcialmente abordado en esta misma sesión de trabajo con la sección de modos de operación) |
 | 8 | Endpoint legacy `/api/analyze` no envía `file_content_b64` al despachar a Celery en modo `API_ONLY` | **Media** | Fallo determinístico (`ValueError`) si se usa este endpoint en la arquitectura híbrida real | Igualar el comportamiento al de `/api/v1/analyze`, o deprecar formalmente el router legacy |
 | 9 | Tipos duplicados entre frontend y backend (`CustodySeal` local vs. `chain_of_custody` inline; `HealthResponse` desactualizada respecto al payload real de `/api/v1/health`) | **Baja-Media** | Riesgo de desincronización silenciosa entre lo que el backend envía y lo que el frontend espera | Generar tipos TypeScript desde los modelos Pydantic (ej. `pydantic-to-typescript` u OpenAPI codegen) |
@@ -504,7 +522,13 @@ No se identifica un uso deliberado de Domain-Driven Design (no hay agregados, en
 
 ### 15.3 Largo plazo (meses, requiere investigación/reentrenamiento)
 
-1. Reentrenar el meta-ensemble XGBoost incorporando las 8-9 señales completas (en vez de solo 3), evaluando si el "Consensus Override" manual puede simplificarse o eliminarse con un modelo mejor calibrado.
+1. Reentrenar el meta-ensemble XGBoost incorporando las 8-9 señales completas (en vez de solo 3), evaluando si el "Consensus Override" manual puede simplificarse o eliminarse con un modelo mejor calibrado. <!-- SUPERADO nov-2026: ver reports/MEJORA_ENSEMBLE_v4.md -->
+
+> **[Ejecutado en noviembre de 2026]** Esta recomendacion se llevo a cabo.
+> El cabezal principal paso de 3 a 7 features y de XGBoost a regresion
+> logistica, elegida por su error leave-one-source-out y no por su ajuste.
+> El detalle y las mediciones estan en `reports/MEJORA_ENSEMBLE_v4.md`.
+
 2. Expandir el conjunto de validación ("golden set") más allá de las 20-512 imágenes actuales hacia un conjunto de validación robusto y estratificado por categoría, con un conjunto de prueba *held-out* nunca usado para ajustar umbrales — actualmente las 4 reglas forenses están calibradas reactivamente sobre casos puntuales, con riesgo de sobreajuste.
 3. Incorporar cobertura de generadores no soportados actualmente: anime/arte digital y GAN clásico (ProGAN/StyleGAN), identificados como brechas reconocidas desde la fase de investigación inicial (`AI_DETECTOR_RESEARCH.md`) y nunca resueltas.
 4. Evaluar la migración del meta-modelo o de alguna señal hacia un esquema de versionado de modelo explícito (firma de esquema en el `.joblib`), eliminando el acoplamiento implícito actual entre `MetaEnsemble` y el formato exacto del archivo serializado.

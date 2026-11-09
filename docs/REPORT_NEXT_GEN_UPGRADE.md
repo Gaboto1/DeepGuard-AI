@@ -2,6 +2,24 @@
 ## DeepGuard AI v5.1 — Corrección de Bug + Optimización del Meta-Ensemble
 **Fecha:** 2026-05-30
 
+
+> ### ⚠ Estado del documento — revisado el 9 de noviembre de 2026
+>
+> Este documento conserva su contenido original con fecha. Describe el sistema
+> tal como era, y partes de su descripcion del meta-ensemble han quedado
+> superadas. Lo que cambio, en terminos estructurales:
+>
+> | Lo que dice el documento | Lo vigente |
+> |---|---|
+> | Meta-clasificador XGBoost unico | **Tres cabezales**: `full` y `noart` son **regresion logistica**; solo el cabezal facial es XGBoost |
+> | Temperatura T=0.581 | Umbral de produccion **0.8764** (cabezal `full`); cada cabezal tiene el suyo |
+> | 5 modelos de vision | **Seis** detectores (A ViT, B sdxl-detector, C probe CLIP ViT-L/14, D detector de arte IA, E SigLIP2, F umm-maybe) |
+> | El meta usa 3 features | El cabezal `full` usa **7** |
+>
+> Las metricas vigentes, cada una con su procedencia declarada (dentro o fuera
+> de muestra), estan en [`reports/MEJORA_ENSEMBLE_v4.md`](../reports/MEJORA_ENSEMBLE_v4.md). No se copian aqui para no crear otra
+> copia que envejezca.
+
 ---
 
 ## 1. PROBLEMA ORIGINAL
