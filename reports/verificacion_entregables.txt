@@ -1,5 +1,5 @@
 INFORME   69,283 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
-GUION     23,041 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
+GUION     23,040 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
 DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
 
 === DEBE APARECER (cifras y textos nuevos) ===
@@ -8,7 +8,7 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    2x (>= 2)  0,990
   ok  INFORME    4x (>= 3)  60.000 imágenes
   ok  INFORME    3x (>= 3)  nueve fuentes
-  ok  INFORME    3x (>= 3)  75 pruebas
+  ok  INFORME    3x (>= 3)  78 pruebas
   ok  INFORME    1x (>= 1)  realizada en noviembre de 2026
   ok  INFORME    1x (>= 1)  frente al 12,5 % de septiembre de 2026
   ok  INFORME    1x (>= 1)  y de un 49,9 % en septiembre de 2026
@@ -16,7 +16,7 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    1x (>= 1)  ELSA multigenerador
   ok  INFORME    1x (>= 1)  Nueve fuentes independientes
   ok  INFORME    1x (>= 1)  peso del track facial
-  ok  GUION      1x (>= 1)  Setenta y cinco pruebas
+  ok  GUION      1x (>= 1)  Setenta y ocho pruebas
   ok  GUION      1x (>= 1)  Sesenta mil imágenes
   ok  GUION      1x (>= 1)  nueve fuentes independientes
   ok  GUION      1x (>= 1)  0,992
@@ -24,7 +24,10 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  GUION      1x (>= 1)  5,7 % con pesos fijos y 12,5 % en septiembre de 2026
   ok  DEFENSA    1x (>= 1)  0,992
   ok  DEFENSA    1x (>= 1)  0,35 a 0,99
-  ok  DEFENSA    2x (>= 1)  75
+  ok  DEFENSA    2x (>= 1)  78
+  ok  GUION      2x (>= 1)  60.000
+  ok  DEFENSA    1x (>= 1)  60.000
+  ok  DEFENSA    1x (>= 1)  9 fuentes
 
 === NO DEBE QUEDAR (texto superado) ===
   ok  INFORME    0x  frente al 0,7 % de septiembre de 2026        | la referencia historica quedo sustituida
@@ -39,12 +42,21 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  DEFENSA    0x  0,883                                        | AUC anterior
   ok  DEFENSA    0x  0,53 a 0,86                                  | rango anterior
   ok  DEFENSA    0x  Ningún detector aislado cubre todas las técn | afirmacion que las mediciones fuera de m
+  ok  INFORME    0x  75 pruebas                                   | recuento desactualizado: la suite da 78
+  ok  GUION      0x  Setenta y cinco                              | mismo recuento, escrito con letras
+  ok  DEFENSA    0x  75 pruebas                                   | mismo recuento en la lamina de estado
+  ok  GUION      0x  14.000                                       | tamano anterior en la tabla de cifras de
+  ok  DEFENSA    0x  14.000                                       | tamano anterior en la lamina de evidenci
+  ok  DEFENSA    0x  6 fuentes                                    | numero de fuentes anterior
 
 === DEBE CONSERVARSE (historia que no se reescribe) ===
   ok  INFORME    2x  49,9 %           | hito de septiembre en la tabla de progresion y en la justi
   ok  INFORME    2x  12,5 %           | mismo hito, columna de falsas alarmas
   ok  INFORME    1x  seis fuentes     | parrafo de lecciones aprendidas: narra cuando se construyo
   ok  INFORME    2x  0,1 %            | punto de partida de la progresion
+  ok  INFORME    1x  14.000           | cantidad de ELSA multigenerador en la tabla 40
+  ok  INFORME    1x  0.75             | AUC del promedio ponderado en la tabla de metodos
+  ok  INFORME    2x  0.975            | AUC del detector de arte sobre obra grafica
   ok  GUION      2x  0,975            | AUC que justifico separar el detector de arte
   ok  GUION      2x  0,609            | el otro extremo de esa medicion
   ok  GUION      2x  0,863            | AUC del probe CLIP que motivo el cabezal facial

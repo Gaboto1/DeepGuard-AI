@@ -49,7 +49,7 @@ DEBE_APARECER = [
     ("INFORME", "0,990", 2),
     ("INFORME", "60.000 imágenes", 3),
     ("INFORME", "nueve fuentes", 3),
-    ("INFORME", "75 pruebas", 3),
+    ("INFORME", "78 pruebas", 3),
     ("INFORME", "realizada en noviembre de 2026", 1),
     ("INFORME", "frente al 12,5 % de septiembre de 2026", 1),
     ("INFORME", "y de un 49,9 % en septiembre de 2026", 1),
@@ -57,7 +57,7 @@ DEBE_APARECER = [
     ("INFORME", "ELSA multigenerador", 1),
     ("INFORME", "Nueve fuentes independientes", 1),
     ("INFORME", "peso del track facial", 1),
-    ("GUION", "Setenta y cinco pruebas", 1),
+    ("GUION", "Setenta y ocho pruebas", 1),
     ("GUION", "Sesenta mil imágenes", 1),
     ("GUION", "nueve fuentes independientes", 1),
     ("GUION", "0,992", 1),
@@ -65,7 +65,14 @@ DEBE_APARECER = [
     ("GUION", "5,7 % con pesos fijos y 12,5 % en septiembre de 2026", 1),
     ("DEFENSA", "0,992", 1),
     ("DEFENSA", "0,35 a 0,99", 1),
-    ("DEFENSA", "75", 1),
+    ("DEFENSA", "78", 1),
+    # Cuarta pasada: la tabla de cifras del guion y la lamina 13 seguian
+    # diciendo 14.000 imagenes y 6 fuentes mientras el cuerpo del guion ya
+    # decia "Sesenta mil". Eran celdas con la cifra sola, que un barrido del
+    # texto corrido no ve.
+    ("GUION", "60.000", 1),
+    ("DEFENSA", "60.000", 1),
+    ("DEFENSA", "9 fuentes", 1),
 ]
 
 # (documento, texto que NO debe quedar, motivo)
@@ -85,6 +92,15 @@ NO_DEBE_QUEDAR = [
     ("DEFENSA", "0,53 a 0,86", "rango anterior"),
     ("DEFENSA", "Ningún detector aislado cubre todas las técnicas",
      "afirmacion que las mediciones fuera de muestra no sostienen"),
+    # El recuento real de la suite es 78 (pytest, 2026-11-09). Declarar 75 es
+    # tan falso como declarar 80: tres pruebas se anadieron despues de que los
+    # documentos se actualizaran por tercera vez.
+    ("INFORME", "75 pruebas", "recuento desactualizado: la suite da 78"),
+    ("GUION", "Setenta y cinco", "mismo recuento, escrito con letras"),
+    ("DEFENSA", "75 pruebas", "mismo recuento en la lamina de estado"),
+    ("GUION", "14.000", "tamano anterior en la tabla de cifras de consulta"),
+    ("DEFENSA", "14.000", "tamano anterior en la lamina de evidencia"),
+    ("DEFENSA", "6 fuentes", "numero de fuentes anterior"),
 ]
 
 # Lo que debe CONSERVARSE: historia que seria falso reescribir.
@@ -96,6 +112,13 @@ DEBE_CONSERVARSE = [
     ("INFORME", "seis fuentes",
      "parrafo de lecciones aprendidas: narra cuando se construyo ese conjunto"),
     ("INFORME", "0,1 %", "punto de partida de la progresion"),
+    # El 14.000 del informe NO es un residuo: es la cantidad que aporta ELSA
+    # multigenerador en la tabla de composicion, y la columna suma 60.000
+    # exacto. Se afirma aqui para que una futura pasada que persiga el 14.000
+    # como cifra obsoleta no se lo lleve por delante.
+    ("INFORME", "14.000", "cantidad de ELSA multigenerador en la tabla 40"),
+    ("INFORME", "0.75", "AUC del promedio ponderado en la tabla de metodos"),
+    ("INFORME", "0.975", "AUC del detector de arte sobre obra grafica"),
     ("GUION", "0,975", "AUC que justifico separar el detector de arte"),
     ("GUION", "0,609", "el otro extremo de esa medicion"),
     ("GUION", "0,863", "AUC del probe CLIP que motivo el cabezal facial"),

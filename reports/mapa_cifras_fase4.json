@@ -1,0 +1,61 @@
+{
+  "nota__": "CUARTA PASADA. Corrige cifras que las tres pasadas anteriores no alcanzaron. Se descubrieron al ejecutar la suite completa (78 pruebas) y al barrer los tres entregables buscando valores obsoletos celda por celda, no solo en el cuerpo del texto.",
+
+  "nota_pruebas__": "Los documentos declaraban 75 pruebas. La ejecucion real da 78: tres pruebas se anadieron despues de la tercera pasada. Una cifra de mas en un entregable es tan falsa como una de menos, de modo que se corrige en los tres sitios del informe, en el cuerpo del guion, en su tabla de cifras y en dos laminas de la presentacion.",
+
+  "nota_tabla_cifras__": "La tabla de cifras del guion (t39) y la lamina 13 de la presentacion seguian diciendo 14.000 imagenes y 6 fuentes. El cuerpo del guion ya decia 'Sesenta mil' y el informe ya tenia la tabla de nueve fuentes: eran las dos piezas que se consultan de un vistazo las que quedaron contradiciendo al resto. Son celdas y formas con la cifra SOLA, sin frase alrededor, que es justo lo que un barrido de texto corrido no ve.",
+
+  "nota_guardas__": "El 14.000 del informe (tabla 40, fila de ELSA multigenerador) es LEGITIMO: es la cantidad aportada por esa fuente y la columna suma 60.000 exacto. Por eso las reglas de '14.000' llevan docs y ubicaciones. Y el '75' suelto se acota con no_contexto '0,975', porque en la misma tabla del guion hay una celda '0,975 / 0,609' que contiene esos dos digitos.",
+
+  "nota_docs__": "CUIDADO con docs: la comparacion es por subcadena del nombre de archivo, y el guion se llama 'Guion_Defensa', de modo que docs ['Defensa'] casaria TAMBIEN con el guion. Para la presentacion hay que usar 'Defensa_DeepScan'. Aqui se acota ademas por ubicacion (#sl13), que nunca aparece en un .docx.",
+
+  "75 pruebas": {
+    "nuevo": "78 pruebas",
+    "veces": 4,
+    "nota": "3 en el informe (justificacion SMART del KPI, celda de valor y tabla del plan de pruebas) + 1 en la lamina 17 de la presentacion"
+  },
+
+  "Setenta y cinco pruebas": {
+    "nuevo": "Setenta y ocho pruebas",
+    "docs": ["Guion"],
+    "veces": 1
+  },
+
+  "14.000": [
+    {
+      "nuevo": "60.000",
+      "docs": ["Guion"],
+      "ubicaciones": ["#t39"],
+      "veces": 1
+    },
+    {
+      "nuevo": "60.000",
+      "docs": ["Defensa_DeepScan"],
+      "ubicaciones": ["#sl13"],
+      "veces": 1
+    }
+  ],
+
+  "6 fuentes": {
+    "nuevo": "9 fuentes",
+    "docs": ["Defensa_DeepScan"],
+    "ubicaciones": ["#sl13"],
+    "veces": 1
+  },
+
+  "75": [
+    {
+      "nuevo": "78",
+      "docs": ["Guion"],
+      "ubicaciones": ["#t39"],
+      "no_contexto": "0,975",
+      "veces": 1
+    },
+    {
+      "nuevo": "78",
+      "docs": ["Defensa_DeepScan"],
+      "ubicaciones": ["#sl13"],
+      "veces": 1
+    }
+  ]
+}
