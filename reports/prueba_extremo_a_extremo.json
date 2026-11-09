@@ -1,0 +1,112 @@
+{
+  "generado": "2026-11-09T14:15:23",
+  "n": 7,
+  "fallos": 3,
+  "filas": [
+    {
+      "fuente": "lfw (rostro real)",
+      "clase": "real",
+      "archivo": "lfw_000376.jpg",
+      "score": 0.17865333054767388,
+      "banda": "Very Low Evidence",
+      "veredicto": "ok",
+      "rostros": 1,
+      "content_type": {
+        "artwork_probability": 0.0051,
+        "is_artwork": false,
+        "content_type": "photographic",
+        "gate_available": true
+      }
+    },
+    {
+      "fuente": "lfw (rostro real)",
+      "clase": "real",
+      "archivo": "lfw_000097.jpg",
+      "score": 0.17900879983317386,
+      "banda": "Very Low Evidence",
+      "veredicto": "ok",
+      "rostros": 1,
+      "content_type": {
+        "artwork_probability": 0.0021,
+        "is_artwork": false,
+        "content_type": "photographic",
+        "gate_available": true
+      }
+    },
+    {
+      "fuente": "imagenet (foto real)",
+      "clase": "real",
+      "archivo": "imagenet_001003.jpg",
+      "score": 0.5056720952890356,
+      "banda": "Inconclusive",
+      "veredicto": "ok",
+      "rostros": 0,
+      "content_type": {
+        "artwork_probability": 0.027,
+        "is_artwork": false,
+        "content_type": "photographic",
+        "gate_available": true
+      }
+    },
+    {
+      "fuente": "imagenet (foto real)",
+      "clase": "real",
+      "archivo": "imagenet_000594.jpg",
+      "score": 0.1845917150953218,
+      "banda": "Very Low Evidence",
+      "veredicto": "ok",
+      "rostros": 0,
+      "content_type": {
+        "artwork_probability": 0.0393,
+        "is_artwork": false,
+        "content_type": "photographic",
+        "gate_available": true
+      }
+    },
+    {
+      "fuente": "flux (IA)",
+      "clase": "ia",
+      "archivo": "flux_001267.jpg",
+      "score": 0.9096963982884568,
+      "banda": "Strong Evidence",
+      "veredicto": "ok",
+      "rostros": 0,
+      "content_type": {
+        "artwork_probability": 0.9722,
+        "is_artwork": true,
+        "content_type": "artwork",
+        "gate_available": true
+      }
+    },
+    {
+      "fuente": "flux (IA)",
+      "clase": "ia",
+      "archivo": "flux_000282.jpg",
+      "score": 0.4972391110245227,
+      "banda": "Inconclusive",
+      "veredicto": "no senala",
+      "rostros": 0,
+      "content_type": {
+        "artwork_probability": 0.5361,
+        "is_artwork": false,
+        "content_type": "photographic",
+        "gate_available": true
+      }
+    },
+    {
+      "fuente": "ff++ Deepfakes (deepfake)",
+      "clase": "ia",
+      "archivo": "008_990_027.jpg",
+      "score": 0.7660317915279656,
+      "banda": "Moderate Evidence",
+      "veredicto": "ok",
+      "rostros": 1,
+      "content_type": {
+        "artwork_probability": 0.0227,
+        "is_artwork": false,
+        "content_type": "photographic",
+        "gate_available": true
+      }
+    }
+  ]
+}
