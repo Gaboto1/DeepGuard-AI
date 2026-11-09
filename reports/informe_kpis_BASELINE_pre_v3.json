@@ -1,0 +1,153 @@
+{
+  "generado": "2026-11-09T06:07:06",
+  "conjunto": {
+    "n_total": 14000,
+    "n_real": 7000,
+    "n_ia": 7000,
+    "n_fuentes": 6,
+    "fuentes": [
+      "coco",
+      "diffusiondb",
+      "ff_fake",
+      "ff_real",
+      "sdturbo",
+      "sdturbo_sports"
+    ],
+    "n_obra_grafica": 2933,
+    "umbral_artwork": 0.55
+  },
+  "umbral_decision": 0.9652,
+  "meta_ensemble": {
+    "global": {
+      "n": 14000,
+      "auc": 0.9989,
+      "n_real": 7000,
+      "n_ia": 7000,
+      "fpr": 0.0006,
+      "deteccion_ia": 0.9271,
+      "score_medio_real": 0.0202,
+      "score_medio_ia": 0.9693
+    },
+    "fotografia": {
+      "n": 11067,
+      "auc": 0.9984,
+      "n_real": 6725,
+      "n_ia": 4342,
+      "fpr": 0.0003,
+      "deteccion_ia": 0.8853,
+      "score_medio_real": 0.0201,
+      "score_medio_ia": 0.9518
+    },
+    "obra_grafica_vs_foto_real": {
+      "n": 9383,
+      "auc": 0.9999,
+      "n_real": 6725,
+      "n_ia": 2658,
+      "fpr": 0.0003,
+      "deteccion_ia": 0.9955,
+      "score_medio_real": 0.0201,
+      "score_medio_ia": 0.9978
+    },
+    "deepfake_facial_en_ffpp": {
+      "n": 4600,
+      "auc": 0.9932,
+      "n_real": 3000,
+      "n_ia": 1600,
+      "fpr": 0.0007,
+      "deteccion_ia": 0.7725,
+      "score_medio_real": 0.0396,
+      "score_medio_ia": 0.9143
+    }
+  },
+  "detectores": {
+    "face_deepfake_vit": {
+      "etiqueta": "A  Deep-Fake-Detector-v2 (ViT)",
+      "global": 0.5982,
+      "obra_grafica": 0.6553,
+      "deepfake_facial": 0.5831
+    },
+    "sdxl_detector": {
+      "etiqueta": "B  sdxl-detector (Swin)",
+      "global": 0.7992,
+      "obra_grafica": 0.8037,
+      "deepfake_facial": 0.4784
+    },
+    "efficientnet_ffpp": {
+      "etiqueta": "C  probe CLIP ViT-L/14",
+      "global": 0.9981,
+      "obra_grafica": 0.9998,
+      "deepfake_facial": 0.9885
+    },
+    "ai_art_detector": {
+      "etiqueta": "D  detector de arte IA",
+      "global": 0.9002,
+      "obra_grafica": 0.9862,
+      "deepfake_facial": 0.5012
+    },
+    "siglip_deepfake": {
+      "etiqueta": "E  Deepfake-Detect-Siglip2",
+      "global": 0.5554,
+      "obra_grafica": 0.6655,
+      "deepfake_facial": 0.5289
+    },
+    "ai_human_detector": {
+      "etiqueta": "F  umm-maybe AI-image-detector",
+      "global": 0.5961,
+      "obra_grafica": 0.5947,
+      "deepfake_facial": 0.5086
+    }
+  },
+  "por_fuente": {
+    "coco": {
+      "n": 4000,
+      "clase": "real",
+      "error": 0.0005,
+      "score_medio": 0.0057
+    },
+    "diffusiondb": {
+      "n": 2200,
+      "clase": "IA",
+      "error": 0.0277,
+      "score_medio": 0.9865
+    },
+    "ff_fake": {
+      "n": 1600,
+      "clase": "IA",
+      "error": 0.2275,
+      "score_medio": 0.9143
+    },
+    "ff_real": {
+      "n": 3000,
+      "clase": "real",
+      "error": 0.0007,
+      "score_medio": 0.0396
+    },
+    "sdturbo": {
+      "n": 1600,
+      "clase": "IA",
+      "error": 0.0025,
+      "score_medio": 0.9986
+    },
+    "sdturbo_sports": {
+      "n": 1600,
+      "clase": "IA",
+      "error": 0.0506,
+      "score_medio": 0.9714
+    }
+  },
+  "generalizacion_loso": {
+    "full_head": {
+      "cv_auc": 0.9975,
+      "cv_f1": 0.9766,
+      "loso_error_medio": 0.0547,
+      "loso_error_peor": 0.2213
+    },
+    "noart_head": {
+      "cv_auc": 0.9975,
+      "cv_f1": 0.9773,
+      "loso_error_medio": 0.1873,
+      "loso_error_peor": 0.7687
+    }
+  },
+  "aviso": "AUC del bloque meta_ensemble = dentro de muestra (el meta se entreno sobre este CSV). Para el informe usar generalizacion_loso."
+}

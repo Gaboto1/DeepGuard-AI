@@ -130,7 +130,10 @@ def generate_forensic_explanation(
     Genera la explicación forense exclusivamente en español técnico.
     Basada en evidencia medida — sin descripciones inventadas de artefactos.
     """
-    pct = round(probability * 100)
+    # Un decimal, igual que `manipulation_probability` en la respuesta de la
+    # tarea (round(prob * 100, 1)). Con round() a entero, un score de 0.585 se
+    # redondeaba a "58%" junto a un titular que mostraba "58.5%".
+    pct = f"{probability * 100:.1f}"
 
     base_map = {
         EvidenceLevel.VERY_LOW: (

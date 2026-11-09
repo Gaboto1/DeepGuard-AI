@@ -1,0 +1,8 @@
+{
+  "0,883": "PENDIENTE_AUC",
+  "0.883": "PENDIENTE_AUC",
+  "49,9 %": "PENDIENTE_DETEC",
+  "12,5 %": "PENDIENTE_FPR",
+  "14.000 imágenes": "PENDIENTE_N imágenes",
+  "AUC individual va de 0,53 a 0,86": "AUC individual va de PENDIENTE_MIN a PENDIENTE_MAX"
+}

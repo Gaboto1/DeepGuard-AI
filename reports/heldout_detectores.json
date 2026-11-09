@@ -1,0 +1,87 @@
+{
+  "generado": "2026-11-09T09:52:35",
+  "n": 2000,
+  "fuentes_real": [
+    "imagenet",
+    "lfw"
+  ],
+  "fuentes_ia": [
+    "dalle3",
+    "flux"
+  ],
+  "nota": "AUC de cada detector sobre fuentes ausentes de todo plan de entrenamiento. A diferencia de la tabla calculada sobre dataset_v2_scores.csv, aqui los seis estan fuera de muestra y son comparables entre si.",
+  "detectores": {
+    "face_deepfake_vit": {
+      "etiqueta": "A  Deep-Fake-Detector-v2 (ViT)",
+      "auc_heldout": 0.451,
+      "media_real": 0.6666,
+      "media_ia": 0.6372,
+      "media_por_fuente": {
+        "dalle3": 0.663,
+        "flux": 0.6114,
+        "imagenet": 0.5735,
+        "lfw": 0.7598
+      }
+    },
+    "sdxl_detector": {
+      "etiqueta": "B  sdxl-detector (Swin)",
+      "auc_heldout": 0.9048,
+      "media_real": 0.1004,
+      "media_ia": 0.7431,
+      "media_por_fuente": {
+        "dalle3": 0.8289,
+        "flux": 0.6574,
+        "imagenet": 0.1846,
+        "lfw": 0.0162
+      }
+    },
+    "efficientnet_ffpp": {
+      "etiqueta": "C  probe CLIP ViT-L/14",
+      "auc_heldout": 0.987,
+      "media_real": 0.0874,
+      "media_ia": 0.9544,
+      "media_por_fuente": {
+        "dalle3": 0.9934,
+        "flux": 0.9155,
+        "imagenet": 0.049,
+        "lfw": 0.1258
+      }
+    },
+    "ai_art_detector": {
+      "etiqueta": "D  detector de arte IA",
+      "auc_heldout": 0.9918,
+      "media_real": 0.0219,
+      "media_ia": 0.9225,
+      "media_por_fuente": {
+        "dalle3": 0.9625,
+        "flux": 0.8825,
+        "imagenet": 0.04,
+        "lfw": 0.0038
+      }
+    },
+    "siglip_deepfake": {
+      "etiqueta": "E  Deepfake-Detect-Siglip2",
+      "auc_heldout": 0.765,
+      "media_real": 0.4425,
+      "media_ia": 0.9069,
+      "media_por_fuente": {
+        "dalle3": 0.8935,
+        "flux": 0.9203,
+        "imagenet": 0.882,
+        "lfw": 0.003
+      }
+    },
+    "ai_human_detector": {
+      "etiqueta": "F  umm-maybe AI-image-detector",
+      "auc_heldout": 0.3452,
+      "media_real": 0.5015,
+      "media_ia": 0.3408,
+      "media_por_fuente": {
+        "dalle3": 0.3751,
+        "flux": 0.3066,
+        "imagenet": 0.2884,
+        "lfw": 0.7146
+      }
+    }
+  }
+}

@@ -22,8 +22,6 @@ from loguru import logger
 
 from app.models.deepfake_detector import DeepfakeDetector
 from app.models.face_detector import FaceDetector
-from app.models.frequency_detector import predict_frequency
-from app.models.srm_detector import predict_srm
 from app.services.video_temporal_service import (
     run_temporal_analysis,
     apply_temporal_risk,
@@ -33,11 +31,9 @@ from app.config import settings
 
 _executor = ThreadPoolExecutor(max_workers=1)
 
-# Umbral conservador para correcciones de señales auxiliares por frame
-_FREQ_THRESHOLD = 0.38   # solo corrige si divergencia > 38%
-_SRM_THRESHOLD  = 0.42   # umbral más alto para SRM (mayor incertidumbre)
-_FREQ_ALPHA     = 0.04   # peso máximo de corrección freq por frame
-_SRM_ALPHA      = 0.03   # peso máximo de corrección SRM por frame
+# Las correcciones por fotograma con las señales frecuencial y SRM se retiraron
+# al medirlas invertidas (AUC 0.296 y 0.409). Sus umbrales y pesos se eliminan
+# junto con ellas para no dejar constantes que sugieran que siguen activas.
 
 
 def _extract_frames(
@@ -124,22 +120,13 @@ def _run_video_analysis(
 
             frame_score = pred["fake_probability"]
 
-            # ── Correcciones CPU por frame: freq + SRM ────────────────────────
-            # Se aplican con umbral alto y peso mínimo para evitar ruido.
-            try:
-                score_freq = predict_frequency(img).get("fake_probability", 0.5)
-                if abs(score_freq - frame_score) > _FREQ_THRESHOLD:
-                    frame_score = (1 - _FREQ_ALPHA) * frame_score + _FREQ_ALPHA * score_freq
-            except Exception:
-                pass
-
-            try:
-                score_srm = predict_srm(img).get("fake_probability", 0.5)
-                if abs(score_srm - frame_score) > _SRM_THRESHOLD:
-                    frame_score = (1 - _SRM_ALPHA) * frame_score + _SRM_ALPHA * score_srm
-            except Exception:
-                pass
-
+            # ── Correcciones CPU por frame: retiradas ─────────────────────────
+            # Aquí se empujaba el score del fotograma hacia las señales
+            # frecuencial y SRM. Medidas sobre 1.100 imágenes de cinco fuentes,
+            # ambas resultaron invertidas (AUC 0.296 y 0.409): puntúan más alto
+            # el material auténtico que el sintético, de modo que la corrección
+            # elevaba el score de los vídeos reales. Se mantiene el mismo
+            # criterio que en el análisis de imagen (ver _calibrated_combine).
             frame_score = float(np.clip(frame_score, 0.0, 1.0))
 
             frame_idx_in_video = int(frame_indices[global_frame_idx])

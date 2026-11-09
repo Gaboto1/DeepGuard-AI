@@ -443,6 +443,77 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
         </div>
       )}
 
+      {/* ── Detector de arte IA — indicador separado ──────────────────────────── */}
+      {result.ai_art_indicator && result.ai_art_indicator.score != null && (() => {
+        const ind      = result.ai_art_indicator!;
+        const excluded = ind.excluded_from_score === true;
+        const pct      = ind.score! * 100;
+        const artP     = result.content_type?.artwork_probability;
+        return (
+          <div className="border overflow-hidden" style={{ borderColor: excluded ? '#3d3218' : '#1a2030' }}>
+            <div
+              className="flex items-center justify-between px-3 py-2 border-b text-2xs uppercase tracking-widest"
+              style={{
+                background: '#05080f',
+                borderColor: excluded ? '#3d3218' : '#1a2030',
+                color: excluded ? '#b8912e' : 'var(--fg-muted)',
+              }}
+            >
+              <span>Detector de arte IA — indicador independiente</span>
+              <span style={{ color: excluded ? '#b8912e' : '#253348' }}>
+                {excluded ? 'fuera del cálculo' : 'incluido en el cálculo'}
+              </span>
+            </div>
+
+            <div className="px-3 py-2.5 space-y-2" style={{ background: '#080c15' }}>
+              <div className="flex items-center gap-3">
+                <span
+                  className="text-2xs flex-shrink-0 truncate"
+                  style={{ color: 'var(--fg-muted)', minWidth: '9rem', maxWidth: '9rem' }}
+                >
+                  AI Art Detector
+                </span>
+                <div className="flex-1 h-1.5 rounded-none overflow-hidden" style={{ background: '#111827' }}>
+                  <div
+                    className="h-full"
+                    style={{
+                      width: `${Math.min(100, Math.max(0, pct))}%`,
+                      background: excluded ? '#5a4a1e' : scoreColor(pct),
+                    }}
+                  />
+                </div>
+                <span
+                  className="text-2xs tabular-nums flex-shrink-0"
+                  style={{ color: excluded ? '#8a7328' : 'var(--fg-secondary)', minWidth: '3rem', textAlign: 'right' }}
+                >
+                  {pct.toFixed(1)}%
+                </span>
+              </div>
+
+              {result.content_type?.content_type && (
+                <div className="text-2xs" style={{ color: 'var(--fg-muted)' }}>
+                  Tipo de contenido:{' '}
+                  <span style={{ color: 'var(--fg-secondary)' }}>
+                    {result.content_type.content_type === 'artwork' ? 'obra gráfica' : 'fotografía'}
+                  </span>
+                  {artP != null && (
+                    <span style={{ color: '#253348' }}>
+                      {' '}(p={(artP * 100).toFixed(0)}%)
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {ind.reason && (
+                <p className="text-2xs leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+                  {ind.reason}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* ── Tabbed sections ──────────────────────────────────────────────────── */}
       <div className="border overflow-hidden" style={{ borderColor: '#1a2030' }}>
         {/* Tab bar */}

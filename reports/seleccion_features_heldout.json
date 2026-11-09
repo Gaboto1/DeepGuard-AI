@@ -1,0 +1,119 @@
+{
+  "generado": "2026-11-09T09:52:38",
+  "n_entrenamiento": 60000,
+  "n_retenido": 2000,
+  "advertencia": "El retenido se usa aqui para SELECCIONAR, de modo que deja de ser un test ciego. La cifra del ganador queda optimista. No citar como validacion independiente.",
+  "candidatos": {
+    "actual": {
+      "features": [
+        "sdxl_detector",
+        "ai_art_detector",
+        "efficientnet_ffpp",
+        "ai_human_detector",
+        "sdxl_x_aiart",
+        "robust_mean",
+        "reliable_std"
+      ],
+      "temperatura": 0.1421,
+      "auc_retenido": 0.9948,
+      "senala_ia_pct": 99.0,
+      "falsa_alarma_pct": 7.4,
+      "ia_descartada_pct": 0.9,
+      "coeficientes": {
+        "sdxl_detector": 0.3089,
+        "ai_art_detector": 0.4858,
+        "efficientnet_ffpp": 1.1138,
+        "ai_human_detector": 0.1313,
+        "sdxl_x_aiart": 0.323,
+        "robust_mean": 0.6683,
+        "reliable_std": 0.1521
+      },
+      "signos_negativos": []
+    },
+    "sin_F": {
+      "features": [
+        "sdxl_detector",
+        "ai_art_detector",
+        "efficientnet_ffpp",
+        "sdxl_x_aiart",
+        "robust_mean",
+        "reliable_std"
+      ],
+      "temperatura": 0.1421,
+      "auc_retenido": 0.9954,
+      "senala_ia_pct": 99.0,
+      "falsa_alarma_pct": 7.4,
+      "ia_descartada_pct": 0.9,
+      "coeficientes": {
+        "sdxl_detector": 0.3066,
+        "ai_art_detector": 0.4866,
+        "efficientnet_ffpp": 1.1177,
+        "sdxl_x_aiart": 0.3229,
+        "robust_mean": 0.6726,
+        "reliable_std": 0.1543
+      },
+      "signos_negativos": []
+    },
+    "sin_F_sin_interaccion": {
+      "features": [
+        "sdxl_detector",
+        "ai_art_detector",
+        "efficientnet_ffpp",
+        "robust_mean",
+        "reliable_std"
+      ],
+      "temperatura": 0.1352,
+      "auc_retenido": 0.9949,
+      "senala_ia_pct": 98.9,
+      "falsa_alarma_pct": 7.2,
+      "ia_descartada_pct": 0.9,
+      "coeficientes": {
+        "sdxl_detector": 0.3449,
+        "ai_art_detector": 0.5254,
+        "efficientnet_ffpp": 1.137,
+        "robust_mean": 0.703,
+        "reliable_std": 0.1451
+      },
+      "signos_negativos": []
+    },
+    "solo_los_tres_buenos": {
+      "features": [
+        "sdxl_detector",
+        "ai_art_detector",
+        "efficientnet_ffpp",
+        "robust_mean",
+        "reliable_std"
+      ],
+      "temperatura": 0.1352,
+      "auc_retenido": 0.9949,
+      "senala_ia_pct": 98.9,
+      "falsa_alarma_pct": 7.2,
+      "ia_descartada_pct": 0.9,
+      "coeficientes": {
+        "sdxl_detector": 0.3449,
+        "ai_art_detector": 0.5254,
+        "efficientnet_ffpp": 1.137,
+        "robust_mean": 0.703,
+        "reliable_std": 0.1451
+      },
+      "signos_negativos": []
+    },
+    "minimo": {
+      "features": [
+        "efficientnet_ffpp",
+        "ai_art_detector"
+      ],
+      "temperatura": 0.119,
+      "auc_retenido": 0.9961,
+      "senala_ia_pct": 97.5,
+      "falsa_alarma_pct": 7.4,
+      "ia_descartada_pct": 0.3,
+      "coeficientes": {
+        "efficientnet_ffpp": 1.3027,
+        "ai_art_detector": 0.6865
+      },
+      "signos_negativos": []
+    }
+  },
+  "mejor": "sin_F_sin_interaccion"
+}

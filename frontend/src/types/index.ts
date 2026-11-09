@@ -122,6 +122,28 @@ export interface C2PAProvenance {
   error?: string | null;
 }
 
+/**
+ * Veredicto de la compuerta de tipo de contenido (CLIP zero-shot).
+ * Separa fotografía de obra gráfica; no dice nada sobre autoría.
+ */
+export interface ContentTypeResult {
+  artwork_probability?: number | null;   // 0–1
+  is_artwork?: boolean;
+  content_type?: 'artwork' | 'photographic';
+  gate_available?: boolean;
+}
+
+/**
+ * Detector de arte IA reportado por separado del porcentaje forense.
+ * En obra gráfica queda excluido: su pregunta ("¿generó una IA esta obra?")
+ * no es la pregunta forense ("¿fue manipulada esta fotografía?").
+ */
+export interface AiArtIndicator {
+  score?: number | null;                 // 0–1
+  excluded_from_score?: boolean;
+  reason?: string;
+}
+
 export interface AnalysisResult {
   task_id: string;
   status: TaskStatus;
@@ -174,6 +196,13 @@ export interface AnalysisResult {
 
   risk_of_error?: string | null;
   ensemble_method?: string | null;
+
+  // Tipo de contenido — fotografía vs obra gráfica (ilustración, pintura, render)
+  content_type?: ContentTypeResult | null;
+
+  // Detector de arte IA como indicador independiente. Cuando
+  // excluded_from_score es true, su score NO entra en manipulation_probability.
+  ai_art_indicator?: AiArtIndicator | null;
 
   // Cadena de custodia criptográfica (SHA-256 + HMAC-SHA256 v2)
   chain_of_custody?: {

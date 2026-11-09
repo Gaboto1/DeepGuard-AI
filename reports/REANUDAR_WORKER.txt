@@ -1,0 +1,10 @@
+Comando exacto del worker de Celery, capturado antes de detenerlo
+(PID originales 41416 / 23500 / 19528, arrancado 09-11-2026 02:38).
+
+Desde la carpeta backend/:
+
+    venv\Scripts\celery.exe -A app.celery_app worker --loglevel=info ^
+        -P threads -Q images,videos,default -c 2 -n deepguard-worker@%h
+
+Tarda 2-4 minutos en cargar los seis detectores en VRAM. La pagina web no
+procesa cargas hasta que termine de arrancar.

@@ -191,6 +191,27 @@ class _HFModel:
             logger.debug(f"[{self._label}] batch failed: {e}")
             return [None] * len(images)
 
+    def _vit_blocks(self):
+        """
+        Lista de bloques transformer del backbone ViT.
+
+        La ruta cambia entre versiones de transformers: las antiguas exponen
+        ``vit.encoder.layer`` y las nuevas ``vit.layers``. El codigo original
+        fijaba la primera, asi que en esta version lanzaba
+        ``'ViTModel' object has no attribute 'encoder'`` y TODOS los mapas de
+        calor fallaban en silencio (la excepcion se tragaba en el except).
+        """
+        vit = getattr(self.model, "vit", None)
+        if vit is None:
+            return None
+        encoder = getattr(vit, "encoder", None)
+        if encoder is not None and hasattr(encoder, "layer"):
+            return encoder.layer
+        layers = getattr(vit, "layers", None)
+        if layers is not None:
+            return layers
+        return None
+
     def grad_cam(self, image: Image.Image, target_class: int = 1) -> Optional[str]:
         if not self._loaded:
             return None
@@ -198,16 +219,35 @@ class _HFModel:
             from pytorch_grad_cam import GradCAMPlusPlus
             from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
             from pytorch_grad_cam.utils.image import show_cam_on_image
-            if not hasattr(self.model, "vit"):
+
+            blocks = self._vit_blocks()
+            if not blocks:
+                logger.debug(f"[{self._label}] GradCAM: backbone ViT no localizado")
                 return None
-            target_layers = [self.model.vit.encoder.layer[-1].layernorm_before]
+            last = blocks[-1]
+            # layernorm_before es el punto de enganche habitual; si el bloque no
+            # lo expone, se usa el bloque completo.
+            target_layers = [getattr(last, "layernorm_before", last)]
+
+            # pytorch-grad-cam espera un tensor de logits. Los modelos de
+            # transformers devuelven ImageClassifierOutput, cuyo indexado por
+            # entero entrega claves (str) y rompe el calculo del target.
+            class _LogitsOnly(nn.Module):
+                def __init__(self, inner):
+                    super().__init__()
+                    self.inner = inner
+
+                def forward(self, pixel_values):
+                    return self.inner(pixel_values=pixel_values).logits
+
+            cam_model = _LogitsOnly(self.model)
 
             def reshape(t: torch.Tensor) -> torch.Tensor:
                 r = t[:, 1:, :]
                 h = w = int(r.shape[1] ** 0.5)
                 return r.reshape(t.size(0), h, w, t.size(2)).transpose(2, 3).transpose(1, 2)
 
-            cam  = GradCAMPlusPlus(model=self.model, target_layers=target_layers, reshape_transform=reshape)
+            cam  = GradCAMPlusPlus(model=cam_model, target_layers=target_layers, reshape_transform=reshape)
             px   = self.processor(images=image, return_tensors="pt")["pixel_values"].to(self.device)
             px.requires_grad_(True)
             gray = cam(input_tensor=px, targets=[ClassifierOutputTarget(target_class)])[0]
@@ -270,7 +310,11 @@ class _EfficientNetFF:  # alias mantenido para compatibilidad con meta-ensemble
             probe_data = joblib.load(str(probe_path))
             self._clf         = probe_data["clf"]
             self._temperature = float(probe_data.get("temperature", 1.0))
-            self.model_name   = "CLIP ViT-L/14 + LR Probe (Advanced GenAI)"
+            # El nombre lo declara la configuración: el probe dejó de ser una
+            # regresión logística al reentrenarse, y dejarlo fijo aquí hacía que
+            # la interfaz informara un modelo que ya no era el que corría.
+            self.model_name   = cfg.get(
+                "model_c_name", "CLIP ViT-L/14 + probe (Advanced GenAI)")
 
             clip_id = cfg.get("model_c_id", "openai/clip-vit-large-patch14")
             self._clip_model = CLIPModel.from_pretrained(
@@ -346,11 +390,32 @@ def _calibrated_combine(
     score_freq: Optional[float] = None,  # Frequency Spectral Detector (FFT)
     score_srm: Optional[float] = None,   # SRM Noise Residual Detector
     score_ela: Optional[float] = None,   # ELA Detector (Error Level Analysis)
+    is_artwork: bool = False,            # compuerta de tipo de contenido
+    compression_level: Optional[float] = None,  # nivel de compresión estimado
 ) -> tuple[float, dict]:
     """
     Meta-ensemble v3 — 8 modelos GPU + 3 señales CPU auxiliares.
-    El XGBoost usa los 3 features más confiables (sdxl, aiart, clip).
-    F, freq, SRM y ELA aportan señales ortogonales como correcciones post-meta.
+
+    ``is_artwork``: cuando la compuerta determina que el contenido es una obra
+    grafica y no una fotografia, el detector de arte IA (modelo D) queda fuera
+    del score forense y se reporta por separado. Su pregunta ("¿genero una IA
+    esta obra?") no es la pregunta forense ("¿fue manipulada esta fotografia?"),
+    y concentraba el 91% de la importancia del meta-modelo.
+
+    Las señales auxiliares de CPU (freq, SRM, ELA) se reciben y se reportan, pero
+    NO corrigen el score. Medidas sobre 1.100 imágenes de cinco fuentes:
+
+        señal   AUC      media en real   media en IA
+        SRM     0.409        0.802           0.745     invertida
+        ELA     0.561        0.748           0.839     sin poder discriminante
+        freq    0.296        0.222           0.117     invertida
+
+    Las tres empujaban el score de las fotografías reales hacia arriba: el 96,6 %
+    de las fotos reales supera el umbral de SRM que activaba la corrección
+    conjunta. Mientras no se recalibren, se mantienen fuera del cálculo.
+
+    El AI-Human Detector (F) tampoco se aplica aquí: ya es una característica de
+    entrada del meta-modelo, de modo que volver a mezclarlo lo contaba dos veces.
     """
     from app.models.meta_ensemble import MetaEnsemble
     meta = MetaEnsemble.get_instance()
@@ -366,51 +431,24 @@ def _calibrated_combine(
         "frequency_spectral":  score_freq,
         "srm_noise_detector":  score_srm,
         "ela_detector":        score_ela,
+        # Característica del meta-modelo, no un detector: le permite distinguir
+        # los artefactos de compresión de los indicios de síntesis.
+        "compression_level":   compression_level,
     }
 
-    # XGBoost meta-model (usa solo los 3 features confiables — no se retrenó)
-    combined, meta_info = meta.predict(scores_dict, face=face)
+    combined, meta_info = meta.predict(scores_dict, face=face, is_artwork=is_artwork)
 
-    # ── Corrección post-meta: señales auxiliares ortogonales ─────────────────
-    # Modelo F + freq — umbral reducido a 0.20 (antes 0.35) para capturar más
-    # casos de divergencia real. Peso proporcional al desacuerdo, cap 0.18.
-    if score_f is not None:
-        freq_w  = 0.15 if score_freq is not None else 0.0
-        new_sig = (1 - freq_w) * score_f + freq_w * (score_freq or score_f)
-        disc_f  = abs(new_sig - combined)
-        if disc_f > 0.20:
-            alpha_f  = min(0.18, disc_f * 0.35)
-            combined = combined * (1.0 - alpha_f) + new_sig * alpha_f
-
-    # SRM Noise Residual — umbral reducido a 0.25 (antes 0.40).
-    # Peso proporcional, cap 0.10. Señal espacial ortogonal al FFT global.
-    if score_srm is not None:
-        disc_srm = abs(score_srm - combined)
-        if disc_srm > 0.25:
-            alpha_srm = min(0.10, disc_srm * 0.20)
-            combined  = combined * (1.0 - alpha_srm) + score_srm * alpha_srm
-
-    # Señal conjunta F+SRM — cuando ambas señales auxiliares coinciden con fuerza
-    # alta (F > 0.72, SRM > 0.65) y el ensemble está por debajo de 0.50,
-    # el acuerdo entre residuos espaciales (SRM) y la firma de distribución (F)
-    # justifica una corrección adicional. Peso cap 0.20.
-    if score_f is not None and score_srm is not None:
-        if score_f > 0.72 and score_srm > 0.65:
-            joint_ai   = 0.55 * score_f + 0.45 * score_srm
-            disc_joint = abs(joint_ai - combined)
-            if disc_joint > 0.18:
-                alpha_joint = min(0.20, disc_joint * 0.40)
-                combined    = combined * (1.0 - alpha_joint) + joint_ai * alpha_joint
-
-    # ELA (Error Level Analysis) — señal de historial de compresión.
-    # Umbral 0.22: solo corrige cuando la uniformidad ELA discrepa notablemente.
-    # Peso proporcional, cap 0.08 — señal nueva con calibración conservadora.
-    if score_ela is not None:
-        disc_ela = abs(score_ela - combined)
-        if disc_ela > 0.22:
-            alpha_ela = min(0.08, disc_ela * 0.15)
-            combined  = combined * (1.0 - alpha_ela) + score_ela * alpha_ela
-
+    # ── Correcciones post-meta: retiradas ────────────────────────────────────
+    # Aquí había cuatro ajustes que empujaban el score hacia freq, SRM, ELA y el
+    # AI-Human Detector. La medición mostró que las tres señales de CPU están
+    # invertidas o son ruido (ver docstring), de modo que los cuatro ajustes
+    # elevaban sistemáticamente el score de las fotografías reales; y el
+    # AI-Human Detector ya entra como característica del meta-modelo, así que
+    # volver a aplicarlo lo contaba dos veces.
+    #
+    # Las señales se siguen calculando y reportando en `per_model` con fines de
+    # diagnóstico, pero no intervienen en el porcentaje. Para reactivarlas hace
+    # falta recalibrarlas y demostrar AUC > 0.5 sobre un conjunto multifuente.
     combined = float(np.clip(combined, 0.0, 1.0))
 
     per_model = {
@@ -420,6 +458,9 @@ def _calibrated_combine(
         "std":              meta_info.get("std"),
         "entropy":          meta_info.get("entropy"),
         "ood_signal":       meta_info.get("ood_signal", False),
+        # ── separacion del detector de arte IA ───────────────────────────────
+        "content_track":    meta_info.get("content_track", "photographic"),
+        "ai_art_excluded":  meta_info.get("ai_art_excluded", False),
     }
     return float(np.clip(combined, 0, 1)), per_model
 
@@ -438,10 +479,14 @@ class DeepfakeDetector:
     def load(self) -> None:
         _model_a.load()
         _model_b.load()
-        _model_c.load()
+        _model_c.load()   # carga CLIP ViT-L/14, que la compuerta reutiliza
         _model_d.load()
         _model_e.load()
-        _model_f.load()   # Nuevo: AI-Human Detector
+        _model_f.load()   # AI-Human Detector
+
+        # La compuerta se carga despues del modelo C para tomar prestado su CLIP
+        from app.models.content_type_gate import ContentTypeGate
+        ContentTypeGate.get_instance().load()
 
     @property
     def _loaded(self) -> bool:
@@ -478,6 +523,13 @@ class DeepfakeDetector:
         from app.models.frequency_detector import predict_frequency
         rfreq = predict_frequency(image)
 
+        # Compuerta de tipo de contenido: decide si el detector de arte IA
+        # participa en el score forense o se reporta por separado.
+        from app.models.content_type_gate import ContentTypeGate
+        from app.models.compression_estimator import compression_level
+        content = ContentTypeGate.get_instance().classify(image)
+        nivel_compresion = compression_level(image)
+
         fake, per_model = _calibrated_combine(
             ra["fake_probability"] if ra else 0.5,
             rb["fake_probability"] if rb else 0.5,
@@ -487,12 +539,28 @@ class DeepfakeDetector:
             score_e=re["fake_probability"] if re else None,
             score_f=rf["fake_probability"] if rf else None,
             score_freq=rfreq.get("fake_probability"),
+            is_artwork=content["is_artwork"],
+            compression_level=nivel_compresion,
         )
         return {
             "fake_probability": fake,
             "real_probability": 1.0 - fake,
             "inference_time":   time.time() - start,
             "per_model":        per_model,
+            "content_type":     content,
+            # Indicador independiente: no entra en fake_probability cuando
+            # per_model["ai_art_excluded"] es True.
+            "ai_art_indicator": {
+                "score": round(rd["fake_probability"], 4) if rd else None,
+                "excluded_from_score": per_model.get("ai_art_excluded", False),
+                "reason": (
+                    "Contenido identificado como obra grafica: el detector de "
+                    "arte IA responde a si la obra fue generada por IA, no a si "
+                    "una fotografia fue manipulada. Se reporta por separado."
+                    if per_model.get("ai_art_excluded") else
+                    "Contenido fotografico: el detector participa en el score."
+                ),
+            },
         }
 
     def predict_batch(
@@ -512,11 +580,18 @@ class DeepfakeDetector:
         re_list = _model_e.predict_batch(images)
         rf_list = _model_f.predict_batch(images)   # Model F incluido en batch
 
+        from app.models.content_type_gate import ContentTypeGate, ARTWORK_THRESHOLD
+        from app.models.compression_estimator import compression_level
+        art_list = ContentTypeGate.get_instance().artwork_probability_batch(images)
+        comp_list = [compression_level(im) for im in images]
+
         out = []
-        for ra, rb, rc, rd, re, rf, face in zip(
-            ra_list, rb_list, rc_list, rd_list, re_list, rf_list, face_flags
+        for ra, rb, rc, rd, re, rf, face, art_p, comp in zip(
+            ra_list, rb_list, rc_list, rd_list, re_list, rf_list, face_flags,
+            art_list, comp_list
         ):
-            fake, _ = _calibrated_combine(
+            is_artwork = art_p >= ARTWORK_THRESHOLD
+            fake, per_model = _calibrated_combine(
                 ra["fake_probability"] if ra else 0.5,
                 rb["fake_probability"] if rb else 0.5,
                 rc["fake_probability"] if rc else None,
@@ -524,9 +599,15 @@ class DeepfakeDetector:
                 score_d=rd["fake_probability"] if rd else None,
                 score_e=re["fake_probability"] if re else None,
                 score_f=rf["fake_probability"] if rf else None,
-                # freq y SRM se añaden en el llamador (video_service) por frame
+                is_artwork=is_artwork,
+                compression_level=comp,
             )
-            out.append({"fake_probability": fake, "real_probability": 1.0 - fake})
+            out.append({
+                "fake_probability": fake,
+                "real_probability": 1.0 - fake,
+                "artwork_probability": round(art_p, 4),
+                "ai_art_excluded": per_model.get("ai_art_excluded", False),
+            })
         return out
 
     def generate_heatmap(self, image: Image.Image, target_class: int = 1) -> Optional[str]:

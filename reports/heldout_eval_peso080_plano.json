@@ -1,0 +1,75 @@
+{
+  "generado": "2026-11-09T09:50:28",
+  "umbral": 0.8764,
+  "n_analizadas": 2000,
+  "n_fallidas": 0,
+  "nota": "Fuentes ausentes de todo plan de entrenamiento. Medido por la via de produccion (_run_image_analysis), incluidas reglas forenses y banda de evidencia.",
+  "por_fuente": {
+    "dalle3": {
+      "clase": "IA",
+      "n": 500,
+      "score_medio": 0.847,
+      "score_mediana": 0.9987,
+      "error": 0.304,
+      "bandas": {
+        "Low Evidence": 45,
+        "Strong Evidence": 350,
+        "Inconclusive": 26,
+        "Moderate Evidence": 77,
+        "Very Low Evidence": 2
+      }
+    },
+    "flux": {
+      "clase": "IA",
+      "n": 500,
+      "score_medio": 0.6587,
+      "score_mediana": 0.6306,
+      "error": 0.704,
+      "bandas": {
+        "Inconclusive": 109,
+        "Strong Evidence": 152,
+        "Moderate Evidence": 160,
+        "Very Low Evidence": 31,
+        "Low Evidence": 48
+      }
+    },
+    "imagenet": {
+      "clase": "real",
+      "n": 500,
+      "score_medio": 0.0493,
+      "score_mediana": 0.0097,
+      "error": 0.01,
+      "bandas": {
+        "Very Low Evidence": 470,
+        "Low Evidence": 14,
+        "Inconclusive": 9,
+        "Strong Evidence": 5,
+        "Moderate Evidence": 2
+      }
+    },
+    "lfw": {
+      "clase": "real",
+      "n": 500,
+      "score_medio": 0.0166,
+      "score_mediana": 0.0017,
+      "error": 0.0,
+      "bandas": {
+        "Very Low Evidence": 497,
+        "Low Evidence": 3
+      }
+    }
+  },
+  "global": {
+    "auc": 0.9894,
+    "fpr": 0.005,
+    "deteccion_ia": 0.496
+  },
+  "extra": [
+    {
+      "path": "C:/Users/gabot/AppData/Local/Temp/claude/d7d8245cac6433a7/82b639b4-3726-436f-bf62-d7da5b0c00fc/images/2.jpg",
+      "p": 0.146468,
+      "banda": "Very Low Evidence",
+      "tipo_contenido": null
+    }
+  ]
+}

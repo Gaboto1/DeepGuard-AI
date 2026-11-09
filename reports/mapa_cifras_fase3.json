@@ -1,0 +1,33 @@
+{
+  "nota__": "TERCERA PASADA. Reescribe parrafos completos del guion y de la presentacion cuyo ARGUMENTO —no solo la cifra— dejo de sostenerse con las mediciones de noviembre de 2026. Se comprobo que los parrafos afectados son de un unico `run`, requisito para que una clave tan larga se encuentre.",
+
+  "nota_orden__": "Las claves buscan el texto que deja la PRIMERA pasada, no el original. En el primer intento se escribieron contra el texto original, que contenia '49,9 %', y la pasada 1 ya lo habia cambiado a '94,0 %': las dos claves dieron 0 coincidencias. El recuento declarado lo marco con '##' en vez de dejarlo pasar en silencio, que es exactamente para lo que esta.",
+
+  "nota_argumento__": "Las cifras de septiembre (0,975 / 0,609 / 0,863) se conservan donde describen POR QUE se tomo una decision: son el dato que la justifico y borrarlas dejaria la decision sin motivo. Lo que se anade es lo medido despues sobre fuentes no vistas, que cambia la conclusion: el detector de arte separado resulta ser el mejor del conjunto, de modo que se separo por responder a otra pregunta y no por ser malo.",
+
+  "Porque concentraba cerca del 91 % del peso del meta-modelo y respondía a otra pregunta. El detector de arte contesta «¿generó una IA esta obra?», y la pregunta forense es «¿fue manipulada esta fotografía?». Lo medimos por tipo de contenido: sobre obra gráfica tiene un AUC de 0,975, pero sobre deepfake facial baja a 0,609, mientras que el probe CLIP llega a 0,863 en ese mismo caso. Al separarlo, la detección de deepfakes faciales pasó de 0,1 % a 94,0 %.": {
+    "nuevo": "Porque concentraba cerca del 91 % del peso del meta-modelo y respondía a otra pregunta. El detector de arte contesta «¿generó una IA esta obra?», y la pregunta forense es «¿fue manipulada esta fotografía?». Lo medimos por tipo de contenido: sobre obra gráfica tenía un AUC de 0,975, pero sobre deepfake facial bajaba a 0,609, mientras que el probe CLIP llegaba a 0,863 en ese mismo caso. Al separarlo, la detección de deepfakes faciales pasó de 0,1 % a 49,9 %, y con el reentrenamiento de noviembre llegó al 94,0 %. Y conviene añadir algo que medimos después: sobre cuatro fuentes que ningún modelo había visto, ese detector de arte resulta ser el mejor del conjunto, con un AUC de 0,992. No se separó por ser malo, sino por responder muy bien a una pregunta distinta de la nuestra.",
+    "docs": ["Guion"],
+    "veces": 1
+  },
+
+  "Concentraba el 91 % del peso del meta-modelo y respondía a otra pregunta: «¿generó una IA esta obra?» en lugar de «¿fue manipulada esta fotografía?». Separarlo llevó la detección de deepfakes faciales del 0,1 % al 94,0 %.": {
+    "nuevo": "Concentraba el 91 % del peso del meta-modelo y respondía a otra pregunta: «¿generó una IA esta obra?» en lugar de «¿fue manipulada esta fotografía?». Separarlo llevó la detección de deepfakes faciales del 0,1 % al 49,9 %, y el reentrenamiento de noviembre al 94,0 %. Medido sobre fuentes no vistas, ese detector es el mejor del conjunto (AUC 0,992): se separó por responder a otra pregunta, no por ser malo.",
+    "docs": ["Defensa"],
+    "veces": 1
+  },
+
+  "nota_rango__": "El rango '0,53 a 0,86' se midio sobre el conjunto de entrenamiento, donde el probe CLIP juega con sus propios datos: su AUC alli (0,9997) es dentro de muestra y aplastaba al resto. Medido sobre el conjunto retenido, donde los seis estan fuera de muestra, el rango real es 0,35 a 0,99, y el orden cambia. Lo decisivo para el argumento es que dos detectores quedan POR DEBAJO del azar —puntuan los rostros reales de LFW mas alto que las imagenes generadas— y que el meta-ensemble dejo a uno de ellos fuera de su cabezal principal. Eso demuestra que el conjunto hace algo medible, que es mas de lo que afirmaba la version anterior.",
+
+  "Porque lo medimos. El AUC individual de cada detector va de 0,53 a 0,86 según el tipo de contenido: cada uno cubre bien un tipo de generación y falla en otros. El conjunto combinado con el meta-clasificador alcanza 0,88. Además, un solo modelo grande sería un punto único de falla; con seis, si uno no carga, el análisis continúa con los demás.": {
+    "nuevo": "Porque lo medimos, y el resultado no fue el que esperábamos. Sobre un conjunto retenido de cuatro fuentes que ningún modelo había visto, el AUC individual va de 0,35 a 0,99: dos detectores superan 0,98, uno aporta señal parcial y dos quedan por debajo del azar —puntúan los rostros reales más alto que las imágenes generadas—. El valor del conjunto no está en sumar seis opiniones equivalentes, sino en que el meta-clasificador aprende a cuánto hacer caso a cada uno: dejó fuera de su cabezal principal al detector facial, cuyo AUC es 0,45, y concentró el 64 % del peso en el probe CLIP. El sistema completo alcanza 0,990 sobre esas mismas fuentes no vistas. Además, un solo modelo grande sería un punto único de falla; con seis, si uno no carga, el análisis continúa con los demás.",
+    "docs": ["Guion"],
+    "veces": 1
+  },
+
+  "Ningún detector aislado cubre todas las técnicas: en nuestras mediciones el AUC individual va de 0,53 a 0,86 según el caso. El conjunto combinado alcanza 0,88.": {
+    "nuevo": "Sobre fuentes no vistas el AUC individual va de 0,35 a 0,99: dos detectores superan 0,98 y dos quedan por debajo del azar. El valor del conjunto está en que el meta-clasificador aprende a cuánto hacer caso a cada uno; el sistema completo alcanza 0,990.",
+    "docs": ["Defensa"],
+    "veces": 1
+  }
+}

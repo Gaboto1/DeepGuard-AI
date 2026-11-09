@@ -205,32 +205,17 @@ def analyze_image_task(
             raw["fake_probability"], forensic_meta
         )
 
-        # 5. Evidencia + explicación
-        from app.utils.helpers import (
-            get_evidence_level, get_model_agreement, get_uncertainty,
-            generate_forensic_explanation,
-        )
-        ev_level         = get_evidence_level(prob)
-        scores_list      = [v for v in (raw.get("model_scores") or {}).values() if v is not None]
-        agreement, std   = get_model_agreement(scores_list)
-        unc_lvl, unc_sc, risk_desc = get_uncertainty(prob, std)
-
-        explanation = generate_forensic_explanation(
-            probability=prob, evidence_level=ev_level,
-            model_agreement=agreement, file_type="image",
-            faces_detected=raw.get("faces_detected", 0),
-            model_scores=raw.get("model_scores"),
-            is_ood=raw.get("is_ood", False),
-        )
-        if forensic_meta.get("ai_generator_detected"):
-            explanation += (
-                f" ⚠ ALERTA FORENSE: generador IA detectado en metadatos: "
-                f"'{forensic_meta['ai_generator_name']}'."
-            )
-        elif meta_note:
-            explanation += f" {meta_note}."
-
-        # 6. Análisis semántico LLaVA (si el modelo fue cargado)
+        # 5. Análisis semántico LLaVA (si el modelo fue cargado)
+        #
+        # IMPORTANTE: la fusión semántica es el ÚLTIMO paso que modifica `prob`.
+        # Todo lo que se derive del score (nivel de evidencia, incertidumbre,
+        # explicación, sello de custodia) va DESPUÉS de este bloque. Antes se
+        # derivaba aquí arriba y la fusión cambiaba `prob` a continuación, así
+        # que el informe describía un score distinto del que se mostraba: el
+        # texto decía "62%" junto a un titular de 58.5%, y el nivel de evidencia
+        # podía quedar en "Moderada" (banda 60-80%) sobre un score de 58.5%, que
+        # es "Inconcluyente" (banda 40-60%). El sello de custodia llegaba a
+        # firmar score y nivel de evidencia contradictorios entre sí.
         self.update_state(state="PROCESSING", meta={"progress": 0.80, "stage": "Coherencia semántica LLaVA"})
         semantic_obj = None
         try:
@@ -257,6 +242,31 @@ def analyze_image_task(
                 }
         except Exception as _e_sem:
             logger.debug(f"Semantic analysis skip (no crítico): {_e_sem}")
+
+        # 6. Evidencia + explicación — derivadas del score YA definitivo
+        from app.utils.helpers import (
+            get_evidence_level, get_model_agreement, get_uncertainty,
+            generate_forensic_explanation,
+        )
+        ev_level         = get_evidence_level(prob)
+        scores_list      = [v for v in (raw.get("model_scores") or {}).values() if v is not None]
+        agreement, std   = get_model_agreement(scores_list)
+        unc_lvl, unc_sc, risk_desc = get_uncertainty(prob, std)
+
+        explanation = generate_forensic_explanation(
+            probability=prob, evidence_level=ev_level,
+            model_agreement=agreement, file_type="image",
+            faces_detected=raw.get("faces_detected", 0),
+            model_scores=raw.get("model_scores"),
+            is_ood=raw.get("is_ood", False),
+        )
+        if forensic_meta.get("ai_generator_detected"):
+            explanation += (
+                f" ⚠ ALERTA FORENSE: generador IA detectado en metadatos: "
+                f"'{forensic_meta['ai_generator_name']}'."
+            )
+        elif meta_note:
+            explanation += f" {meta_note}."
 
         # 7. Sello de custodia
         self.update_state(state="PROCESSING", meta={"progress": 0.90, "stage": "Sello de custodia"})
@@ -290,6 +300,9 @@ def analyze_image_task(
             "is_ood": raw.get("is_ood", False),
             "ood_confidence": raw.get("ood_confidence", 0.0),
             "ood_signals": raw.get("ood_signals", []),
+            # Tipo de contenido y detector de arte IA reportado por separado
+            "content_type": raw.get("content_type"),
+            "ai_art_indicator": raw.get("ai_art_indicator"),
             "forensic_metadata": {
                 "ai_generator_detected":     forensic_meta["ai_generator_detected"],
                 "ai_generator_name":         forensic_meta["ai_generator_name"],

@@ -229,6 +229,15 @@ class AnalysisResult(BaseModel):
     risk_of_error: Optional[str] = None
     ensemble_method: Optional[str] = None       # meta_xgboost / fallback_weights
 
+    # Tipo de contenido — fotografía vs obra gráfica (CLIP zero-shot)
+    # {artwork_probability, is_artwork, content_type, gate_available}
+    content_type: Optional[dict] = None
+
+    # Detector de arte IA reportado como indicador independiente.
+    # Cuando excluded_from_score=True su score NO entra en el porcentaje final.
+    # {score, excluded_from_score, reason}
+    ai_art_indicator: Optional[dict] = None
+
     # Cadena de custodia forense (enterprise)
     chain_of_custody: Optional[dict] = None      # sello criptográfico SHA-256 + HMAC
 

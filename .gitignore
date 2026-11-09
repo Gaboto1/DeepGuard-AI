@@ -26,6 +26,16 @@ reports/tasks/
 reports/custody/
 backend/reports/
 
+# Mediciones crudas: los CSV de puntuaciones se reconstruyen con
+# scripts/score_dataset_v2.py y scripts/score_heldout_detectores.py y suman
+# ~25 MB. Se versiona el REGISTRO (los .md y los .json de resumen), no la
+# materia prima. Excepcion: heldout_detectores.csv (117 KB) es la evidencia
+# directa de la tabla de AUC por detector, medida fuera de muestra.
+reports/*.csv
+!reports/heldout_detectores.csv
+# Copias de seguridad de modelos descartados durante la seleccion
+reports/backup_*/
+
 # Logs del sistema (pueden contener rutas, IPs, datos de debug)
 logs/
 *.log
@@ -36,8 +46,17 @@ frontend_*.log
 
 # ── MODELOS DE IA (demasiado grandes para Git, usar HuggingFace Hub) ──────────
 # Total aproximado: 19+ GB — NUNCA en Git, se descargan automáticamente
-# /models/ solo ignora el directorio raíz (pesos HuggingFace), NO backend/app/models/
-/models/
+# /models/* ignora el contenido del directorio raíz (pesos HuggingFace), NO
+# backend/app/models/. Se usa /models/* en vez de /models/ porque git no
+# desciende a un directorio excluido: con la forma /models/ las excepciones de
+# abajo no tendrían efecto.
+/models/*
+# Excepción: los artefactos del meta-ensemble son pequeños (~235 KB) y el
+# sistema no funciona sin ellos, así que sí se versionan. meta_classifier.joblib
+# ya estaba trackeado; sin esta excepción el cabezal sin-arte quedaría fuera del
+# repo y un despliegue limpio se quedaría sin él.
+!/models/meta_ensemble/
+/models/meta_ensemble/*.bak
 *.safetensors
 *.bin
 *.pt
@@ -50,12 +69,11 @@ huggingface/
 
 
 # ── DATOS DE ENTRENAMIENTO (usar Git LFS o enlace externo) ───────────────────
-# Los CSV de FaceForensics++ son reproductibles desde el dataset original
-data/ff++_faces/train.csv
-data/ff++_faces/val.csv
-data/ff++_faces/test.csv
-# Mantener solo manifest.json de benchmarks si son pequeños (< 1MB)
-# data/
+# Los conjuntos de imágenes no van al repositorio: son decenas de GB y se
+# reconstruyen con scripts/download_dataset_v3.py y los descargadores de
+# FaceForensics++. Lo que sí se versiona son los artefactos entrenados
+# (models/meta_ensemble/) y los scripts que los producen.
+data/
 
 
 # ── PYTHON ───────────────────────────────────────────────────────────────────
@@ -194,6 +212,16 @@ mysql_data/
 *.mpeg
 *.mpg
 
+
+# ── ARCHIVOS PRIVADOS / ACADÉMICOS (no van al repo) ─────────────────────────
+# Entregables, informes y documentos personales del proyecto
+privado/
+informes/
+evaluacion*/
+Evaluacion*/
+evaluación*/
+ev [0-9]*/
+EV [0-9]*/
 
 # ── MEMORIA DEL ASISTENTE IA ──────────────────────────────────────────────────
 # Carpeta de contexto del asistente — contiene conversaciones privadas

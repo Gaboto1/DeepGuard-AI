@@ -71,6 +71,65 @@ def _build_ensemble_breakdown(
     )
 
 
+# Peso del track facial en la mezcla, cuando se detecta un rostro.
+#
+# Estaba en 0.60 desde el release v6.0, que es ANTERIOR al cabezal facial del
+# meta-ensemble: se fijo cuando ambos tracks corrian el mismo modelo generico y
+# no habia razon para confiar mas en uno. Al entrenar un cabezal especifico
+# para rostro (validado por identidad, AUC 0.9968) el peso no se movio, y el
+# resultado era que el cabezal competente quedaba vetado por el que no lo es.
+#
+# Sobre ff++ el track de imagen completa promedia 0.476 ante un deepfake
+# —incompetente, porque esta calibrado para imagen de difusion— mientras el
+# facial promedia 0.971. Con 0.60/0.40 la mezcla da 0.773 y el umbral es
+# 0.8764: el 88.7 % de los deepfakes faciales caian del lado equivocado.
+#
+# Medido sobre las 60.000 filas de reports/dataset_v2_scores.csv:
+#
+#     peso facial   deteccion IA      FPR     error ff_fake
+#     0.60 (antes)       80.41 %   0.030 %         88.70 %
+#     0.80 (ahora)       93.23 %   0.027 %         11.74 %
+#     1.00                94.30 %   0.067 %          5.32 %
+#
+# Se elige 0.80 y no 1.00 por dos razones. Mejora la deteccion y ADEMAS baja
+# el FPR respecto a 0.60, de modo que no hay nada que ceder; y conserva un 20 %
+# del track de imagen completa, necesario porque el cabezal facial se entreno
+# solo con intercambio de rostro (ff++) y queda fuera de dominio ante un rostro
+# enteramente sintetico dentro de una imagen generada, caso en que el track
+# completo si acierta. Llevarlo a 1.00 apagaria esa segunda via por una ganancia
+# de un punto, a cambio de mas del doble de falsas alarmas sobre fotografia
+# autentica — el error mas caro en uso forense, segun el criterio del proyecto.
+PESO_TRACK_FACIAL = 0.80
+
+# Peso del track facial cuando la compuerta de contenido dice OBRA GRAFICA.
+#
+# El cabezal facial se entrena solo con ff++, es decir intercambio de rostro
+# sobre fotografia. Nunca vio un rostro enteramente sintetico, de modo que ante
+# un retrato generado opina fuera de su dominio y lo declara autentico. Subir su
+# peso a 0.80 amplifico ese error: sobre el conjunto retenido, las imagenes de
+# IA erroneamente descartadas pasaron de 4,9 % a 12,6 %, y 29 imagenes de FLUX
+# se movieron de "Inconclusive" a "Low Evidence".
+#
+# La compuerta separa los dos casos con holgura (reports/
+# diagnostico_compuerta_rostro.json, 200 imagenes por fuente):
+#
+#     fuente     naturaleza            obra grafica   con rostro   ambos
+#     ff_fake    intercambio de rostro         1,0 %      100,0 %   1,0 %
+#     ff_real    rostro real                   0,0 %      100,0 %   0,0 %
+#     lfw        rostro real retenido          0,0 %      100,0 %   0,0 %
+#     flux       rostro sintetico             68,5 %       18,0 %   5,5 %
+#     dalle3     rostro sintetico             79,5 %       32,5 %  23,5 %
+#
+# La columna "ambos" es la que importa: 5,5 % en FLUX, practicamente la misma
+# proporcion que la regresion medida (29 de 500 = 5,8 %). Y ff_fake es obra
+# grafica en el 1 % de los casos, de modo que condicionar el peso no toca la
+# ganancia de 82 puntos en deepfake facial.
+#
+# Se deja en 0.30 y no en 0: un intercambio de rostro dentro de una ilustracion
+# es concebible, y el cabezal facial es la unica pieza entrenada para verlo.
+PESO_TRACK_FACIAL_OBRA = 0.30
+
+
 def _run_image_analysis(image_path: Path) -> dict:
     start_total = time.time()
 
@@ -104,6 +163,29 @@ def _run_image_analysis(image_path: Path) -> dict:
     ela_result = predict_ela(image)
     score_ela  = ela_result.get("fake_probability", 0.5)
 
+    # Nivel de compresión: característica del meta-modelo. Sin ella, recomprimir
+    # una foto auténtica elevaba su score porque los detectores base reaccionan
+    # a los artefactos JPEG y el meta-modelo no tenía forma de saber la causa.
+    from app.models.compression_estimator import estimate_compression
+    compresion = estimate_compression(image)
+    score_compresion = compresion["compression_level"]
+
+    # ── Compuerta de tipo de contenido ───────────────────────────────────────
+    # Se evalua sobre la imagen completa (el tipo de contenido es propiedad de
+    # la imagen, no del recorte facial). Si resulta ser una obra grafica, el
+    # detector de arte IA sale del score forense y se reporta por separado.
+    from app.models.content_type_gate import ContentTypeGate
+    from app.models.meta_ensemble import ai_art_is_excluded
+
+    content = ContentTypeGate.get_instance().classify(image)
+    is_artwork = content["is_artwork"]
+    ai_art_excluded = ai_art_is_excluded(is_artwork)
+    if is_artwork:
+        logger.info(
+            f"Compuerta de contenido: obra grafica "
+            f"(p={content['artwork_probability']})"
+        )
+
     # ── Predict — 8 modelos GPU + 3 señales CPU (freq, SRM, ELA) ────────────
     def _predict_all(img: Image.Image, face: bool) -> tuple[list[Optional[float]], float]:
         ra = _model_a.predict(img)
@@ -129,6 +211,8 @@ def _run_image_analysis(image_path: Path) -> dict:
             score_d=scores_raw[3], score_e=scores_raw[4],
             score_f=scores_raw[5], score_freq=scores_raw[6],
             score_srm=scores_raw[7], score_ela=scores_raw[8],
+            is_artwork=is_artwork,
+            compression_level=score_compresion,
         )
         return scores_raw, ens
 
@@ -136,9 +220,12 @@ def _run_image_analysis(image_path: Path) -> dict:
 
     if face_detected:
         face_scores, face_ens = _predict_all(faces[0], face=True)
-        final_score  = 0.60 * face_ens + 0.40 * full_ens
+        # El peso depende del tipo de contenido: ver PESO_TRACK_FACIAL_OBRA.
+        w_face = PESO_TRACK_FACIAL_OBRA if is_artwork else PESO_TRACK_FACIAL
+        final_score  = w_face * face_ens + (1.0 - w_face) * full_ens
         blend_scores = [
-            (0.60 * (f or 0.0) + 0.40 * (u or 0.0)) if (f is not None or u is not None) else None
+            (w_face * (f or 0.0) + (1.0 - w_face) * (u or 0.0))
+            if (f is not None or u is not None) else None
             for f, u in zip(face_scores, full_scores)
         ]
         use_face_mode = True
@@ -172,7 +259,8 @@ def _run_image_analysis(image_path: Path) -> dict:
         "ela_detector":       blend_scores[8],
     }
     final_score, correction_type, correction_details = apply_forensic_corrections(
-        final_score, model_scores_for_correction, ood_result
+        final_score, model_scores_for_correction, ood_result,
+        ai_art_excluded=ai_art_excluded,
     )
     correction_explanation = build_correction_explanation(correction_type, correction_details)
 
@@ -201,12 +289,16 @@ def _run_image_analysis(image_path: Path) -> dict:
         score_d=blend_scores[3], score_e=blend_scores[4],
         score_f=blend_scores[5], score_freq=blend_scores[6],
         score_srm=blend_scores[7], score_ela=blend_scores[8],
+        is_artwork=is_artwork,
+        compression_level=score_compresion,
     )
     ens_meta = {
         "method":     _pm.get("ensemble_method", "unknown"),
         "std":        _pm.get("std"),
         "entropy":    _pm.get("entropy"),
         "ood_signal": _pm.get("ood_signal", False),
+        "content_track":   _pm.get("content_track", "photographic"),
+        "ai_art_excluded": _pm.get("ai_art_excluded", False),
     }
 
     def _r(v: Optional[float]) -> Optional[float]:
@@ -232,6 +324,29 @@ def _run_image_analysis(image_path: Path) -> dict:
             "frequency_spectral": _r(blend_scores[6]),
             "srm_noise_detector": _r(blend_scores[7]),
             "ela_detector":       _r(blend_scores[8]),
+        },
+        # ── Tipo de contenido y detector de arte IA separado ─────────────────
+        "content_type": content,
+        "ai_art_indicator": {
+            "score": _r(blend_scores[3]),
+            "excluded_from_score": ai_art_excluded,
+            "reason": (
+                (
+                    "El detector de arte IA responde a si la obra fue generada "
+                    "por IA, no a si una fotografia fue manipulada. Se reporta "
+                    "como indicador independiente y no afecta al porcentaje "
+                    "forense."
+                    + (
+                        " El contenido se identifico como obra grafica, por lo "
+                        "que este indicador es la lectura mas relevante para "
+                        "esta imagen."
+                        if is_artwork else ""
+                    )
+                )
+                if ai_art_excluded else
+                "Contenido fotografico: el detector de arte IA participa en el "
+                "calculo del porcentaje forense."
+            ),
         },
         "forensic_correction_type":        correction_type,
         "forensic_correction_details":     correction_details,

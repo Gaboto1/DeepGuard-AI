@@ -1,0 +1,24 @@
+{
+  "nota__": "SEGUNDA PASADA. Se ejecuta DESPUES de mapa_cifras.json. Aqui van los textos que mencionan un valor ANTIGUO como referencia historica ('antes 5,7 %'). Si fueran en la misma pasada colisionarian: el script aplica las claves de la mas larga a la mas corta, de modo que '(antes 5,7 %)' -> '(antes 12,5 %)' se aplicaria primero y despues la clave '12,5 %' encontraria el 12,5 % que acaba de escribirse y lo volveria a sustituir, corrompiendo el texto. Separar en dos pasadas da control explicito del orden sin anadir maquinaria al script.",
+
+  "(antes 5,7 %)": {
+    "nuevo": "(5,7 % con pesos fijos y 12,5 % en septiembre de 2026)",
+    "docs": ["Guion"],
+    "veces": 1,
+    "nota": "Hoja de referencia de la defensa: la cadena de valores previos del KPI-02. Se amplia para que la progresion completa quede a la vista en la tarjeta."
+  },
+
+  "el valor actual es de 0,7 %; el ajuste del umbral de decisión permite reducirlo": {
+    "nuevo": "el valor actual es de 0,7 %, frente al 12,5 % de septiembre de 2026",
+    "docs": ["Informe"],
+    "veces": 1,
+    "nota": "El texto buscado es el que deja la PRIMERA pasada, no el original: alli la clave corta '12,5 %' ya cambio la cifra de esta frase a 0,7 %. Aqui se reescribe el resto de la oracion para que mencione el valor historico. 0,7 % y no 0,5 %: el 0,5 % corresponde a los rostros reales de ff++, poblacion de la tabla de progresion, mientras el KPI-02 habla de fotografia autentica en general y su cifra sale del conjunto retenido (LFW e ImageNet)."
+  },
+
+  "partiendo de un 0,1 % en la configuración previa": {
+    "nuevo": "partiendo de un 0,1 % en la configuración previa y de un 49,9 % en septiembre de 2026",
+    "docs": ["Informe"],
+    "veces": 1,
+    "nota": "Justificacion SMART del KPI-01. Conserva el punto de partida y anade el hito intermedio, para que el salto no parezca surgido de la nada."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "origen": "heldout_eval.json",
+  "generado": "2026-11-09T10:17:27",
+  "por_clase": {
+    "real": {
+      "n": 1000,
+      "senalada_pct": 0.7,
+      "descartada_pct": 98.4,
+      "inconclusive_pct": 0.9
+    },
+    "IA": {
+      "n": 1000,
+      "senalada_pct": 76.7,
+      "descartada_pct": 9.4,
+      "inconclusive_pct": 13.9
+    }
+  },
+  "nota": "Banda >= Moderate Evidence cuenta como senalada; <= Low Evidence como descartada; Inconclusive no cuenta en ninguna direccion."
+}

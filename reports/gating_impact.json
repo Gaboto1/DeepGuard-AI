@@ -1,0 +1,243 @@
+{
+  "umbral_artwork": 0.55,
+  "n_total": 14000,
+  "n_artwork": 2933,
+  "global": {
+    "A_fallback": {
+      "n": 14000,
+      "exactitud": 0.7501,
+      "f1": 0.7489,
+      "fpr": 0.245,
+      "fnr": 0.2547,
+      "score_medio": 0.5
+    },
+    "B_con_arte_ia": {
+      "n": 14000,
+      "exactitud": 0.8544,
+      "f1": 0.8384,
+      "fpr": 0.0466,
+      "fnr": 0.2446,
+      "score_medio": 0.4863
+    },
+    "C_arte_separado": {
+      "n": 14000,
+      "exactitud": 0.7776,
+      "f1": 0.7779,
+      "fpr": 0.2237,
+      "fnr": 0.2211,
+      "score_medio": 0.5613
+    }
+  },
+  "por_fuente": {
+    "coco": {
+      "A_fallback": {
+        "n": 4000,
+        "exactitud": 0.5735,
+        "f1": 0.0,
+        "fpr": 0.4265,
+        "fnr": null,
+        "score_medio": 0.509
+      },
+      "B_con_arte_ia": {
+        "n": 4000,
+        "exactitud": 0.9575,
+        "f1": 0.0,
+        "fpr": 0.0425,
+        "fnr": null,
+        "score_medio": 0.082
+      },
+      "C_arte_separado": {
+        "n": 4000,
+        "exactitud": 0.8508,
+        "f1": 0.0,
+        "fpr": 0.1492,
+        "fnr": null,
+        "score_medio": 0.301
+      }
+    },
+    "diffusiondb": {
+      "A_fallback": {
+        "n": 2200,
+        "exactitud": 0.9477,
+        "f1": 0.9732,
+        "fpr": null,
+        "fnr": 0.0523,
+        "score_medio": 0.7629
+      },
+      "B_con_arte_ia": {
+        "n": 2200,
+        "exactitud": 0.9477,
+        "f1": 0.9732,
+        "fpr": null,
+        "fnr": 0.0523,
+        "score_medio": 0.9461
+      },
+      "C_arte_separado": {
+        "n": 2200,
+        "exactitud": 0.7841,
+        "f1": 0.879,
+        "fpr": null,
+        "fnr": 0.2159,
+        "score_medio": 0.7927
+      }
+    },
+    "ff_fake": {
+      "A_fallback": {
+        "n": 1600,
+        "exactitud": 0.0044,
+        "f1": 0.0087,
+        "fpr": null,
+        "fnr": 0.9956,
+        "score_medio": 0.1604
+      },
+      "B_con_arte_ia": {
+        "n": 1600,
+        "exactitud": 0.0875,
+        "f1": 0.1609,
+        "fpr": null,
+        "fnr": 0.9125,
+        "score_medio": 0.3172
+      },
+      "C_arte_separado": {
+        "n": 1600,
+        "exactitud": 0.6875,
+        "f1": 0.8148,
+        "fpr": null,
+        "fnr": 0.3125,
+        "score_medio": 0.5918
+      }
+    },
+    "ff_real": {
+      "A_fallback": {
+        "n": 3000,
+        "exactitud": 0.997,
+        "f1": 0.0,
+        "fpr": 0.003,
+        "fnr": null,
+        "score_medio": 0.1449
+      },
+      "B_con_arte_ia": {
+        "n": 3000,
+        "exactitud": 0.948,
+        "f1": 0.0,
+        "fpr": 0.052,
+        "fnr": null,
+        "score_medio": 0.2757
+      },
+      "C_arte_separado": {
+        "n": 3000,
+        "exactitud": 0.677,
+        "f1": 0.0,
+        "fpr": 0.323,
+        "fnr": null,
+        "score_medio": 0.4211
+      }
+    },
+    "sdturbo": {
+      "A_fallback": {
+        "n": 1600,
+        "exactitud": 0.9775,
+        "f1": 0.9886,
+        "fpr": null,
+        "fnr": 0.0225,
+        "score_medio": 0.8074
+      },
+      "B_con_arte_ia": {
+        "n": 1600,
+        "exactitud": 0.9744,
+        "f1": 0.987,
+        "fpr": null,
+        "fnr": 0.0256,
+        "score_medio": 0.9728
+      },
+      "C_arte_separado": {
+        "n": 1600,
+        "exactitud": 0.8337,
+        "f1": 0.9093,
+        "fpr": null,
+        "fnr": 0.1663,
+        "score_medio": 0.8402
+      }
+    },
+    "sdturbo_sports": {
+      "A_fallback": {
+        "n": 1600,
+        "exactitud": 0.9756,
+        "f1": 0.9877,
+        "fpr": null,
+        "fnr": 0.0244,
+        "score_medio": 0.8138
+      },
+      "B_con_arte_ia": {
+        "n": 1600,
+        "exactitud": 0.94,
+        "f1": 0.9691,
+        "fpr": null,
+        "fnr": 0.06,
+        "score_medio": 0.9422
+      },
+      "C_arte_separado": {
+        "n": 1600,
+        "exactitud": 0.8081,
+        "f1": 0.8939,
+        "fpr": null,
+        "fnr": 0.1919,
+        "score_medio": 0.8473
+      }
+    }
+  },
+  "por_tipo_contenido": {
+    "obra_grafica": {
+      "A_fallback": {
+        "n": 2933,
+        "exactitud": 0.9243,
+        "f1": 0.9583,
+        "fpr": 0.4073,
+        "fnr": 0.0414,
+        "score_medio": 0.7509
+      },
+      "B_con_arte_ia": {
+        "n": 2933,
+        "exactitud": 0.9475,
+        "f1": 0.9704,
+        "fpr": 0.0873,
+        "fnr": 0.0489,
+        "score_medio": 0.8749
+      },
+      "C_arte_separado": {
+        "n": 2933,
+        "exactitud": 0.7961,
+        "f1": 0.8754,
+        "fpr": 0.1455,
+        "fnr": 0.2099,
+        "score_medio": 0.7549
+      }
+    },
+    "fotografia": {
+      "A_fallback": {
+        "n": 11067,
+        "exactitud": 0.704,
+        "f1": 0.6197,
+        "fpr": 0.2384,
+        "fnr": 0.3853,
+        "score_medio": 0.4335
+      },
+      "B_con_arte_ia": {
+        "n": 11067,
+        "exactitud": 0.8298,
+        "f1": 0.7455,
+        "fpr": 0.0449,
+        "fnr": 0.3643,
+        "score_medio": 0.3833
+      },
+      "C_arte_separado": {
+        "n": 11067,
+        "exactitud": 0.7727,
+        "f1": 0.7271,
+        "fpr": 0.2269,
+        "fnr": 0.228,
+        "score_medio": 0.51
+      }
+    }
+  }
+}

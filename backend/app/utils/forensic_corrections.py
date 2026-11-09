@@ -105,10 +105,18 @@ from loguru import logger
 # ─── Regla 1: OOD-Manipulation Bypass ────────────────────────────────────────
 OOD_BYPASS_VIT_THRESHOLD    = 0.72   # ViT debe superar este umbral
 OOD_BYPASS_AIART_THRESHOLD  = 0.52   # o AI Art debe superar este umbral
-OOD_BYPASS_VIT_W            = 0.35   # peso ViT en la señal combinada
-OOD_BYPASS_AIART_W          = 0.30   # peso AI Art
-OOD_BYPASS_AIHUMAN_W        = 0.20   # peso AI-Human Detector (nuevo)
-OOD_BYPASS_SRM_W            = 0.15   # peso SRM Noise Residual (nuevo)
+OOD_BYPASS_CLIP_THRESHOLD   = 0.70   # o el probe CLIP debe superar este umbral
+OOD_BYPASS_VIT_W            = 0.20   # peso ViT en la señal combinada
+OOD_BYPASS_AIART_W          = 0.20   # peso AI Art
+OOD_BYPASS_AIHUMAN_W        = 0.15   # peso AI-Human Detector
+# El probe CLIP lleva el mayor peso: reentrenado sobre 34.000 embeddings, es el
+# unico detector con AUC alto en todas las pistas (0.976 en deepfake facial,
+# donde los demas estan entre 0.48 y 0.58). La regla se escribio antes de ese
+# reentrenamiento y lo ignoraba por completo, de modo que en composiciones
+# graficas reemplazaba una deteccion correcta del probe por una media de
+# detectores que no veian nada.
+OOD_BYPASS_CLIP_W           = 0.45
+OOD_BYPASS_SRM_W            = 0.00   # SRM retirado: AUC 0.409 (invertido)
 OOD_BYPASS_DAMPER_BASE      = 0.82   # amortiguación base (subida de 0.60)
 OOD_BYPASS_DAMPER_BONUS     = 0.06   # bonus si ≥4 señales presentes
 OOD_BYPASS_MIN              = 0.38   # límite inferior del rango objetivo
@@ -124,16 +132,32 @@ COMPRESSION_VETO_MIN_SCORE  = 0.20
 COMPRESSION_VETO_BASE       = 0.08
 COMPRESSION_VETO_AIART_COEF = 0.35
 
+# Guarda: el veto NO se aplica si el probe CLIP ve síntesis con claridad.
+#
+# La premisa del veto es "si los dos especialistas en generación IA no ven nada,
+# el score elevado viene de artefactos de compresión". Esa premisa dejó de valer
+# al reentrenar el probe CLIP: en un deepfake facial, SDXL y Arte IA están bajos
+# porque ninguno detecta intercambio de rostros, no porque la imagen sea
+# auténtica. El veto estaba anulando detecciones correctas — el probe marcaba
+# 100 % y el veto dejaba el resultado en 8 %.
+#
+# Umbral 0.70 medido sobre 20.000 imágenes: lo supera el 98,0 % del material
+# sintético y sólo el 1,8 % de la fotografía auténtica.
+COMPRESSION_VETO_CLIP_BLOCK = 0.70
+
 # ─── Regla 3: Consensus Override ─────────────────────────────────────────────
+# Votantes del consenso. Se excluyeron srm_noise_detector y siglip_deepfake:
+# medidos sobre conjunto multifuente, SRM tiene AUC 0.409 (invertido, y supera
+# su umbral en el 96,6 % de las fotos reales) y SigLIP 0.227 sobre deepfakes
+# faciales. Ambos votaban "fake" en fotografía auténtica y completaban el
+# quórum por sí solos.
 CONSENSUS_MODELS     = [
     "face_deepfake_vit",
     "ai_art_detector",
-    "siglip_deepfake",
     "ai_human_detector",
-    "srm_noise_detector",
 ]
 CONSENSUS_THRESHOLD  = 0.52   # score mínimo para contar como "voto fake"
-CONSENSUS_MIN_VOTES  = 4      # mínimo de modelos votando fake
+CONSENSUS_MIN_VOTES  = 3      # unanimidad de los tres votantes que quedan
 CONSENSUS_SDXL_MAX   = 0.22   # SDXL debe estar muy bajo (fallo claro)
 CONSENSUS_SCORE_MAX  = 0.50   # solo activa si score < 50% (el meta-ensemble falló)
 CONSENSUS_FLOOR_BASE = 0.50   # floor mínimo al activar
@@ -143,6 +167,15 @@ CONSENSUS_FLOOR_STEP = 0.04   # bonus por cada voto extra sobre el mínimo
 # Activa cuando el AI-Human Detector (F) y SRM Noise Residual concuerdan
 # fuertemente en imagen sintética pero el meta-ensemble está bajo 50%.
 # Ambas señales son ortogonales al XGBoost (entrenado en SDXL+AIArt+CLIP).
+# DESACTIVADA. La regla elevaba el score cuando AI-Human y SRM coincidían por
+# encima de sus umbrales, bajo el supuesto de que ese acuerdo era específico de
+# imagen sintética. La medición sobre 1.100 imágenes de cinco fuentes desmintió
+# el supuesto: SRM tiene AUC 0.409 (invertido) y el 96,6 % de las FOTOGRAFÍAS
+# REALES supera su umbral de 0.65. La regla se activaba sobre fotografía
+# auténtica y sólo podía subir el score, de modo que era una fuente neta de
+# falsos positivos. Para reactivarla hay que recalibrar SRM y demostrar que el
+# acuerdo discrimina.
+F_SRM_ENABLED       = False
 F_SRM_F_MIN         = 0.72   # AI-Human score mínimo (señal de distribución)
 F_SRM_SRM_MIN       = 0.65   # SRM noise score mínimo (señal espacial)
 F_SRM_SCORE_MAX     = 0.50   # solo activa si ensemble < 50%
@@ -152,46 +185,95 @@ F_SRM_FLOOR_BASE    = 0.50   # floor mínimo garantizado
 F_SRM_FLOOR_MAX     = 0.60   # floor máximo (cap de seguridad)
 
 
+def _avail(model_scores: dict, key: str) -> Optional[float]:
+    """
+    Score del modelo, o None si no esta disponible.
+
+    Distinguir "ausente" de "0.0" es critico: varias reglas se activan cuando un
+    detector puntua bajo, y tratar un score ausente como 0.0 las hacia disparar
+    sin evidencia. Si el detector de arte IA fallaba al cargar, su None se
+    convertia en 0.0, el Compression Veto veia "AI Art = 0% < 20%" y hundia el
+    score a ~8%: un fallo de modelo producia el veredicto "autentica".
+    """
+    v = model_scores.get(key)
+    if v is None:
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
 def apply_forensic_corrections(
     final_score: float,
     model_scores: dict,
     ood_result: dict,
+    ai_art_excluded: bool = False,
 ) -> tuple[float, Optional[str], list[str]]:
     """
     Aplica correcciones forenses post-hoc basadas en conocimiento de dominio.
 
+    ``ai_art_excluded``: cuando la compuerta de tipo de contenido determina que
+    la imagen es una obra grafica, el detector de arte IA queda fuera del score
+    forense. Las reglas que dependen de el se tratan entonces como si el score
+    no estuviera disponible, para que no lo reintroduzcan por la puerta de atras.
+
     Returns: (corrected_score, correction_type, details_list)
-    correction_type: None | "ood_bypass" | "compression_veto" | "consensus_override"
+    correction_type: None | "ood_bypass" | "compression_veto"
+                     | "consensus_override" | "f_srm_alignment"
     """
-    vit      = float(model_scores.get("face_deepfake_vit",  0) or 0)
-    sdxl     = float(model_scores.get("sdxl_detector",      0) or 0)
-    ai_art   = float(model_scores.get("ai_art_detector",    0) or 0)
-    ai_human = float(model_scores.get("ai_human_detector",  0) or 0)
-    srm      = float(model_scores.get("srm_noise_detector", 0) or 0)
-    is_ood   = bool(ood_result.get("is_ood", False))
+    vit_o      = _avail(model_scores, "face_deepfake_vit")
+    sdxl_o     = _avail(model_scores, "sdxl_detector")
+    ai_art_o   = None if ai_art_excluded else _avail(model_scores, "ai_art_detector")
+    ai_human_o = _avail(model_scores, "ai_human_detector")
+    srm_o      = _avail(model_scores, "srm_noise_detector")
+    is_ood     = bool(ood_result.get("is_ood", False))
+
+    # Valores numericos para las formulas; las condiciones usan los *_o
+    vit      = vit_o      or 0.0
+    sdxl     = sdxl_o     or 0.0
+    ai_art   = ai_art_o   or 0.0
+    ai_human = ai_human_o or 0.0
+    srm      = srm_o      or 0.0
 
     # ── Regla 1: OOD-Manipulation Bypass ─────────────────────────────────────
-    if is_ood and (vit > OOD_BYPASS_VIT_THRESHOLD or ai_art > OOD_BYPASS_AIART_THRESHOLD):
+    clip_o = _avail(model_scores, "efficientnet_ffpp")
+    clip_v = clip_o or 0.0
+    _r1_trigger = (
+        (vit_o is not None and vit > OOD_BYPASS_VIT_THRESHOLD)
+        or (ai_art_o is not None and ai_art > OOD_BYPASS_AIART_THRESHOLD)
+        or (clip_o is not None and clip_v > OOD_BYPASS_CLIP_THRESHOLD)
+    )
+    if is_ood and _r1_trigger:
 
         # Señales presentes (no-None) para calcular el damper adaptativo
-        signals_present = sum(1 for s in [vit, ai_art, ai_human, srm] if s > 0.01)
+        signals_present = sum(
+            1 for s in [vit_o, ai_art_o, ai_human_o, clip_o]
+            if s is not None and s > 0.01
+        )
         damper = OOD_BYPASS_DAMPER_BASE + (
             OOD_BYPASS_DAMPER_BONUS if signals_present >= 4 else 0.0
         )
 
-        # Fórmula v2: incluye AI-Human y SRM además de ViT y AI Art
-        manip_signal = (
-            vit      * OOD_BYPASS_VIT_W
-            + ai_art   * OOD_BYPASS_AIART_W
-            + ai_human * OOD_BYPASS_AIHUMAN_W
-            + srm      * OOD_BYPASS_SRM_W
-        )
+        # Los pesos se renormalizan sobre las señales realmente disponibles, de
+        # modo que excluir una (p. ej. arte IA en obra grafica) redistribuya su
+        # peso en lugar de restar magnitud a la señal combinada.
+        # SRM queda fuera: medido invertido (AUC 0.409) y saturado alto sobre
+        # fotografía real, sólo aportaba empuje hacia "sintético".
+        _terms = [
+            (vit_o,      OOD_BYPASS_VIT_W),
+            (ai_art_o,   OOD_BYPASS_AIART_W),
+            (ai_human_o, OOD_BYPASS_AIHUMAN_W),
+            (clip_o,     OOD_BYPASS_CLIP_W),
+        ]
+        _w_total = sum(w for v, w in _terms if v is not None) or 1.0
+        manip_signal = sum(v * w for v, w in _terms if v is not None) / _w_total
         corrected = float(min(OOD_BYPASS_MAX, max(OOD_BYPASS_MIN, manip_signal * damper)))
 
         details = [
-            f"OOD-Manipulation Bypass v2 activado: contexto gráfico (is_ood=True) + "
-            f"señal de manipulación: ViT={vit:.1%}, AI Art={ai_art:.1%}, "
-            f"AI-Human={ai_human:.1%}, SRM={srm:.1%}. "
+            f"OOD-Manipulation Bypass v3 activado: contexto gráfico (is_ood=True) + "
+            f"señal de manipulación: probe CLIP={clip_v:.1%}, ViT={vit:.1%}, "
+            f"AI Art={ai_art:.1%}, AI-Human={ai_human:.1%}. "
             f"manip_signal={manip_signal:.3f} × damper={damper:.2f} → "
             f"{final_score:.3f} corregido a {corrected:.3f}. "
             f"Rango objetivo: {OOD_BYPASS_MIN:.0%}-{OOD_BYPASS_MAX:.0%}."
@@ -199,8 +281,9 @@ def apply_forensic_corrections(
 
         if abs(corrected - final_score) > 0.02:
             logger.info(
-                f"Forensic R1 [OOD Bypass v2]: "
-                f"ViT={vit:.2f} AIArt={ai_art:.2f} AIHuman={ai_human:.2f} SRM={srm:.2f} "
+                f"Forensic R1 [OOD Bypass v3]: "
+                f"CLIP={clip_v:.2f} ViT={vit:.2f} AIArt={ai_art:.2f} "
+                f"AIHuman={ai_human:.2f} "
                 f"→ manip={manip_signal:.3f} × {damper:.2f} "
                 f"→ {final_score:.3f} → {corrected:.3f}"
             )
@@ -208,8 +291,16 @@ def apply_forensic_corrections(
         return corrected, "ood_bypass", details
 
     # ── Regla 2: Compression Veto ─────────────────────────────────────────────
+    # Exige que AMBOS detectores esten disponibles: la regla concluye "es una
+    # foto real comprimida" a partir de que los dos especialistas en generacion
+    # IA no ven sintesis. Sin sus scores no hay tal evidencia, y con el arte IA
+    # excluido por la compuerta la regla no aplica.
+    _clip_bloquea = clip_o is not None and clip_o >= COMPRESSION_VETO_CLIP_BLOCK
     if (
-        final_score > COMPRESSION_VETO_MIN_SCORE
+        ai_art_o is not None
+        and sdxl_o is not None
+        and not _clip_bloquea
+        and final_score > COMPRESSION_VETO_MIN_SCORE
         and ai_art < COMPRESSION_VETO_AIART_MAX
         and sdxl   < COMPRESSION_VETO_SDXL_MAX
     ):
@@ -234,13 +325,26 @@ def apply_forensic_corrections(
 
     # ── Regla 3: Consensus Override ───────────────────────────────────────────
     # Solo activa en imágenes NO-OOD donde SDXL está fallando.
-    if not is_ood and final_score < CONSENSUS_SCORE_MAX and sdxl < CONSENSUS_SDXL_MAX:
-        strong_votes = sum(
-            1 for key in CONSENSUS_MODELS
-            if float(model_scores.get(key, 0) or 0) > CONSENSUS_THRESHOLD
-        )
+    if (
+        not is_ood
+        and sdxl_o is not None
+        and final_score < CONSENSUS_SCORE_MAX
+        and sdxl < CONSENSUS_SDXL_MAX
+    ):
+        # Solo votan los modelos con score disponible. Un detector ausente no
+        # cuenta como voto "real": simplemente no vota.
+        voters = {
+            k: (None if (k == "ai_art_detector" and ai_art_excluded)
+                else _avail(model_scores, k))
+            for k in CONSENSUS_MODELS
+        }
+        available_voters = [v for v in voters.values() if v is not None]
+        strong_votes = sum(1 for v in available_voters if v > CONSENSUS_THRESHOLD)
 
-        if strong_votes >= CONSENSUS_MIN_VOTES:
+        if (
+            len(available_voters) >= CONSENSUS_MIN_VOTES
+            and strong_votes >= CONSENSUS_MIN_VOTES
+        ):
             floor = CONSENSUS_FLOOR_BASE + (strong_votes - CONSENSUS_MIN_VOTES) * CONSENSUS_FLOOR_STEP
             if final_score < floor:
                 corrected = float(floor)
@@ -263,10 +367,15 @@ def apply_forensic_corrections(
     # Cuando AI-Human (F) y SRM Noise concuerdan en imagen sintética con alta
     # confianza, aplica un floor proporcional a la fuerza de la señal conjunta.
     # Restricción not-is_ood evita solapamiento con Regla 1.
-    f_score  = float(model_scores.get("ai_human_detector",  0) or 0)
-    srm_score= float(model_scores.get("srm_noise_detector", 0) or 0)
+    # Ambas señales deben estar presentes: la regla se apoya en su *acuerdo*,
+    # que no existe si una de las dos falta.
+    f_score   = ai_human
+    srm_score = srm
     if (
-        not is_ood
+        F_SRM_ENABLED
+        and not is_ood
+        and ai_human_o is not None
+        and srm_o is not None
         and f_score   >= F_SRM_F_MIN
         and srm_score >= F_SRM_SRM_MIN
         and final_score < F_SRM_SCORE_MAX

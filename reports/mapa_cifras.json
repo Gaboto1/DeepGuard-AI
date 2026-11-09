@@ -1,0 +1,119 @@
+{
+  "nota__": "PRIMERA PASADA. Se ejecuta DESPUES de scripts/actualizar_tablas_entregables.py (que reescribe la tabla de fuentes y anade la fila de progresion) y ANTES de mapa_cifras_fase2.json. El nombre no es el que el script toma por defecto: mientras falte una cifra, un --aplicar accidental no encuentra mapa y falla en vez de escribir un valor a medias. Se renombra a mapa_cifras.json cuando este completo y simulado.",
+  "nota_veces__": "El campo 'veces' esta puesto solo donde el recuento quedo confirmado por simulacion. Donde falta, se anade despues de ver el recuento real: declarar un numero a ojo haria saltar la alarma por nada y acostumbraria a ignorarla.",
+  "49,9 %": {
+    "nuevo": "94,0 %",
+    "no_ubicaciones": [
+      "#t5"
+    ],
+    "veces": 5,
+    "nota": "KPI-01. Medido por la via de produccion sobre ff++ (reports/produccion_ffpp.json), en banda >= Moderate Evidence, que es la definicion de la columna. Se excluye la tabla 5 porque ahi 49,9 % es el hito de septiembre dentro de una progresion historica: esa fila la conserva intacta y el valor nuevo entra como fila adicional."
+  },
+  "0,883": {
+    "nuevo": "0,990",
+    "veces": 4,
+    "nota": "KPI-03. AUC sobre el conjunto RETENIDO (reports/heldout_eval.json): LFW, ImageNet, FLUX y DALL-E 3, ninguna en ningun plan de entrenamiento. Se prefiere esta al 0,9988 de validacion cruzada porque mide generalizacion y no ajuste."
+  },
+  "14.000 imágenes": {
+    "nuevo": "60.000 imágenes",
+    "veces": 5,
+    "nota": "Tamano del conjunto de entrenamiento y validacion, confirmado contra el recuento de reports/dataset_v2_scores.csv. Son 5 y no 6 porque la frase 'Medible: se calcula sobre las 14.000 imagenes...' del KPI-03 es mas larga y se aplica antes, consumiendo esa ocurrencia. El recuento declarado detecto la interaccion entre las dos claves; sin el habria pasado inadvertida."
+  },
+  "seis fuentes": {
+    "nuevo": "nueve fuentes",
+    "no_contexto": "se hizo visible",
+    "veces": 4,
+    "nota": "La guarda negativa protege el parrafo de lecciones aprendidas, que narra el momento en que se construyo el conjunto de seis fuentes y se descubrio que el anterior confundia clase con origen. Ahi 'seis' es historia: cambiarlo falsearia el relato."
+  },
+  "6 fuentes independientes": {
+    "nuevo": "nueve fuentes independientes",
+    "docs": [
+      "Guion"
+    ],
+    "nota": "Hoja de referencia de la defensa, fila del tamano del conjunto."
+  },
+  "Catorce mil imágenes": {
+    "nuevo": "Sesenta mil imágenes",
+    "docs": [
+      "Guion"
+    ],
+    "nota": "Escrito con letras, de modo que ninguna busqueda de cifras lo encontraba."
+  },
+  "Cincuenta y ocho pruebas": {
+    "nuevo": "Setenta y cinco pruebas",
+    "docs": [
+      "Guion"
+    ],
+    "veces": 1,
+    "nota": "Tambien escrito con letras. 75 confirmado por `pytest -q`: 70 anteriores mas 5 del nuevo test_mezcla_facial.py."
+  },
+  "58 pruebas": {
+    "nuevo": "75 pruebas",
+    "veces": 4,
+    "nota": "KPI-06 y tabla del plan de pruebas en el informe, mas la lamina 17 de la presentacion. Al principio restringi esta clave al informe y la simulacion delato la cuarta ocurrencia en la diapositiva: sin el aviso de 'omitidas a proposito' la presentacion se habria quedado diciendo 58."
+  },
+  "58": [
+    {
+      "nuevo": "75",
+      "docs": [
+        "Guion"
+      ],
+      "ubicaciones": [
+        "#t39"
+      ],
+      "veces": 1,
+      "nota": "Hoja de referencia de la defensa: la celda contiene solo '58', sin texto alrededor que permita una guarda de contexto, de modo que se acota por ubicacion a esa tabla."
+    },
+    {
+      "nuevo": "75",
+      "docs": [
+        "Defensa"
+      ],
+      "ubicaciones": [
+        "#sl13"
+      ],
+      "veces": 1,
+      "nota": "Lamina de cifras de la presentacion, celda suelta."
+    }
+  ],
+  "nota_58__": "Un '58' sin acotar es el peor caso de este mapa. La simulacion mostro que, sin guardas, habria entrado en 'VICENTE 7:07 - 7:58' y 'VICENTE 7:58 - 8:44' —marcas de tiempo del guion— y dentro de '0.586', un AUC de la tabla 4, que se habria convertido en '0.756'. De ahi que cada ocurrencia legitima lleve su propia regla con ubicacion exacta y recuento declarado.",
+  "nota_procedencia__": "Estas tres claves no cambian una cifra: cambian la frase que declara DONDE se midio. Los KPI-02 y 03 decian calcularse sobre el conjunto de validacion, y sus valores nuevos vienen del conjunto RETENIDO. Cambiar solo el numero dejaria la cifra contradiciendo su propia procedencia declarada, que es justo el defecto que este trabajo vino a corregir. El KPI-01 se mide sobre ff++, que SI esta en el entrenamiento, y por eso su frase dice explicitamente que es un techo.",
+  "Medible: se obtiene del subconjunto de fotografía real del conjunto de validación.": {
+    "nuevo": "Medible: se obtiene de un conjunto retenido de fotografía auténtica —LFW e ImageNet, 1.000 imágenes— ausente de todo plan de entrenamiento, analizado por la misma vía que atiende una carga de la página.",
+    "docs": [
+      "Informe"
+    ],
+    "veces": 1
+  },
+  "Medible: se calcula sobre las 14.000 imágenes del conjunto de validación.": {
+    "nuevo": "Medible: se calcula sobre el conjunto retenido de 2.000 imágenes de cuatro fuentes —LFW, ImageNet, FLUX y DALL·E 3— que no participan en ningún plan de entrenamiento.",
+    "docs": [
+      "Informe"
+    ],
+    "veces": 1
+  },
+  "Medible: se calcula sobre el subconjunto etiquetado de deepfakes faciales del conjunto de validación.": {
+    "nuevo": "Medible: se calcula sobre el subconjunto de deepfakes faciales de FaceForensics++, analizado por la vía de producción. Al participar ese material en el entrenamiento, la cifra es un techo y no una estimación de lo que ocurrirá ante una técnica de intercambio de rostro nueva.",
+    "docs": [
+      "Informe"
+    ],
+    "veces": 1
+  },
+  "nota_colision__": "La frase del KPI-02 que menciona el 12,5 % como valor historico se edita en la SEGUNDA pasada, no aqui. Dentro de una misma pasada las claves se aplican de la mas larga a la mas corta: la frase larga se sustituiria primero, escribiendo un '12,5 %' nuevo, y a continuacion la clave corta '12,5 %' lo encontraria y lo convertiria en '0,7 %', dejando escrito 'frente al 0,7 % de septiembre de 2026'. El recuento NO delata esta colision: hay 5 ocurrencias originales de '12,5 %' fuera de la tabla 5, y con la frase larga en esta pasada el total seguia siendo 5 porque la larga consumia una y la corta reencontraba la recien escrita. Dos caminos distintos con el mismo recuento. De ahi que el recuento declarado no sustituya a leer el texto final: ver reports/verificacion_entregables.txt.",
+  "12,5 %": {
+    "nuevo": "0,7 %",
+    "no_ubicaciones": [
+      "#t5"
+    ],
+    "veces": 5,
+    "nota": "KPI-02. Se excluye la tabla 5 porque ahi 12,5 % es el hito de septiembre dentro de la progresion historica, y el valor de noviembre entra como fila nueva."
+  },
+  "realizada en septiembre de 2026": {
+    "nuevo": "realizada en noviembre de 2026",
+    "docs": [
+      "Informe"
+    ],
+    "veces": 1,
+    "nota": "La fecha de la medicion acompana a las cifras: dejarla en septiembre con valores de noviembre invita a la duda sobre todo lo demas."
+  }
+}

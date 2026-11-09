@@ -17,6 +17,45 @@ Professional deepfake detection for images and videos. Powered by Vision Transfo
 
 ---
 
+## Compuerta de tipo de contenido (v3)
+
+El detector de arte IA (modelo D) responde a la pregunta *"¿generó una IA esta
+obra?"*, que no es la pregunta forense *"¿fue manipulada esta fotografía?"*.
+Como además concentraba el 91% de la importancia del meta-modelo, el porcentaje
+final era en la práctica su sola opinión.
+
+Antes de combinar los detectores, una compuerta CLIP zero-shot clasifica la
+imagen como **fotografía** u **obra gráfica** (ilustración, pintura, render):
+
+| Tipo de contenido | Cabezal del meta-ensemble | Detector de arte IA |
+|---|---|---|
+| Fotografía | `meta_classifier.joblib` | participa en el score |
+| Obra gráfica | `meta_classifier_noart.joblib` | **excluido**, se reporta aparte |
+
+La exclusión es completa: también se aplica a las reglas de corrección forense,
+para que el score de arte IA no reentre por esa vía. La API devuelve
+`content_type` y `ai_art_indicator`, y la UI muestra ese indicador en un panel
+propio marcado como *fuera del cálculo*.
+
+La compuerta reutiliza el CLIP ViT-L/14 que ya carga el modelo C: 0 VRAM extra.
+Es complementaria al detector OOD, que es heurístico y busca afiches y texto
+denso, no tipo de contenido.
+
+Validación (150 img/grupo, AUC foto-vs-arte = 0.973):
+
+| Conjunto | `artwork_probability` |
+|---|---|
+| COCO (foto natural) | 0.097 |
+| FF++ real (rostro en video) | 0.028 |
+| FF++ fake (deepfake) | 0.046 |
+| sdturbo_sports (IA fotorrealista) | 0.103 |
+| DiffusionDB (arte IA) | 0.881 |
+
+El deepfake facial y la imagen IA fotorrealista quedan del lado *fotografía*:
+la compuerta separa por tipo de contenido, no por autoría.
+
+---
+
 ## Modos de operación (Producción vs Local)
 
 El backend opera en dos modos controlados por la variable `API_ONLY` (`backend/.env`):
