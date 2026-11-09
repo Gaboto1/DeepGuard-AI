@@ -35,6 +35,12 @@ reports/*.csv
 !reports/heldout_detectores.csv
 # Copias de seguridad de modelos descartados durante la seleccion
 reports/backup_*/
+# Respaldos tomados antes de un reentrenamiento. Son copias de los .joblib
+# que ya estan versionados en models/, asi que versionarlas duplicaria los
+# binarios. Las MEDICIONES que acompanan al respaldo si se versionan: se
+# restauran a reports/ cuando el reentrenamiento se descarta.
+reports/snapshot_*/
+reports/.snapshot_actual
 
 # Logs del sistema (pueden contener rutas, IPs, datos de debug)
 logs/

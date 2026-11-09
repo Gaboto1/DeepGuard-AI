@@ -1,0 +1,352 @@
+{
+  "version": "v3-dual-head",
+  "trained_at": "2026-11-09T18:54:39",
+  "dataset": "dataset_v2_scores.csv",
+  "n_samples": 68000,
+  "artwork_threshold": 0.55,
+  "best_method": "logreg",
+  "full_head": {
+    "features": [
+      "sdxl_detector",
+      "ai_art_detector",
+      "efficientnet_ffpp",
+      "ai_human_detector",
+      "sdxl_x_aiart",
+      "robust_mean",
+      "reliable_std"
+    ],
+    "stat_keys": [
+      "sdxl_detector",
+      "ai_art_detector",
+      "efficientnet_ffpp",
+      "ai_human_detector"
+    ],
+    "classifier": "logreg",
+    "temperature": 0.8879,
+    "cv": {
+      "f1": 0.9932,
+      "auc": 0.9989,
+      "fpr": 0.0073,
+      "T": 0.8884
+    },
+    "loso": {
+      "por_fuente": {
+        "celeba": {
+          "n": 7000,
+          "clase": "real",
+          "error": 0.0001,
+          "score_medio": 0.0106
+        },
+        "celeba_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.0,
+          "score_medio": 0.009
+        },
+        "coco": {
+          "n": 4000,
+          "clase": "real",
+          "error": 0.0003,
+          "score_medio": 0.0111
+        },
+        "coco_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.004,
+          "score_medio": 0.0146
+        },
+        "coco_train": {
+          "n": 12000,
+          "clase": "real",
+          "error": 0.0018,
+          "score_medio": 0.0162
+        },
+        "coco_train_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.009,
+          "score_medio": 0.0206
+        },
+        "diffusiondb": {
+          "n": 6000,
+          "clase": "IA",
+          "error": 0.005,
+          "score_medio": 0.9928
+        },
+        "diffusiondb_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0063,
+          "score_medio": 0.9885
+        },
+        "elsa_multigen": {
+          "n": 14000,
+          "clase": "IA",
+          "error": 0.0025,
+          "score_medio": 0.9921
+        },
+        "elsa_multigen_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.015,
+          "score_medio": 0.9744
+        },
+        "ff_fake": {
+          "n": 5000,
+          "clase": "IA",
+          "error": 0.0178,
+          "score_medio": 0.9612
+        },
+        "ff_fake_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0663,
+          "score_medio": 0.916
+        },
+        "ff_real": {
+          "n": 7000,
+          "clase": "real",
+          "error": 0.0249,
+          "score_medio": 0.0403
+        },
+        "ff_real_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.052,
+          "score_medio": 0.0718
+        },
+        "midjourney": {
+          "n": 4000,
+          "clase": "IA",
+          "error": 0.0,
+          "score_medio": 0.999
+        },
+        "midjourney_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0025,
+          "score_medio": 0.9948
+        },
+        "sdturbo_sports": {
+          "n": 1000,
+          "clase": "IA",
+          "error": 0.0,
+          "score_medio": 0.998
+        },
+        "sdturbo_sports_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0013,
+          "score_medio": 0.9954
+        }
+      },
+      "error_medio": 0.0116,
+      "error_peor": 0.0663
+    },
+    "importances": {
+      "sdxl_detector": 0.442,
+      "ai_art_detector": 1.7976,
+      "efficientnet_ffpp": 8.9478,
+      "ai_human_detector": 0.5907,
+      "sdxl_x_aiart": 1.0616,
+      "robust_mean": 0.1084,
+      "reliable_std": 0.833
+    },
+    "peso_relativo_pct": {
+      "sdxl_detector": 3.2,
+      "ai_art_detector": 13.0,
+      "efficientnet_ffpp": 64.9,
+      "ai_human_detector": 4.3,
+      "sdxl_x_aiart": 7.7,
+      "robust_mean": 0.8,
+      "reliable_std": 6.0
+    }
+  },
+  "noart_head": {
+    "candidate": "compacto",
+    "features": [
+      "sdxl_detector",
+      "efficientnet_ffpp",
+      "ai_human_detector",
+      "robust_mean",
+      "reliable_std"
+    ],
+    "stat_keys": [
+      "sdxl_detector",
+      "efficientnet_ffpp",
+      "ai_human_detector"
+    ],
+    "classifier": "logreg",
+    "temperature": 0.9179,
+    "cv": {
+      "f1": 0.993,
+      "auc": 0.9986,
+      "fpr": 0.0075,
+      "T": 0.9163
+    },
+    "loso": {
+      "por_fuente": {
+        "celeba": {
+          "n": 7000,
+          "clase": "real",
+          "error": 0.0001,
+          "score_medio": 0.01
+        },
+        "celeba_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.0,
+          "score_medio": 0.0085
+        },
+        "coco": {
+          "n": 4000,
+          "clase": "real",
+          "error": 0.0003,
+          "score_medio": 0.0082
+        },
+        "coco_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.004,
+          "score_medio": 0.017
+        },
+        "coco_train": {
+          "n": 12000,
+          "clase": "real",
+          "error": 0.0019,
+          "score_medio": 0.0108
+        },
+        "coco_train_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.009,
+          "score_medio": 0.0228
+        },
+        "diffusiondb": {
+          "n": 6000,
+          "clase": "IA",
+          "error": 0.0057,
+          "score_medio": 0.9883
+        },
+        "diffusiondb_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0075,
+          "score_medio": 0.9877
+        },
+        "elsa_multigen": {
+          "n": 14000,
+          "clase": "IA",
+          "error": 0.0028,
+          "score_medio": 0.9914
+        },
+        "elsa_multigen_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0138,
+          "score_medio": 0.9785
+        },
+        "ff_fake": {
+          "n": 5000,
+          "clase": "IA",
+          "error": 0.017,
+          "score_medio": 0.972
+        },
+        "ff_fake_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0612,
+          "score_medio": 0.9294
+        },
+        "ff_real": {
+          "n": 7000,
+          "clase": "real",
+          "error": 0.026,
+          "score_medio": 0.041
+        },
+        "ff_real_comp": {
+          "n": 1000,
+          "clase": "real",
+          "error": 0.055,
+          "score_medio": 0.0762
+        },
+        "midjourney": {
+          "n": 4000,
+          "clase": "IA",
+          "error": 0.0,
+          "score_medio": 0.9952
+        },
+        "midjourney_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0025,
+          "score_medio": 0.9925
+        },
+        "sdturbo_sports": {
+          "n": 1000,
+          "clase": "IA",
+          "error": 0.0,
+          "score_medio": 0.9946
+        },
+        "sdturbo_sports_comp": {
+          "n": 800,
+          "clase": "IA",
+          "error": 0.0025,
+          "score_medio": 0.993
+        }
+      },
+      "error_medio": 0.0116,
+      "error_peor": 0.0612
+    },
+    "importances": {
+      "sdxl_detector": 1.0329,
+      "efficientnet_ffpp": 9.7106,
+      "ai_human_detector": 0.6736,
+      "robust_mean": -0.1458,
+      "reliable_std": 0.9207
+    },
+    "peso_relativo_pct": {
+      "sdxl_detector": 8.3,
+      "efficientnet_ffpp": 77.8,
+      "ai_human_detector": 5.4,
+      "robust_mean": 1.2,
+      "reliable_std": 7.4
+    }
+  },
+  "artwork_subset_comparison": {
+    "full": {
+      "n": 20599,
+      "score_medio": 0.9405,
+      "fpr": 0.01,
+      "recall": 0.9991
+    },
+    "noart": {
+      "n": 20599,
+      "score_medio": 0.939,
+      "fpr": 0.01,
+      "recall": 0.999
+    }
+  },
+  "face_head": {
+    "features": [
+      "efficientnet_ffpp",
+      "face_deepfake_vit",
+      "ai_human_detector",
+      "compression_level",
+      "reliable_std"
+    ],
+    "stat_keys": [
+      "efficientnet_ffpp",
+      "face_deepfake_vit",
+      "ai_human_detector"
+    ],
+    "classifier": "lightgbm",
+    "temperature": 0.888,
+    "cv": {
+      "auc": 0.9967,
+      "fpr": 0.0209,
+      "recall": 0.9709
+    },
+    "entrenado_sobre": "solo ff++ (intercambio de rostro); NO cubre rostros enteramente sinteticos"
+  }
+}

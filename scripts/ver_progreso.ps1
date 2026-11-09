@@ -152,9 +152,74 @@ while ($true) {
         }
     }
 
+    # ---- FASE 2: lo que de verdad decide. El pipeline solo deja los modelos
+    # nuevos en disco; hasta que el retenido se mide y se aplica el criterio,
+    # el reentrenamiento no significa nada. Un archivo cuenta como recien
+    # hecho solo si es posterior al fin del pipeline: asi una medicion vieja
+    # no se hace pasar por la de ahora.
     Write-Host ""
-    Write-Host "   Al terminar queda por hacer: medir el retenido y aplicar" -ForegroundColor DarkGray
-    Write-Host "   scripts/decidir_adopcion.py (adoptar o revertir)." -ForegroundColor DarkGray
+    Write-Host "   FASE 2 - MEDICION Y DECISION" -ForegroundColor White
+
+    $corte = (Get-Date).AddDays(-1)
+    if (Test-Path $LOG) { $corte = (Get-Item $LOG).LastWriteTime }
+
+    $pasos = @(
+        @{ etiqueta = "Medir el retenido (2.000 imagenes, ~17 min)"
+           ruta     = "reports\heldout_eval.json" }
+        @{ etiqueta = "Bandas de evidencia"
+           ruta     = "reports\heldout_eval_bandas.json" }
+        @{ etiqueta = "Decision de adopcion"
+           ruta     = "reports\decision_adopcion.json" }
+    )
+    foreach ($ps in $pasos) {
+        $ruta  = Join-Path $RAIZ $ps.ruta
+        $listo = (Test-Path $ruta) -and ((Get-Item $ruta).LastWriteTime -gt $corte)
+        if ($listo) {
+            Write-Host ("     [ OK ]  {0}" -f $ps.etiqueta) -ForegroundColor Green
+        } else {
+            Write-Host ("             {0}" -f $ps.etiqueta) -ForegroundColor DarkGray
+        }
+    }
+
+    $logMed = Join-Path $RAIZ "reports\heldout_run_post_v3.log"
+    if (Test-Path $logMed) {
+        # -Tail 400 y no 4: el log de la medicion lleva varias lineas de
+        # DEBUG por imagen, asi que la linea de avance queda sepultada muy
+        # por encima del final. Con 4 el panel no mostraba nada.
+        $ult = Get-Content $logMed -Tail 400 |
+               Where-Object { $_ -match '\[\d+/\d+\]' } |
+               Select-Object -Last 1
+        if ($ult) {
+            Write-Host ("     avance     {0}" -f $ult.Trim()) -ForegroundColor Gray
+        }
+    }
+
+    $dj = Join-Path $RAIZ "reports\decision_adopcion.json"
+    if ((Test-Path $dj) -and ((Get-Item $dj).LastWriteTime -gt $corte)) {
+        $d = Get-Content $dj -Raw | ConvertFrom-Json
+        $colv = if ($d.veredicto -eq "ADOPTAR") { "Green" } else { "DarkYellow" }
+        Write-Host ""
+        Write-Host ("     VEREDICTO  {0}" -f $d.veredicto) -ForegroundColor $colv
+        Write-Host ("        falsas alarmas {0:N2} -> {1:N2} %" -f `
+                    $d.antes.falsas_alarmas_pct, $d.ahora.falsas_alarmas_pct) -ForegroundColor Gray
+        Write-Host ("        IA senalada    {0:N1} -> {1:N1} %" -f `
+                    $d.antes.ia_senalada_pct, $d.ahora.ia_senalada_pct) -ForegroundColor Gray
+        if ($d.antes.auc -and $d.ahora.auc) {
+            Write-Host ("        AUC retenido   {0:N4} -> {1:N4}" -f `
+                        $d.antes.auc, $d.ahora.auc) -ForegroundColor Gray
+        }
+    }
+
+    # El worker carga los modelos una sola vez al arrancar: mientras este
+    # detenido, la pagina no procesa nada, por buenos que sean los .joblib.
+    $wk = Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
+          Where-Object { $_.CommandLine -like "*celery*" }
+    if ($wk) {
+        Write-Host "     worker     en marcha: la pagina procesa cargas" -ForegroundColor Green
+    } else {
+        Write-Host "     worker     DETENIDO: la pagina no procesa cargas" -ForegroundColor DarkYellow
+    }
+
     Write-Host ""
     Write-Host "   Refresca cada 15 s. Ctrl+C para salir." -ForegroundColor DarkCyan
     Start-Sleep -Seconds 15

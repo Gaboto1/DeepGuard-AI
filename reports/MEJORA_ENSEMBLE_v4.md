@@ -280,8 +280,11 @@ en su `.joblib`, de modo que el archivo que documenta el modelo describía dos d
 los tres cabezales que producción carga. No afectaba a la ejecución —el cargador
 lee la temperatura y las features del propio `.joblib`—, pero sí a la
 auditabilidad. `scripts/train_meta_dual_head.py` ya escribe la sección
-`face_head`; el `meta_config.json` del repositorio la tendrá tras el próximo
-reentrenamiento. Las cifras del cabezal vigente, tomadas del log de
+`face_head`, y el reentrenamiento de las 18:51 lo confirmó: el config que
+produjo sí la traía. Pero ese reentrenamiento se descartó por el criterio de
+adopción (sección 10), de modo que el `meta_config.json` vigente es el
+restaurado y **sigue sin la sección**. La tendrá el primer reentrenamiento que
+llegue a adoptarse. Las cifras del cabezal vigente, tomadas del log de
 entrenamiento `reports/etapa9_importancias.log`: xgboost, 13.800 muestras de
 ff++ (8.000 auténticas, 5.800 deepfake), AUC 0,9968, FPR 1,81 %, recall 96,95 %,
 temperatura 0,880 — todas dentro de muestra.
@@ -315,3 +318,93 @@ El worker de Celery debe estar detenido para las etapas que necesitan VRAM, y
 hay que **reiniciarlo al terminar**: carga los modelos una sola vez al arrancar,
 de modo que mientras siga el proceso antiguo la web sirve los modelos antiguos.
 El comando está en `reports/REANUDAR_WORKER.txt`.
+
+
+## 10. El segundo reentrenamiento del 9 de noviembre y por qué se descartó
+
+Esta sección registra un reentrenamiento **que no está en el sistema**. Se anota
+porque el resultado negativo es la evidencia de que el modelo vigente es el
+mejor de los dos medidos, y porque muestra el criterio de adopción funcionando.
+
+### 10.1 Qué se hizo
+
+Entre las 15:46 y las 18:54 se ejecutaron las etapas 2 a 10 del pipeline sobre
+un conjunto de imágenes ampliado: ELSA multigenerador pasó de 18.000 a 72.000
+archivos, y el total en disco creció en unas 145.600 imágenes. Las nueve etapas
+terminaron OK y las 78 pruebas pasaron.
+
+Antes de arrancar se guardó un respaldo de los modelos vigentes en
+`reports/snapshot_pre_v3_20261109_154502` y se escribió el criterio de adopción
+en `scripts/decidir_adopcion.py` — **antes de medir**, para que la decisión no
+pudiera acomodarse al resultado:
+
+1. **Veto** si las falsas alarmas sobre fotografía auténtica suben más de
+   0,3 puntos. Una acusación infundada es el error de mayor costo del sistema.
+2. **Veto** si el AUC fuera de muestra baja más de 0,005.
+3. Superados los vetos, se adopta si la IA señalada sube al menos 1,0 punto, o
+   si se mantiene y las falsas alarmas bajan al menos 0,2 puntos.
+
+### 10.2 Lo que midió el retenido
+
+Las mismas 2.000 imágenes de LFW, ImageNet-val, FLUX y DALL·E 3, por la vía de
+producción, en bandas de evidencia:
+
+| | vigente | reentrenado | delta |
+|---|---|---|---|
+| Falsas alarmas sobre foto auténtica | 0,70 % | **1,40 %** | **+0,70 pt** |
+| IA señalada | 76,70 % | 78,60 % | +1,90 pt |
+| AUC fuera de muestra | 0,9906 | 0,9868 | −0,0038 |
+
+El modelo reentrenado duplicó las falsas alarmas para ganar 1,9 puntos de
+detección. El primer veto se activó y el veredicto fue **REVERTIR**. El respaldo
+se restauró a las 19:21 y el worker se reinició a las 19:22 para que la página
+volviera a servir los modelos vigentes.
+
+Un detalle de método que importa para no fabricar una cifra falsa: medir
+**sobrescribe** `reports/heldout_eval.json` y sus derivados, de modo que al
+revertir los modelos esos archivos quedaron describiendo al modelo descartado
+mientras el informe los citaba como fuente del KPI-02. Las mediciones del
+reentrenamiento se apartaron a `reports/descartado_20261109_1854/` —con un
+`LEEME.md` que advierte de no citarlas— y las del modelo vigente se
+restauraron en `reports/`. Quien reentrene y revierta tiene que repetir ese
+paso.
+
+Un caso ilustra el costo mejor que la tabla: una fotografía real con un rostro,
+medida en las dos corridas, pasó de 0,146 (*Very Low Evidence*) a 0,448
+(*Inconclusive*). El modelo nuevo dudaba de una cara auténtica.
+
+### 10.3 Por qué el reentrenamiento no mejoró, y qué dice del método
+
+La causa es que **las etapas que construyen muestras llevan cuotas fijas**. La
+etapa 2, que alimenta al probe CLIP, tiene cuotas por fuente que suman 140.000
+imágenes base y 188.926 embeddings con aumento; la etapa 5 tiene un plan de
+exactamente 60.000. Las 145.600 imágenes descargadas no agrandaron ninguna
+muestra: solo agrandaron el fondo del que se sortea. El probe entrenó con
+191.847 embeddings antes y 191.782 después.
+
+Así que lo que se midió no fue «más datos contra menos datos», sino **un sorteo
+distinto al mismo tamaño de muestra**. Y ese sorteo salió peor fuera de muestra.
+
+Dentro de muestra, en cambio, el reentrenamiento se veía mejor: el probe subió
+su AUC de deepfake facial de 0,9715 a 0,9770 y bajó sus falsos positivos de
+1,84 % a 1,58 %, ambas sobre particiones por identidad con cero solapamiento de
+grupos. **Esa es la lección del episodio**: una validación interna bien
+construida —particiones por grupo, sin fuga— mejoró, y el comportamiento ante
+fuentes nuevas empeoró de todos modos. Sin el retenido y sin un criterio escrito
+por adelantado, este modelo habría entrado en producción con una tabla a favor.
+
+Para que un fondo mayor se convierta en mejora real haría falta **subir las
+cuotas de la etapa 2**, que es un cambio deliberado con su propio costo: 41,6
+minutos para 188.926 embeddings, y escalando desde ahí.
+
+### 10.4 Procedencia
+
+| cifra | archivo |
+|---|---|
+| veredicto y criterio | `reports/decision_adopcion.json` |
+| medición del reentrenado | `reports/descartado_20261109_1854/heldout_eval.json` |
+| bandas del reentrenado | `reports/descartado_20261109_1854/heldout_eval_bandas.json` |
+| línea base vigente | `reports/heldout_eval.json` y `reports/heldout_eval_bandas.json` |
+| probe anterior y actual | `models/advanced_detector/best_model_config.json`, campo `holdout_metrics` |
+| cuotas de la etapa 2 | `reports/pipeline_v3_etapa2.log`, cabecera |
+| duración de las etapas | `reports/pipeline_v3_etapas2a10.log` |
