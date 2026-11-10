@@ -1,0 +1,57 @@
+{
+  "nota__": "SEXTA PASADA. Corrige el KPI-04 y el SLA de tiempo de respuesta del informe. Ninguna otra cifra cambia, y el guion y la presentacion no mencionan latencia, de modo que esta pasada toca un solo documento.",
+
+  "nota_hallazgo__": "El KPI-04 declaraba '< 3 s' como valor actual y decia medirse 'mediante el campo de tiempo de analisis'. Ese campo es analysis_time y sobre 49 analisis reales por la via de produccion nunca bajo de 17,3 s, porque incluye el analisis semantico con LLaVA, que es la parte lenta (mediana 28 s). Midiendo lo que el KPI dice medir -el ensemble sin la parte semantica, restando semantic_analysis.analysis_time- la mediana es 5,3 s y el percentil 95 es 11,7 s con la GPU dedicada. Ni el valor ni la meta eran ciertos. Procedencia: reports/latencia_medida.json, generado por scripts/medir_latencia.py.",
+
+  "nota_dos_metricas__": "El KPI-04 y el SLA miden cosas distintas a proposito, y por eso la misma cadena '<= 5 s en el percentil 95' lleva dos sustituciones distintas acotadas por ubicacion. El KPI mide el ensemble sin semantica (11,7 s p95), que es el componente propio del proyecto. El SLA compromete lo que el cliente espera de verdad, que incluye el analisis semantico (61,6 s p95 con la GPU dedicada). Un SLA que prometiera el tiempo del componente estaria prometiendo algo que el cliente no recibe.",
+
+  "nota_condicion__": "Las dos metas se fijan sobre la condicion 'GPU dedicada'. Con la memoria de video ocupada por otras aplicaciones la latencia se degrada un orden de magnitud -mediana de 1.709 s en 8 analisis medidos-, y eso no es un limite del sistema sino del equipo donde corre. La condicion queda escrita en el detalle SMART para que la cifra no se pueda citar sin ella.",
+
+  "nota_margen__": "Las metas (15 s y 90 s) se fijan por encima del p95 medido (11,7 s y 61,6 s) con margen para la variacion normal, no igualadas al dato. Una meta igual a la medicion se incumple la mitad de las veces por puro ruido.",
+
+  "Tiempo transcurrido entre la recepción del archivo y la disponibilidad del resultado, en el percentil 95": {
+    "nuevo": "Tiempo de cómputo del ensemble de seis detectores, excluido el análisis semántico, en el percentil 95",
+    "docs": ["InformeDeepScan"],
+    "ubicaciones": ["#t17"],
+    "veces": 1,
+    "nota": "La formula describia el tiempo TOTAL mientras el detalle SMART decia excluir el analisis semantico: el KPI se contradecia consigo mismo. Ahora la formula dice lo que el KPI mide."
+  },
+
+  "Medible: se registra en cada ejecución mediante el campo de tiempo de análisis.": {
+    "nuevo": "Medible: se obtiene restando semantic_analysis.analysis_time del campo analysis_time de cada ejecución, que es lo que aísla el ensemble del análisis semántico; el guion scripts/medir_latencia.py lo calcula sobre los resultados reales del intermediario.",
+    "docs": ["InformeDeepScan"],
+    "ubicaciones": ["#t17"],
+    "veces": 1
+  },
+
+  "Alcanzable: las mediciones en la estación de cómputo se sitúan entre 1 y 3 segundos.": {
+    "nuevo": "Alcanzable: sobre 49 análisis reales por la vía de producción con la GPU dedicada, la mediana es de 5,3 segundos y el percentil 95 de 11,7 segundos; con la memoria de vídeo ocupada por otras aplicaciones la latencia se degrada un orden de magnitud, por lo que la meta se declara bajo la condición de GPU dedicada.",
+    "docs": ["InformeDeepScan"],
+    "ubicaciones": ["#t17"],
+    "veces": 1
+  },
+
+  "< 3 s": {
+    "nuevo": "11,7 s (p95)",
+    "docs": ["InformeDeepScan"],
+    "ubicaciones": ["#t17"],
+    "veces": 1
+  },
+
+  "≤ 5 s en el percentil 95": [
+    {
+      "nuevo": "≤ 15 s en el percentil 95",
+      "docs": ["InformeDeepScan"],
+      "ubicaciones": ["#t17"],
+      "veces": 1,
+      "nota": "KPI-04: ensemble sin semantica. p95 medido 11,7 s."
+    },
+    {
+      "nuevo": "≤ 90 s en el percentil 95",
+      "docs": ["InformeDeepScan"],
+      "ubicaciones": ["#t22"],
+      "veces": 1,
+      "nota": "SLA: tiempo total que espera el cliente. p95 medido 61,6 s."
+    }
+  ]
+}

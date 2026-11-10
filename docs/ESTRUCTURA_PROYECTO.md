@@ -89,8 +89,12 @@ PROYECTO TITULO FINAL/
 │
 ├── models/                          # Pesos de modelos descargados (en .gitignore, >GB)
 │
-├── INICIAR PAGINA WEB.bat           # Script para arrancar el worker GPU local (produccion)
-├── INICIAR LOCAL.bat                # Script para arrancar stack completo en localhost
+├── INICIAR PAGINA WEB.bat           # Arranca el worker GPU local (es lo que hace funcionar la web)
+├── INICIAR LOCAL.bat                # Arranca el stack completo en localhost
+├── VER PROGRESO.bat                 # Panel en vivo del pipeline y de la fase de medicion
+├── scripts/preparar_worker.ps1      # Comprobacion previa: venv, .env, worker duplicado, VRAM libre
+├── scripts/tee_log.py               # Duplica la salida del worker a pantalla y a reports/worker.log
+├── scripts/medir_latencia.py        # Latencia real por la via de produccion -> reports/latencia_medida.json
 ├── tools/generar_informe.py         # Generador del informe Word (.docx)
 ├── .gitignore                       # Reglas Git: venv, .env, models, uploads, etc.
 └── ESTRUCTURA_PROYECTO.md           # Este archivo
@@ -149,10 +153,30 @@ PROYECTO TITULO FINAL/
 
 ## Métricas del modelo
 
-| Métrica | Valor |
-|---------|-------|
-| F1-Score | 94.7% |
-| Error de Calibración (ECE) | 0.084 |
-| Tasa de Falsos Positivos | 10% |
-| VRAM utilizada (ensemble + LLaVA) | ~6.8 GB / 12.9 GB |
-| Latencia imagen completa | < 5 s (GPU local) |
+Toda cifra declara si se midió **dentro** de muestra (fuentes que participan en
+el entrenamiento) o **fuera** de muestra (`data/heldout/`: LFW, ImageNet-val,
+FLUX y DALL·E 3, 7.000 imágenes que no entran en ningún plan de entrenamiento).
+Sin esa distinción el proyecto ha producido ya cuatro mediciones falsas; están
+documentadas en `reports/MEJORA_ENSEMBLE_v4.md`, secciones 4 y 11.
+
+| Métrica | Valor | Procedencia |
+|---------|-------|-------------|
+| KPI-01 — señalamiento de deepfake facial | 94,0 % | **dentro** de muestra (ff++) |
+| KPI-02 — falsas alarmas sobre fotografía auténtica | 0,7 % | **fuera** de muestra |
+| KPI-03 — capacidad discriminativa (AUC) | 0,990 | **fuera** de muestra |
+| KPI-05 — exactitud de la compuerta de tipo de contenido | 0,973 | mixto, declarado |
+| Latencia del ensemble, sin análisis semántico | 5,3 s mediana · 11,7 s p95 | 49 análisis, GPU dedicada |
+| Latencia total, lo que espera el usuario | 32,4 s mediana · 61,6 s p95 | 49 análisis, GPU dedicada |
+| VRAM con todo residente (ensemble + LLaVA) | 7,1 GB / 12,9 GB | arranque del worker |
+| Batería de pruebas automatizadas | 81, todas en verde | `pytest` en `backend/` |
+
+> **La latencia depende del equipo, no solo del sistema.** Las cifras de arriba
+> suponen la GPU dedicada. Con la memoria de vídeo ocupada por otras
+> aplicaciones se degrada un orden de magnitud: 8 de esos 49 análisis corrieron
+> con la VRAM saturada y dieron una mediana de 1.709 s. Conviene cerrar
+> navegadores y juegos antes de arrancar el worker.
+
+> **El `F1-Score 94,7 %` que figuraba aquí era falso.** Se calculaba con el
+> cabezal facial aislado cuando producción lo mezcla con el track completo.
+> Medido por la vía real daba 11 %. El relato está en
+> `reports/MEJORA_ENSEMBLE_v4.md`, sección 4.1.

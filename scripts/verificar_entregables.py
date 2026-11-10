@@ -50,6 +50,12 @@ DEBE_APARECER = [
     ("INFORME", "60.000 imágenes", 3),
     ("INFORME", "nueve fuentes", 3),
     ("INFORME", "81 pruebas", 3),
+    # Sexta pasada: latencia. El valor y la meta del KPI-04 y la meta del SLA
+    # se corrigieron contra la medicion real (reports/latencia_medida.json).
+    ("INFORME", "11,7 s (p95)", 1),
+    ("INFORME", "≤ 15 s en el percentil 95", 1),
+    ("INFORME", "≤ 90 s en el percentil 95", 1),
+    ("INFORME", "restando semantic_analysis.analysis_time", 1),
     ("INFORME", "realizada en noviembre de 2026", 1),
     ("INFORME", "frente al 12,5 % de septiembre de 2026", 1),
     ("INFORME", "y de un 49,9 % en septiembre de 2026", 1),
@@ -103,6 +109,15 @@ NO_DEBE_QUEDAR = [
     ("INFORME", "78 pruebas", "recuento de la cuarta pasada: la suite da 81"),
     ("GUION", "Setenta y ocho", "recuento de la cuarta pasada, con letras"),
     ("DEFENSA", "78 pruebas", "recuento de la cuarta pasada en la lamina 17"),
+    # El KPI-04 declaraba "< 3 s" midiendo con un campo que incluye el
+    # analisis semantico y que nunca bajo de 17,3 s sobre 49 analisis reales.
+    # Aislado el ensemble, la mediana es 5,3 s: tampoco eran 3. La meta de
+    # "<= 5 s" tampoco se cumplia, con un p95 de 11,7 s.
+    ("INFORME", "< 3 s", "valor de latencia falso: el minimo medido es 3,43 s"),
+    ("INFORME", "≤ 5 s en el percentil 95",
+     "meta de latencia incumplida: el p95 medido es 11,7 s"),
+    ("INFORME", "entre 1 y 3 segundos",
+     "justificacion SMART basada en una medicion que no existe"),
     ("GUION", "14.000", "tamano anterior en la tabla de cifras de consulta"),
     ("DEFENSA", "14.000", "tamano anterior en la lamina de evidencia"),
     ("DEFENSA", "6 fuentes", "numero de fuentes anterior"),

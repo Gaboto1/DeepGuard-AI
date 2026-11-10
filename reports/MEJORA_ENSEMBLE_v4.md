@@ -408,3 +408,81 @@ minutos para 188.926 embeddings, y escalando desde ahí.
 | probe anterior y actual | `models/advanced_detector/best_model_config.json`, campo `holdout_metrics` |
 | cuotas de la etapa 2 | `reports/pipeline_v3_etapa2.log`, cabecera |
 | duración de las etapas | `reports/pipeline_v3_etapas2a10.log` |
+
+
+## 11. El KPI de latencia medía otra cosa que la que declaraba
+
+Un cuarto error de medición, de la misma familia que los tres de la sección 4,
+encontrado el 9 de noviembre de 2026 al revisar si los entregables seguían al
+día.
+
+### 11.1 Qué declaraba y qué pasa en realidad
+
+El **KPI-04 — Latencia de análisis de imagen** daba como valor actual
+**«< 3 s»** y como meta «≤ 5 s en el percentil 95», y decía medirse *«mediante
+el campo de tiempo de análisis»*. Ese campo es `analysis_time`, y sobre **49
+análisis reales por la vía de producción nunca bajó de 17,3 s**, con mediana de
+35,1 s. Incluye el análisis semántico con LLaVA, que es la parte lenta: su
+mediana por sí sola es de 28,0 s.
+
+El detalle SMART del mismo KPI decía, en cambio, que la cifra excluye el
+análisis semántico. De modo que el KPI se contradecía consigo mismo: su fórmula
+describía el tiempo total, su justificación decía excluir la parte semántica, y
+su fuente de medición entregaba el total.
+
+Como el resultado trae el desglose (`semantic_analysis.analysis_time`), la
+resta se puede hacer y el KPI se puede medir como está definido. Hecha la resta,
+tampoco eran 3 segundos:
+
+| medición (49 análisis, vía de producción) | mediana | p95 |
+|---|---|---|
+| Total — lo que espera el usuario, GPU dedicada | 32,4 s | 61,6 s |
+| Solo la parte semántica (LLaVA) | 28,0 s | — |
+| **Ensemble sin semántica, GPU dedicada** | **5,3 s** | **11,7 s** |
+
+El mínimo del ensemble aislado sobre las 49 medidas es **3,43 s**. No hay
+ninguna lectura de los datos que sostenga «< 3 s».
+
+### 11.2 Qué se corrigió
+
+Las dos métricas se separan explícitamente, porque miden cosas distintas y las
+dos hacen falta:
+
+- **KPI-04** mide el componente propio del proyecto, el ensemble sin la parte
+  semántica. Valor **11,7 s (p95)**, meta **≤ 15 s en el percentil 95**. Su
+  fórmula pasa a decir lo que mide, y su apartado «Medible» nombra la resta
+  exacta y el guion que la calcula.
+- **SLA, tiempo de respuesta de imagen** compromete lo que el cliente espera de
+  verdad, análisis semántico incluido. Meta **≤ 90 s en el percentil 95**,
+  medida con el campo `analysis_time` tal cual. Un SLA que prometiera el tiempo
+  del componente estaría prometiendo algo que el cliente no recibe.
+
+Las dos metas se fijan **por encima** del percentil 95 medido, no igualadas a
+él: una meta igual a la medición se incumple la mitad de las veces por puro
+ruido.
+
+### 11.3 La condición que la cifra no puede perder
+
+Las dos metas se declaran sobre **GPU dedicada**. Con la memoria de vídeo
+ocupada por otras aplicaciones la latencia se degrada un orden de magnitud: de
+los 49 análisis, 8 corrieron con la VRAM saturada y dieron una mediana de
+**1.709 s**, con un máximo de 2.677 s. No es un límite del sistema sino del
+equipo donde corre, y por eso la condición va escrita en el detalle SMART del
+KPI en vez de quedar como nota al pie.
+
+El reparto de VRAM de LLaVA tenía además un defecto propio: se presupuestaba
+sobre la memoria **total** de la tarjeta en lugar de la **libre**, de modo que
+en una tarjeta de 12,9 GB reservaba 5,9 GiB para LLaVA aunque otras
+aplicaciones ya ocuparan 3,5 GB. Corregido en
+`backend/app/services/semantic_inspection_service.py`, que ahora lee
+`torch.cuda.mem_get_info` y registra un error explícito cuando el presupuesto
+no alcanza, en lugar de degradarse en silencio.
+
+### 11.4 Procedencia
+
+| cifra | archivo |
+|---|---|
+| todas las latencias de esta sección | `reports/latencia_medida.json` |
+| guion que las calcula | `scripts/medir_latencia.py` |
+| origen de los datos | backend de resultados de Celery en Redis, análisis reales por la vía de producción |
+| sustituciones aplicadas al informe | `reports/mapa_cifras_fase6.json` |

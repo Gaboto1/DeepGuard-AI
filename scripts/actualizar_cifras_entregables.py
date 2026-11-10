@@ -317,4 +317,11 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    # La consola de Windows usa cp1252 y los mapas llevan caracteres que no
+    # existen en esa pagina de codigos: el guion reventaba con
+    # UnicodeEncodeError al IMPRIMIR un "<=" de una meta, despues de haber
+    # aplicado ya parte de las sustituciones. Un informe a medias es peor que
+    # ninguno, porque no se sabe que quedo hecho.
+    import sys
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     raise SystemExit(main())

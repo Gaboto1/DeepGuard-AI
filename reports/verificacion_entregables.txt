@@ -1,4 +1,4 @@
-INFORME   69,283 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
+INFORME   69,691 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
 GUION     23,039 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
 DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
 
@@ -9,6 +9,10 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    4x (>= 3)  60.000 imágenes
   ok  INFORME    3x (>= 3)  nueve fuentes
   ok  INFORME    3x (>= 3)  81 pruebas
+  ok  INFORME    1x (>= 1)  11,7 s (p95)
+  ok  INFORME    1x (>= 1)  ≤ 15 s en el percentil 95
+  ok  INFORME    1x (>= 1)  ≤ 90 s en el percentil 95
+  ok  INFORME    1x (>= 1)  restando semantic_analysis.analysis_time
   ok  INFORME    1x (>= 1)  realizada en noviembre de 2026
   ok  INFORME    1x (>= 1)  frente al 12,5 % de septiembre de 2026
   ok  INFORME    1x (>= 1)  y de un 49,9 % en septiembre de 2026
@@ -48,6 +52,9 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    0x  78 pruebas                                   | recuento de la cuarta pasada: la suite d
   ok  GUION      0x  Setenta y ocho                               | recuento de la cuarta pasada, con letras
   ok  DEFENSA    0x  78 pruebas                                   | recuento de la cuarta pasada en la lamin
+  ok  INFORME    0x  < 3 s                                        | valor de latencia falso: el minimo medid
+  ok  INFORME    0x  ≤ 5 s en el percentil 95                     | meta de latencia incumplida: el p95 medi
+  ok  INFORME    0x  entre 1 y 3 segundos                         | justificacion SMART basada en una medici
   ok  GUION      0x  14.000                                       | tamano anterior en la tabla de cifras de
   ok  DEFENSA    0x  14.000                                       | tamano anterior en la lamina de evidenci
   ok  DEFENSA    0x  6 fuentes                                    | numero de fuentes anterior

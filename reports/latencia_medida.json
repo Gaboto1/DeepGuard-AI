@@ -1,0 +1,48 @@
+{
+  "generado": "2026-11-09T22:53:53",
+  "origen": "backend de resultados de Celery en Redis (via de produccion)",
+  "umbral_regimen_s": 120.0,
+  "nota": "total = lo que espera el usuario, incluido el analisis semantico. ensemble = total menos semantic_analysis.analysis_time, que es lo que el KPI-04 dice medir. 'gpu_dedicada' excluye los analisis corridos con la VRAM saturada por otras aplicaciones.",
+  "total_todos": {
+    "n": 49,
+    "minimo_s": 17.29,
+    "mediana_s": 35.06,
+    "p95_s": 2324.34,
+    "maximo_s": 2677.13
+  },
+  "total_gpu_dedicada": {
+    "n": 41,
+    "minimo_s": 17.29,
+    "mediana_s": 32.43,
+    "p95_s": 61.59,
+    "maximo_s": 83.25
+  },
+  "total_vram_saturada": {
+    "n": 8,
+    "minimo_s": 203.2,
+    "mediana_s": 1709.1,
+    "p95_s": 2677.13,
+    "maximo_s": 2677.13
+  },
+  "semantico_todos": {
+    "n": 49,
+    "minimo_s": 13.25,
+    "mediana_s": 28.02,
+    "p95_s": 2283.41,
+    "maximo_s": 2645.04
+  },
+  "ensemble_sin_semantica_todos": {
+    "n": 49,
+    "minimo_s": 3.43,
+    "mediana_s": 5.5,
+    "p95_s": 40.93,
+    "maximo_s": 1573.06
+  },
+  "ensemble_sin_semantica_gpu_dedicada": {
+    "n": 41,
+    "minimo_s": 3.43,
+    "mediana_s": 5.31,
+    "p95_s": 11.71,
+    "maximo_s": 14.97
+  }
+}
