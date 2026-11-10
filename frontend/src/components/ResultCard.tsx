@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Eye, EyeOff, Clock, Cpu, Users, TrendingUp, Image as ImageIcon, Film, ChevronDown, Sparkles } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
@@ -97,6 +97,30 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
   const [showHeatmap, setShowHeatmap] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
 
+  // La accion "analizar otro archivo" vive junto al veredicto, arriba. Pero el
+  // informe es largo -seis pestanas, previsualizacion, paneles forenses- y al
+  // bajar a leerlo la accion queda fuera de pantalla. Entonces aparece una
+  // barra fija abajo, que ademas recuerda el veredicto: mientras se leen los
+  // detalles es facil perder de vista la cifra que los resume.
+  //
+  // Se observa la franja del veredicto en lugar de la posicion del scroll
+  // porque lo que importa no es cuanto se ha bajado, sino si la accion sigue
+  // alcanzable. Con `rootMargin` negativo arriba, la barra no aparece cuando
+  // el veredicto solo asoma por el borde.
+  const veredictoRef = useRef<HTMLDivElement>(null);
+  const [veredictoVisible, setVeredictoVisible] = useState(true);
+
+  useEffect(() => {
+    const nodo = veredictoRef.current;
+    if (!nodo || typeof IntersectionObserver === 'undefined') return;
+    const obs = new IntersectionObserver(
+      ([entrada]) => setVeredictoVisible(entrada.isIntersecting),
+      { rootMargin: '-56px 0px 0px 0px', threshold: 0 },
+    );
+    obs.observe(nodo);
+    return () => obs.disconnect();
+  }, []);
+
   const pct    = result.manipulation_probability ?? ((result.fake_probability ?? 0) * 100);
   const pctR   = Math.round(pct * 10) / 10;
   const color  = scoreColor(pctR);
@@ -139,29 +163,48 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
 
       {/* ── Verdict banner — lo más importante, primero ─────────────────────── */}
       <div
+        ref={veredictoRef}
         className="px-5 py-4 border"
         style={{ background: `${color}0a`, borderColor: `${color}35` }}
       >
-        <div className="flex items-center gap-4">
-          <div
-            className="flex-shrink-0 w-12 h-12 flex items-center justify-center border-2 text-2xl font-bold"
-            style={{ borderColor: color, color, background: `${color}12`, borderRadius: 0 }}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center gap-4 min-w-0 flex-1">
+            <div
+              className="flex-shrink-0 w-12 h-12 flex items-center justify-center border-2 text-2xl font-bold"
+              style={{ borderColor: color, color, background: `${color}12`, borderRadius: 0 }}
+            >
+              {pctR >= 65 ? '✕' : pctR >= 42 ? '!' : '✓'}
+            </div>
+            <div className="min-w-0">
+              <p className="text-lg font-bold" style={{ color, fontFamily: 'system-ui,sans-serif', lineHeight: 1.2 }}>
+                {pctR >= 65
+                  ? 'Alta probabilidad de manipulación'
+                  : pctR >= 42
+                  ? 'Resultado no concluyente'
+                  : 'Sin indicios de manipulación detectables'}
+              </p>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif' }}>
+                {pctR.toFixed(1)}% de probabilidad de ser IA
+                {evInfo ? ` — ${evInfo.label}` : ''}
+              </p>
+            </div>
+          </div>
+
+          {/* La accion siguiente, donde se lee el resultado y no al final del
+              informe. Nunca depende del observador: aqui esta siempre. */}
+          <button
+            onClick={onReset}
+            className="flex-shrink-0 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold border transition-colors"
+            style={{
+              background: '#0a0f1a', borderColor: '#253348',
+              color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif',
+            }}
+            onMouseEnter={e => { const b = e.currentTarget; b.style.borderColor = color; b.style.color = 'var(--fg-primary)'; }}
+            onMouseLeave={e => { const b = e.currentTarget; b.style.borderColor = '#253348'; b.style.color = 'var(--fg-secondary)'; }}
           >
-            {pctR >= 65 ? '✕' : pctR >= 42 ? '!' : '✓'}
-          </div>
-          <div>
-            <p className="text-lg font-bold" style={{ color, fontFamily: 'system-ui,sans-serif', lineHeight: 1.2 }}>
-              {pctR >= 65
-                ? 'Alta probabilidad de manipulación'
-                : pctR >= 42
-                ? 'Resultado no concluyente'
-                : 'Sin indicios de manipulación detectables'}
-            </p>
-            <p className="text-sm mt-0.5" style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif' }}>
-              {pctR.toFixed(1)}% de probabilidad de ser IA
-              {evInfo ? ` — ${evInfo.label}` : ''}
-            </p>
-          </div>
+            <RotateCcw size={13} />
+            Analizar otro archivo
+          </button>
         </div>
       </div>
 
@@ -700,19 +743,70 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
         un peritaje legal. Siempre contraste los resultados con otras fuentes antes de tomar decisiones.
       </div>
 
-      <button
-        onClick={onReset}
-        className="w-full flex items-center justify-center gap-2 py-2 text-xs border transition-colors"
-        style={{
-          background: 'transparent', borderColor: '#1a2030',
-          color: 'var(--fg-muted)', fontFamily: 'inherit',
-        }}
-        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#253348'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--fg-secondary)'; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#1a2030'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--fg-muted)'; }}
-      >
-        <RotateCcw size={12} />
-        Analizar otro archivo
-      </button>
+      {/* El boton que habia aqui se quito: era el ultimo elemento del informe,
+          detras del aviso legal, y debajo del card aun quedan el historial y
+          el pie. Volver a empezar obligaba a recorrer la pagina entera. La
+          accion esta ahora junto al veredicto y en la barra fija de abajo. */}
+
+      {/* Hueco para que la barra fija no tape el aviso legal al final. */}
+      {!veredictoVisible && <div aria-hidden className="h-16" />}
+
+      {/* ── Barra fija: aparece al perder de vista el veredicto ─────────────── */}
+      <AnimatePresence>
+        {!veredictoVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.18 }}
+            className="fixed left-0 right-0 bottom-0 z-40 px-4 py-2.5 border-t"
+            style={{
+              background: 'rgba(5, 8, 15, 0.94)',
+              backdropFilter: 'blur(8px)',
+              borderColor: '#1a2030',
+            }}
+          >
+            <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+              {/* Recordatorio del veredicto: leyendo los paneles forenses es
+                  facil perder de vista la cifra que los resume. */}
+              <div className="flex items-center gap-3 min-w-0">
+                <span
+                  className="flex-shrink-0 w-7 h-7 flex items-center justify-center border text-sm font-bold"
+                  style={{ borderColor: color, color, background: `${color}12` }}
+                >
+                  {pctR >= 65 ? '✕' : pctR >= 42 ? '!' : '✓'}
+                </span>
+                <div className="min-w-0 leading-tight" style={{ fontFamily: 'system-ui,sans-serif' }}>
+                  <span className="text-sm font-bold" style={{ color }}>{pctR.toFixed(1)}%</span>
+                  {evInfo && (
+                    <span className="text-2xs ml-2" style={{ color: 'var(--fg-muted)' }}>
+                      {evInfo.label}
+                    </span>
+                  )}
+                  <span className="hidden sm:block text-2xs truncate" style={{ color: '#253348' }}>
+                    {result.filename}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={onReset}
+                className="flex-shrink-0 flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold border transition-colors"
+                style={{
+                  background: '#0a0f1a', borderColor: '#253348',
+                  color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif',
+                }}
+                onMouseEnter={e => { const b = e.currentTarget; b.style.borderColor = color; b.style.color = 'var(--fg-primary)'; }}
+                onMouseLeave={e => { const b = e.currentTarget; b.style.borderColor = '#253348'; b.style.color = 'var(--fg-secondary)'; }}
+              >
+                <RotateCcw size={13} />
+                <span className="hidden sm:inline">Analizar otro archivo</span>
+                <span className="sm:hidden">Analizar otro</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
