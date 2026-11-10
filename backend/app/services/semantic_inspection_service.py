@@ -43,6 +43,19 @@ from app.config import settings
 
 MODEL_ID    = "llava-hf/llava-1.5-7b-hf"
 QUANT_DESC  = "4-bit NF4 + bfloat16"
+
+# Margen que se deja libre para las activaciones de inferencia. NO es el peso
+# de los seis detectores: LLaVA se carga DESPUES de ellos
+# (app/tasks/analysis_tasks.py, init_worker_models), asi que la VRAM libre que
+# se mide ya los descuenta. Restar aqui su peso otra vez reduciria el
+# presupuesto de LLaVA por error y empujaria mas capas a la CPU, que es
+# justo el problema que se quiere evitar.
+# Medido el 9 de noviembre de 2026: con todo residente el worker declara 7,1GB
+# de tensores, y durante el analisis el proceso llega a ~7,7GB. De ahi 1,5GB.
+HEADROOM_ACTIVACIONES_GB = 1.5
+# LLaVA-1.5-7B en 4-bit NF4 ocupa unos 4,5GB. Por debajo de eso, parte del
+# modelo se despacha a la CPU y la inferencia se vuelve inutilizable.
+LLAVA_MINIMO_GPU_GB = 4.5
 MAX_TOKENS  = 300   # suficiente para JSON + descripción forense
 TEMPERATURE = 0.05  # muy baja para respuestas reproducibles y estructuradas
 
@@ -113,14 +126,50 @@ class _SemanticInspector:
                 llm_int8_enable_fp32_cpu_offload = True,
             )
 
-            # Reservar VRAM para el ensemble de 5 modelos (~6.5GB usados previamente)
-            # LLaVA toma lo que quede, con overflow a RAM del sistema
-            llava_vram_gb = max(3.0, total_vram_gb - 7.0)
+            # Presupuesto de VRAM para LLaVA: lo que de verdad queda libre
+            # en este momento -los detectores ya estan cargados-, menos un
+            # margen para las activaciones de inferencia.
+            #
+            # Antes se calculaba como `total_vram_gb - 7.0`, es decir a partir
+            # de la memoria TOTAL de la tarjeta. El comentario decia "LLaVA
+            # toma lo que quede" pero el codigo no lo hacia: presupuestaba 5,9
+            # GiB en una tarjeta de 12,9 GB aunque otras aplicaciones ya
+            # ocuparan 3,5 GB. Entonces `device_map="auto"` colocaba en CPU las
+            # capas que no cabian -el max_memory lo permite hasta 12 GiB- y la
+            # inferencia pasaba de 30 segundos a 38 minutos por imagen, sin un
+            # solo mensaje que lo delatara. Medido el 9 de noviembre de 2026:
+            # dos analisis de 2.290 y 2.342 segundos con 734 MiB de VRAM libre,
+            # y los nueve siguientes entre 25 y 62 segundos al liberarse.
+            libre_gb = total_vram_gb
+            try:
+                libre_bytes, _total = torch.cuda.mem_get_info(0)
+                libre_gb = libre_bytes / 1e9
+            except Exception as e:  # driver antiguo: se cae al total, como antes
+                logger.warning(f"  No se pudo leer la VRAM libre ({e}); "
+                               f"se presupuesta sobre el total")
+
+            llava_vram_gb = max(3.0, libre_gb - HEADROOM_ACTIVACIONES_GB)
             max_memory = {
-                0:     f"{llava_vram_gb:.1f}GiB",  # GPU: VRAM disponible para LLaVA
+                0:     f"{llava_vram_gb:.1f}GiB",  # GPU: VRAM realmente libre
                 "cpu": "12GiB",                     # CPU RAM: overflow sin errores
             }
+            logger.info(f"  VRAM libre: {libre_gb:.1f}GB  "
+                        f"(margen de activaciones: {HEADROOM_ACTIVACIONES_GB:.1f}GB)")
             logger.info(f"  Asignando LLaVA: GPU={llava_vram_gb:.1f}GiB, CPU=12GiB overflow")
+
+            # El aviso que faltaba: si el presupuesto no alcanza, parte del
+            # modelo va a la CPU y el analisis tarda decenas de minutos. Eso
+            # tiene que verse en el log, no deducirse de que la pagina no
+            # responde.
+            if llava_vram_gb < LLAVA_MINIMO_GPU_GB:
+                logger.error(
+                    f"  VRAM INSUFICIENTE: LLaVA necesita ~{LLAVA_MINIMO_GPU_GB:.1f}GB "
+                    f"en GPU y solo hay presupuesto para {llava_vram_gb:.1f}GB. "
+                    f"Parte del modelo correra en CPU y cada analisis tardara "
+                    f"DECENAS DE MINUTOS en lugar de ~30 segundos. Cierra las "
+                    f"aplicaciones que usen la GPU (navegadores, juegos, "
+                    f"Wallpaper Engine) y reinicia el worker."
+                )
 
             self._processor = AutoProcessor.from_pretrained(
                 MODEL_ID,

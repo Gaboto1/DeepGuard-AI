@@ -1,46 +1,45 @@
 @echo off
-title DEEPGUARD - Celery GPU Worker
+title DEEPGUARD - Worker GPU (hace funcionar la pagina)
+cd /d "%~dp0"
+
+REM Este archivo arranca el WORKER GPU, que es lo que hace que la pagina
+REM funcione: la web vive en GitHub Pages y la API en Render, pero el analisis
+REM corre aqui, en esta maquina, con la GPU. Sin este worker la pagina acepta
+REM la imagen y se queda esperando para siempre.
+
+REM Comprobacion previa: entorno, worker duplicado y VRAM libre.
+REM Ahi se decide si merece la pena arrancar ahora o cerrar aplicaciones antes.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\preparar_worker.ps1"
+if errorlevel 1 (
+    echo.
+    pause
+    exit /b 1
+)
+
 cd /d "%~dp0backend"
 
-echo.
 echo ============================================================
-echo   DeepGuard AI - Worker GPU Local
-echo   Broker: Aiven Valkey TLS (puerto 13419)
+echo   DeepScan - Worker GPU local
+echo   Broker : Upstash Redis TLS (rediss, puerto 6379)
+echo   Colas  : images, videos, default    Pool: threads, 2 hilos
 echo ============================================================
 echo.
+echo [INFO] Cargando los seis detectores, el meta-ensemble y LLaVA.
+echo        Tarda entre 2 y 4 minutos. La pagina NO procesa cargas
+echo        hasta que aparezca la linea "ready".
+echo.
+echo [INFO] Si en el log sale "VRAM INSUFICIENTE", LLaVA esta corriendo
+echo        en CPU y cada analisis tardara decenas de minutos. Cierra
+echo        navegadores y juegos, y reinicia este worker.
+echo.
 
-REM Verificar que el entorno virtual existe
-if not exist "venv\Scripts\python.exe" (
-    echo [ERROR] No se encontro el entorno virtual en backend\venv\
-    echo         Ejecuta primero: python -m venv venv
-    echo         Luego: venv\Scripts\pip install -r requirements.txt
-    pause
-    exit /b 1
-)
-
-REM Verificar que el .env existe
-if not exist ".env" (
-    echo [ERROR] Archivo .env no encontrado en backend\.env
-    echo         Copia backend\.env.worker.example como .env
-    pause
-    exit /b 1
-)
-
-REM Variables de entorno para modelos HuggingFace
+REM Cache de modelos HuggingFace dentro del proyecto, no en el perfil.
 set TRANSFORMERS_CACHE=%~dp0models
 set HF_HOME=%~dp0models
 set HF_HUB_DISABLE_SYMLINKS_WARNING=1
 
-echo [INFO] Iniciando Celery Worker...
-echo        Pool    : threads (compatible Windows)
-echo        Colas   : images, videos, default
-echo        Workers : 2 hilos concurrentes
-echo.
-echo [INFO] Cargando modelos GPU... esto tarda ~90 segundos la primera vez.
-echo.
-
 venv\Scripts\celery.exe -A app.celery_app worker --loglevel=info -P threads -Q images,videos,default -c 2 -n deepguard-worker@%%h
 
 echo.
-echo [INFO] El worker se detuvo.
+echo [INFO] El worker se detuvo. La pagina ya no procesa cargas.
 pause
