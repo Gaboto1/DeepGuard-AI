@@ -7,11 +7,21 @@ $ErrorActionPreference = "SilentlyContinue"
 $RAIZ    = Split-Path -Parent $PSScriptRoot
 $BACKEND = Join-Path $RAIZ "backend"
 
-# VRAM libre que conviene tener ANTES de arrancar. El worker llega a ~7,7GB
-# con todo residente y analizando, y LLaVA necesita 4,5GB de esos en GPU.
-# El resto es holgura para que otras aplicaciones crezcan: el consumo de un
-# navegador o un juego fluctua mientras el worker ya esta arriba.
-$VRAM_MINIMA_MIB = 9500
+# VRAM libre que conviene tener ANTES de arrancar: 7,7GB que el worker llega a
+# usar con todo residente y analizando, mas ~1GB de holgura para que otras
+# aplicaciones crezcan mientras el worker ya esta arriba.
+#
+# Esta comprobacion es un aviso, no un veredicto: el consumo de un navegador o
+# un juego fluctua, de modo que desde aqui no se puede predecir con certeza. La
+# palabra final la tiene el propio worker, que mide la VRAM libre en el
+# instante en que carga LLaVA y escribe en el log el presupuesto que consiguio
+# (app/services/semantic_inspection_service.py).
+#
+# El umbral se fijo en 8700 y no mas alto a proposito: con la GPU en reposo y
+# el escritorio normal de este equipo quedan unos 9300 MiB libres. Un umbral
+# por encima de eso saltaria en cada arranque, y un aviso que salta siempre se
+# ignora, que es peor que no tenerlo.
+$VRAM_MINIMA_MIB = 8700
 
 # Procesos que suelen llevarse VRAM en este equipo, para poder nombrarlos.
 $GOLOSOS = 'opera|chrome|msedge|firefox|League|RiotClient|wallpaper|Discord|' +
@@ -74,7 +84,7 @@ if ($libre -ge $VRAM_MINIMA_MIB) {
 
 # Por debajo del minimo: nombrar a los culpables y dejar decidir.
 Write-Host ""
-Write-Host ("   [ALTO]  VRAM libre {0} MiB de {1}. Hacen falta {2}." -f `
+Write-Host ("   [aviso] VRAM libre {0} MiB de {1}. Conviene tener {2}." -f `
             $libre, $total, $VRAM_MINIMA_MIB) -ForegroundColor Yellow
 Write-Host ""
 Write-Host "   Con menos VRAM, LLaVA no cabe entero en la GPU y parte del" -ForegroundColor Gray
