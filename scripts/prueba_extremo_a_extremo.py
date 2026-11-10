@@ -107,7 +107,14 @@ def main() -> int:
         correcto = (senala and clase == "ia") or (not senala and clase == "real")
         ver = "ok" if correcto else ("FALSA ALARMA" if clase == "real"
                                      else "no senala")
-        if banda == "Inconclusive Evidence":
+        # La banda que emite el sistema es "Inconclusive", sin la palabra
+        # "Evidence" que si llevan las otras cuatro. Comparar contra
+        # "Inconclusive Evidence" hacia que esta rama nunca entrara, y una
+        # imagen de IA sobre la que el sistema declara que no sabe aparecia
+        # como "no senala", es decir contada como fallo de deteccion. No es lo
+        # mismo: en bandas, "Inconclusive" no cuenta en ninguna direccion
+        # (ver reports/MEJORA_ENSEMBLE_v4.md, kpi_por_bandas.py).
+        if banda.startswith("Inconclusive"):
             ver = "inconcluso"
         print(f"  {etiqueta:27s} {nombre[:26]:26s} "
               f"{score if score is None else round(score, 4)!s:>7s} "
