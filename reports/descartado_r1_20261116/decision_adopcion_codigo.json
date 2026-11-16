@@ -1,0 +1,28 @@
+{
+  "generado": "2026-11-16T01:24:42",
+  "cambio": "R1 no rebaja cuando el ensemble supera 0,95",
+  "linea_base": "reports/linea_base_pre_r1",
+  "veredicto": "REVERTIR",
+  "vetos": [
+    "las falsas alarmas suben +0.70 pt (tolerancia 0.3)"
+  ],
+  "antes": {
+    "falsas_alarmas_pct": 0.7,
+    "ia_senalada_pct": 76.7,
+    "auc": 0.9906
+  },
+  "ahora": {
+    "falsas_alarmas_pct": 1.4,
+    "ia_senalada_pct": 82.5,
+    "auc": 0.9885
+  },
+  "criterio": {
+    "origen": "importado de scripts/decidir_adopcion.py, fijado el 2026-11-09",
+    "tol_fpr_subida_pt": 0.3,
+    "tol_auc_bajada": 0.005,
+    "mejora_min_ia_pt": 1.0,
+    "tol_ia_plana_pt": -0.5,
+    "mejora_min_fpr_pt": 0.2
+  },
+  "nota": "Revertir aqui es `git revert`, no restaurar pesos: este guion decide sobre cambios de codigo y no toca modelos."
+}

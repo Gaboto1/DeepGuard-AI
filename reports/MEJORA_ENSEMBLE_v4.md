@@ -486,3 +486,121 @@ no alcanza, en lugar de degradarse en silencio.
 | guion que las calcula | `scripts/medir_latencia.py` |
 | origen de los datos | backend de resultados de Celery en Redis, análisis reales por la vía de producción |
 | sustituciones aplicadas al informe | `reports/mapa_cifras_fase6.json` |
+
+
+## 12. La regla que destruye detecciones y por qué sigue puesta
+
+El 16 de noviembre de 2026, buscando por qué FLUX se escapa, se encontró que
+la **Regla 1 (OOD-Manipulation Bypass)** cuesta un número grande de
+detecciones. Se midieron dos arreglos y **los dos se descartaron**. Esta
+sección registra el hallazgo, el intento y la razón de no adoptarlo, porque el
+problema sigue ahí y la decisión de convivir con él debe ser explícita.
+
+### 12.1 Qué hace la regla hoy
+
+R1 se escribió para **rescatar**: el penalizador OOD arrastraba hacia 0,50 el
+score de los afiches y composiciones, y la regla lo levantaba (el caso
+Cobreloa de su cabecera, 0,605). Para ello **sustituye** el score del
+meta-ensemble por una media ponderada a mano de los detectores crudos,
+amortiguada por 0,82 y topada en `OOD_BYPASS_MAX = 0,68`.
+
+El sistema cambió debajo de la regla. El meta-ensemble se reentrenó y alcanza
+**AUC 0,990 fuera de muestra**, de modo que su score ya suele venir alto y
+correcto. Y la media que lo sustituye pondera `face_deepfake_vit` (AUC 0,451)
+y `ai_human_detector` (AUC 0,345), dos detectores **peores que el azar** fuera
+de muestra. El tope de 0,68 impide además, por construcción, que una imagen
+marcada como obra gráfica alcance la banda «Strong Evidence» — y lo que más
+parece obra gráfica es justamente el material de los generadores modernos.
+
+Medido sobre 600 imágenes del retenido (`reports/diagnostico_regla_ood.json`):
+
+| fuente | n | marcadas OOD | dispara R1 |
+|---|---|---|---|
+| flux | 150 | 88 | **80 (53 %)** |
+| dalle3 | 150 | 28 | 27 |
+| imagenet | 150 | 49 | 3 |
+| lfw | 150 | 13 | 1 |
+
+### 12.2 Los dos intentos, y por qué se rechazaron
+
+**Intento 1 — que la regla sólo pueda elevar.** Conserva intacto su propósito
+de rescate y le quita la capacidad de rebajar.
+
+**Intento 2 — que no rebaje cuando el ensemble supera 0,95.** Más
+conservador: por debajo de ese umbral la regla sigue moderando.
+
+| sobre 2.000 imágenes del retenido | falsas alarmas | IA señalada | AUC |
+|---|---|---|---|
+| sistema vigente | **0,70 %** | 76,70 % | 0,9906 |
+| intento 1 (sólo elevar) | 1,40 % | **87,50 %** | 0,9889 |
+| intento 2 (umbral 0,95) | 1,40 % | 82,50 % | 0,9885 |
+
+El criterio de adopción —fijado el 9 de noviembre, antes de estas mediciones, e
+**importado** por `scripts/decidir_adopcion_codigo.py` en lugar de copiado para
+que no pudiera ajustarse al resultado— veta cualquier subida de falsas alarmas
+mayor de 0,3 puntos. Las dos subían 0,70. **REVERTIR** las dos.
+
+El desglose por fuente del intento 2 muestra exactamente qué se gana y qué se
+pierde: flux +51 detecciones, dalle3 +7, imagenet +5 falsas alarmas, lfw +2.
+Cincuenta y ocho detecciones más a cambio de siete falsas alarmas.
+
+### 12.3 Lo que esto revela, que no es lo que parecía
+
+El diagnóstico inicial concluyó que la regla «sólo resta»: cero falsas alarmas
+evitadas sobre 300 imágenes auténticas. **Esa conclusión era un artefacto del
+tamaño de muestra.** Un efecto del 0,7 % sobre 300 imágenes son dos casos
+esperados; salieron cero, y se leyó como ausencia de efecto. Con 1.000
+imágenes auténticas aparecen los siete.
+
+Así que R1 hace dos trabajos a la vez: destruye entre 37 y 58 detecciones
+ciertas **y** atrapa siete fotografías auténticas sobre las que el
+meta-ensemble se equivoca con confianza (score ≥ 0,95). Es una red de
+seguridad contra los fallos seguros del ensemble, pagada con un peaje muy alto
+sobre el material legítimamente sintético.
+
+### 12.4 Por qué no se siguió ajustando
+
+Se podría mover el umbral hasta que el criterio pase. No se hizo: el umbral se
+elegiría mirando el conjunto retenido, que es precisamente el defecto que las
+secciones 4 y 11 documentan. Dos intentos medidos y rechazados son un
+resultado; un tercero ajustado hasta que dé es un modelo sobreajustado al test.
+
+### 12.5 El arreglo de fondo, que está pendiente
+
+El problema real no es la regla sino que **el meta-ensemble se equivoca con
+confianza en siete fotografías auténticas de mil**. Mientras eso siga, hace
+falta una red de seguridad, y la que hay cuesta 58 detecciones. Las dos vías
+razonables, por orden:
+
+1. **Quitar del ensemble los dos detectores peores que el azar.**
+   `face_deepfake_vit` (0,451) y `ai_human_detector` (0,345) no sólo degradan
+   la media de R1: están dentro del meta-ensemble. Medir el sistema sin ellos
+   es barato y puede eliminar buena parte de esos siete fallos.
+2. **Sustituir el tope fijo de R1 por una condición de acuerdo entre los dos
+   detectores fiables** (probe CLIP 0,987 y arte IA 0,992), en vez de por el
+   score agregado.
+
+Ambas son cambios de mecanismo, no de umbral, y por tanto no son ajuste al
+test.
+
+### 12.6 La decisión que corresponde al dueño del proyecto
+
+El criterio vigente expresa una preferencia: una falsa alarma cuesta más que
+una detección perdida, con una tolerancia de 0,3 puntos. Esa preferencia la
+fijó el proyecto después de que el usuario reportara fotografías auténticas
+marcadas como IA, y por eso se respeta aquí.
+
+Pero la relación medida es de **58 detecciones ganadas por 7 falsas alarmas**,
+y si el uso real resulta ser más tolerante a una falsa alarma que a un
+deepfake no detectado, el criterio debería revisarse **antes** de volver a
+medir, nunca después. Queda anotado como decisión pendiente, no como cifra.
+
+### 12.7 Procedencia
+
+| cifra | archivo |
+|---|---|
+| activación de la regla por fuente | `reports/diagnostico_regla_ood.json` |
+| guion del diagnóstico | `scripts/diagnostico_regla_ood.py` |
+| medición de los intentos | `reports/descartado_r1_20261116/` |
+| veredicto y criterio | `reports/decision_adopcion_codigo.json` |
+| línea base del sistema vigente | `reports/linea_base_pre_r1/` |
