@@ -268,21 +268,42 @@ def test_el_plan_gratuito_no_emite_licencia_en_el_checkout(con_clave):
 
 def test_la_facturacion_viene_apagada_por_defecto(monkeypatch):
     """
-    La propiedad mas importante de todo el modulo: recien clonado, DeepScan no
-    le niega un analisis a nadie. La compuerta de /analyze consulta esto antes
-    de hacer nada, de modo que con el interruptor apagado el endpoint se
-    comporta exactamente como antes de que existiera la facturacion.
+    La propiedad mas importante de todo el modulo: recien clonado y sin
+    configurar, DeepScan no le niega un analisis a nadie.
+
+    Hay DOS fuentes -la variable de entorno y backend/.env via settings- y la
+    prueba tiene que neutralizar las dos. Si solo quitara la del entorno,
+    pasaria o fallaria segun lo que tenga el .env de quien ejecuta las
+    pruebas, que es justo la clase de prueba que no sirve para nada.
     """
     import app.billing as b
+    from app.config import settings
     monkeypatch.delenv("BILLING_ENABLED", raising=False)
+    monkeypatch.setattr(settings, "BILLING_ENABLED", False, raising=False)
     assert b.habilitado() is False
 
 
 def test_el_interruptor_solo_se_enciende_con_valores_explicitos(monkeypatch):
     import app.billing as b
+    from app.config import settings
+    monkeypatch.setattr(settings, "BILLING_ENABLED", False, raising=False)
     for valor in ("true", "TRUE", "1", "si", "yes"):
         monkeypatch.setenv("BILLING_ENABLED", valor)
         assert b.habilitado() is True, valor
-    for valor in ("false", "0", "no", "", "quizas"):
+    for valor in ("false", "0", "no", "quizas"):
         monkeypatch.setenv("BILLING_ENABLED", valor)
         assert b.habilitado() is False, valor
+
+
+def test_el_env_file_enciende_la_facturacion(monkeypatch):
+    """
+    La regresion del 16 de noviembre de 2026: pydantic carga backend/.env en
+    `settings`, NO en os.environ. Leyendo solo el entorno, poner
+    BILLING_ENABLED=true en el .env no encendia nada y no habia forma de
+    saber por que.
+    """
+    import app.billing as b
+    from app.config import settings
+    monkeypatch.delenv("BILLING_ENABLED", raising=False)
+    monkeypatch.setattr(settings, "BILLING_ENABLED", True, raising=False)
+    assert b.habilitado() is True
