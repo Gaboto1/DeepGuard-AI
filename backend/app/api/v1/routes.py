@@ -248,6 +248,35 @@ async def analyze_async(
     # Validación 2: tipo de archivo soportado
     file_type = get_file_type(file.filename)
 
+    # ── Cuota del plan ───────────────────────────────────────────────────────
+    # Va ANTES de leer el archivo: no tiene sentido subir 500 MB para
+    # rechazarlos despues. Con BILLING_ENABLED apagado -el valor por defecto-
+    # este bloque no hace nada en absoluto y el comportamiento es el de
+    # siempre; ver app/billing/__init__.py.
+    _plan_actual = None
+    try:
+        from app import billing as _billing
+        if _billing.habilitado():
+            from app.billing import identity as _ident, usage as _uso
+            _id = _ident.resolver(request)
+            _plan_actual = _id.plan
+            _consumo = _uso.consumir(_id.clave, _id.plan)
+            if not _consumo.permitido:
+                return JSONResponse(status_code=429, content={
+                    "error": _consumo.motivo or "cuota_agotada",
+                    "mensaje": (
+                        f"Has agotado la cuota del plan {_id.plan.nombre}. "
+                        f"Vuelve manana o cambia de plan."
+                    ),
+                    "plan": _id.plan.id,
+                    "consumo": _consumo.to_dict(),
+                })
+    except Exception as e:
+        # La facturacion nunca puede tumbar el analisis. Si algo falla aqui,
+        # se registra y se sigue: es preferible regalar un analisis a dejar la
+        # pagina sin servicio por un fallo del contador.
+        logger.warning(f"[billing] compuerta omitida ({type(e).__name__}: {e})")
+
     # Validación 3: leer y verificar tamaño
     content = await file.read()
     validate_not_empty(len(content), file.filename)
@@ -302,6 +331,12 @@ async def analyze_async(
         # que puede tener una conexión previa activa.
         try:
             from app.tasks.analysis_tasks import analyze_image_task, analyze_video_task
+            # Prioridad segun el plan. La cola 'images' se declara con
+            # x-max-priority=10 (app/celery_app.py), asi que el numero del plan
+            # se puede pasar tal cual. Sin plan -facturacion apagada- no se
+            # pasa nada y el comportamiento es exactamente el de antes.
+            _extra = ({"priority": _plan_actual.prioridad}
+                      if _plan_actual is not None else {})
             # file_content_b64 viaja en el payload para que el worker GPU local
             # reconstruya el archivo en su propio disco (arquitectura híbrida).
             if file_type == "image":
@@ -309,12 +344,14 @@ async def analyze_async(
                     args=[task_id, str(dest), file.filename],
                     kwargs={"file_content_b64": file_content_b64},
                     task_id=task_id,
+                    **_extra,
                 )
             else:
                 analyze_video_task.apply_async(
                     args=[task_id, str(dest), file.filename],
                     kwargs={"file_content_b64": file_content_b64},
                     task_id=task_id,
+                    **_extra,
                 )
             dispatch_mode = "celery"
         except Exception as e:

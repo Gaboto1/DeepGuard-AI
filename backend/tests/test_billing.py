@@ -262,3 +262,27 @@ def test_la_pasarela_simulada_se_declara_simulada(con_clave):
 def test_el_plan_gratuito_no_emite_licencia_en_el_checkout(con_clave):
     ch = providers.PasarelaSimulada().crear_checkout(plans.GRATIS, "x@y.cl")
     assert ch.licencia is None
+
+
+# ─── El interruptor general ──────────────────────────────────────────────────
+
+def test_la_facturacion_viene_apagada_por_defecto(monkeypatch):
+    """
+    La propiedad mas importante de todo el modulo: recien clonado, DeepScan no
+    le niega un analisis a nadie. La compuerta de /analyze consulta esto antes
+    de hacer nada, de modo que con el interruptor apagado el endpoint se
+    comporta exactamente como antes de que existiera la facturacion.
+    """
+    import app.billing as b
+    monkeypatch.delenv("BILLING_ENABLED", raising=False)
+    assert b.habilitado() is False
+
+
+def test_el_interruptor_solo_se_enciende_con_valores_explicitos(monkeypatch):
+    import app.billing as b
+    for valor in ("true", "TRUE", "1", "si", "yes"):
+        monkeypatch.setenv("BILLING_ENABLED", valor)
+        assert b.habilitado() is True, valor
+    for valor in ("false", "0", "no", "", "quizas"):
+        monkeypatch.setenv("BILLING_ENABLED", valor)
+        assert b.habilitado() is False, valor
