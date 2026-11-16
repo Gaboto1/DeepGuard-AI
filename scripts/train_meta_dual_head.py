@@ -127,6 +127,38 @@ NOART_CANDIDATES = {
          "face_deepfake_vit", "compression_level", "robust_mean", "reliable_std"],
         ["sdxl_detector", "efficientnet_ffpp", "ai_human_detector"],
     ),
+    # ── Candidatos SIN ai_human_detector ─────────────────────────────────────
+    #
+    # Hasta el 16 de noviembre de 2026 los seis candidatos incluian
+    # `ai_human_detector`, de modo que la seleccion no podia elegir
+    # prescindir de el aunque le conviniera.
+    #
+    # Y le puede convenir: medido sobre el conjunto retenido, ese detector da
+    # AUC **0,345** (reports/heldout_detectores.json), es decir esta
+    # anticorrelacionado con la verdad ante fuentes que no vio. Sin embargo el
+    # cabezal le aprendio un peso POSITIVO de 0,956, porque dentro de las
+    # fuentes de entrenamiento si predice. Eso es una brecha de generalizacion
+    # de manual: el modelo se apoya en una senal que se invierte fuera.
+    #
+    # No se elimina a la fuerza. Se anaden estas alternativas y decide el
+    # mismo mecanismo de seleccion que ya existe, que pondera el error
+    # leave-one-source-out: si prescindir de el generaliza mejor, el LOSO lo
+    # dira. Si no, la seleccion seguira eligiendo los de siempre y no se habra
+    # cambiado nada.
+    "compacto_sin_aihuman": (
+        ["sdxl_detector", "efficientnet_ffpp", "robust_mean", "reliable_std"],
+        ["sdxl_detector", "efficientnet_ffpp"],
+    ),
+    "amplio_sin_aihuman": (
+        ["sdxl_detector", "efficientnet_ffpp", "siglip_deepfake",
+         "robust_mean", "reliable_std"],
+        ["sdxl_detector", "efficientnet_ffpp"],
+    ),
+    "amplio_compresion_sin_aihuman": (
+        ["sdxl_detector", "efficientnet_ffpp", "siglip_deepfake",
+         "compression_level", "robust_mean", "reliable_std"],
+        ["sdxl_detector", "efficientnet_ffpp"],
+    ),
 }
 
 

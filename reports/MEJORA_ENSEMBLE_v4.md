@@ -521,7 +521,7 @@ Medido sobre 600 imágenes del retenido (`reports/diagnostico_regla_ood.json`):
 | imagenet | 150 | 49 | 3 |
 | lfw | 150 | 13 | 1 |
 
-### 12.2 Los dos intentos, y por qué se rechazaron
+### 12.2 Los dos primeros intentos, y por qué se rechazaron
 
 **Intento 1 — que la regla sólo pueda elevar.** Conserva intacto su propósito
 de rescate y le quita la capacidad de rebajar.
@@ -565,7 +565,64 @@ elegiría mirando el conjunto retenido, que es precisamente el defecto que las
 secciones 4 y 11 documentan. Dos intentos medidos y rechazados son un
 resultado; un tercero ajustado hasta que dé es un modelo sobreajustado al test.
 
-### 12.5 El arreglo de fondo, que está pendiente
+### 12.5 Tercer intento: quitar del ensemble el detector anticorrelacionado
+
+El `ai_human_detector` da **AUC 0,345** sobre el retenido: ante fuentes que no
+vio está *anticorrelacionado* con la verdad. Y sin embargo el cabezal le había
+aprendido un peso **positivo de 0,956**, porque dentro de las fuentes de
+entrenamiento sí predice. Es una brecha de generalización de manual.
+
+La causa de que siguiera ahí resultó ser estructural: los seis conjuntos de
+features candidatos lo incluían **todos**, de modo que el mecanismo de
+selección —que pondera el error leave-one-source-out precisamente para premiar
+la generalización— nunca pudo elegir prescindir de él.
+
+No se eliminó a la fuerza. Se añadieron tres candidatos sin él y se dejó
+decidir al LOSO. **Eligió uno de ellos por sus propios méritos:**
+
+| conjunto | LOSO error medio | peor fuente |
+|---|---|---|
+| `compacto` (con el detector) | 0,0123 | 0,065 |
+| **`compacto_sin_aihuman`** | **0,0114** | **0,060** |
+
+Y aun así, sobre el retenido: falsas alarmas 0,70 % → **1,20 %**, IA señalada
+76,70 % → 77,80 %, AUC 0,9906 → 0,9884. **REVERTIR.**
+
+El desglose explica por qué la ganancia es pequeña: flux +20 detecciones pero
+**dalle3 −9**, imagenet +3 falsas alarmas y lfw +2.
+
+Esto repite, en otra escala, la lección de la sección 10.3: **una validación
+interna mejor no se tradujo en un comportamiento mejor ante fuentes nuevas.**
+El LOSO prefirió el conjunto sin ese detector, y el conjunto retenido lo
+rechazó igual.
+
+Los candidatos añadidos **se conservan en el guion**: amplían el espacio de
+búsqueda y el LOSO los prefiere, de modo que un reentrenamiento futuro con
+datos distintos podría adoptarlos legítimamente. Lo que se revirtió son los
+pesos, no la opción.
+
+### 12.6 Tres intentos, un patrón
+
+| sobre 2.000 imágenes del retenido | falsas alarmas | IA señalada | AUC | veredicto |
+|---|---|---|---|---|
+| **sistema vigente** | **0,70 %** | **76,70 %** | **0,9906** | — |
+| 1. R1 sólo puede elevar | 1,40 % | 87,50 % | 0,9889 | REVERTIR |
+| 2. R1 con umbral 0,95 | 1,40 % | 82,50 % | 0,9885 | REVERTIR |
+| 3. Sin `ai_human_detector` | 1,20 % | 77,80 % | 0,9884 | REVERTIR |
+
+El patrón es el resultado, y es más informativo que cualquiera de los tres
+intentos por separado: **toda reconfiguración que sube la detección sube
+también las falsas alarmas, y el AUC baja ligeramente en las tres.** No se
+está mejorando el sistema sino desplazándolo a lo largo de una frontera de
+compromiso que ya ocupa.
+
+Eso acota lo que queda por hacer. Ganar detección sin pagar en falsas alarmas
+no saldrá de recombinar lo que hay: exige **mover la frontera**, no caminar
+sobre ella. Las vías son datos de entrenamiento que cubran los generadores
+modernos o un detector mejor que los seis actuales — no otro reajuste de
+pesos, umbrales o reglas.
+
+### 12.7 El arreglo de fondo, que está pendiente
 
 El problema real no es la regla sino que **el meta-ensemble se equivoca con
 confianza en siete fotografías auténticas de mil**. Mientras eso siga, hace
@@ -583,7 +640,7 @@ razonables, por orden:
 Ambas son cambios de mecanismo, no de umbral, y por tanto no son ajuste al
 test.
 
-### 12.6 La decisión que corresponde al dueño del proyecto
+### 12.8 La decisión que corresponde al dueño del proyecto
 
 El criterio vigente expresa una preferencia: una falsa alarma cuesta más que
 una detección perdida, con una tolerancia de 0,3 puntos. Esa preferencia la
@@ -595,7 +652,7 @@ y si el uso real resulta ser más tolerante a una falsa alarma que a un
 deepfake no detectado, el criterio debería revisarse **antes** de volver a
 medir, nunca después. Queda anotado como decisión pendiente, no como cifra.
 
-### 12.7 Procedencia
+### 12.9 Procedencia
 
 | cifra | archivo |
 |---|---|
@@ -604,3 +661,5 @@ medir, nunca después. Queda anotado como decisión pendiente, no como cifra.
 | medición de los intentos | `reports/descartado_r1_20261116/` |
 | veredicto y criterio | `reports/decision_adopcion_codigo.json` |
 | línea base del sistema vigente | `reports/linea_base_pre_r1/` |
+| intento 3: medición y veredicto | `reports/descartado_sinF_20261116/` |
+| intento 3: selección LOSO | `reports/etapa9_sinF.log` |
