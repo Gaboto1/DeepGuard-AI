@@ -25,6 +25,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
 from app.api.v1.routes import router as router_v1
+from app.api.v1.billing_routes import router as router_billing
 from app.config import settings
 
 # True en Render / cualquier entorno cloud sin GPU
@@ -122,6 +123,9 @@ app.add_middleware(
 
 # Routes
 app.include_router(router_v1)
+# Modelo de negocio. Solo lectura salvo /checkout, y con la cuota
+# apagada por defecto: ver app/billing/__init__.py.
+app.include_router(router_billing)
 
 
 @app.get("/")

@@ -44,6 +44,16 @@ class Settings(BaseSettings):
     # ── Clave HMAC ────────────────────────────────────────────────────────────
     DEEPGUARD_SIGNING_KEY: str = ""
 
+    # Clave de firma de las licencias de suscripcion. Separada a proposito de
+    # DEEPGUARD_SIGNING_KEY: esa acredita un peritaje y esta autoriza un cobro.
+    # Compartirlas significaria que comprometer la facturacion compromete la
+    # prueba forense. Vacia = las licencias quedan deshabilitadas y todo el
+    # mundo es plan gratuito, que es el valor por defecto deseado.
+    DEEPGUARD_BILLING_KEY: str = ""
+    # Interruptor de la cuota. Apagado por defecto: un fallo contando cuotas
+    # se manifiesta dejando usuarios sin servicio.
+    BILLING_ENABLED: bool = False
+
     # ── Modelos ───────────────────────────────────────────────────────────────
     DEVICE: str = "cuda"
 

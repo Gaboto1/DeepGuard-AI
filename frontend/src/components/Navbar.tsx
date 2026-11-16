@@ -1,6 +1,7 @@
 'use client';
 
 import { ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 import { useWorkerStatus } from '@/components/WorkerStatusProvider';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -51,6 +52,12 @@ export default function Navbar() {
              className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             Historial
           </a>
+          {/* Link y no <a>: con basePath de GitHub Pages un href absoluto
+              plano pierde el prefijo /DeepGuard-AI y da 404. */}
+          <Link href="/precios"
+             className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
+            Planes
+          </Link>
           <a href={`${BASE_URL}/docs`} target="_blank" rel="noopener noreferrer"
              className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             API
