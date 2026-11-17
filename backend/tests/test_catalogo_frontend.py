@@ -45,3 +45,14 @@ def test_precios_y_cuotas_coinciden():
             assert local[pid][campo] == getattr(p, campo), (
                 f"{pid}.{campo}: frontend {local[pid][campo]!r} "
                 f"vs backend {getattr(p, campo)!r}")
+
+
+def test_las_descripciones_coinciden():
+    """
+    Tambien el texto: el 17 de noviembre la copia del backend decia "un ano de
+    historial" (sin tilde) y la pagina lo mostraba tal cual.
+    """
+    t = TSX.read_text(encoding="utf-8")
+    for pid, p in plans.PLANES.items():
+        m = re.search(rf"\{{ id: '{pid}'.*?descripcion: '([^']*)'", t, flags=re.S)
+        assert m and m.group(1) == p.descripcion, pid

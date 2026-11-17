@@ -1,7 +1,7 @@
 """
 Celery Tasks — Workers GPU exclusivos para análisis forense
 ===========================================================
-Los 5 modelos de IA se cargan UNA SOLA VEZ al arrancar el worker
+Los 6 detectores de IA se cargan UNA SOLA VEZ al arrancar el worker
 (señal worker_init), no por tarea. Elimina el overhead de carga y
 mantiene la GPU plenamente utilizada.
 
@@ -59,7 +59,7 @@ def _heartbeat_loop() -> None:
 def init_worker_models(**kwargs) -> None:
     """
     Ejecutado UNA VEZ por proceso worker al arrancar.
-    Carga los 5 modelos + face detector + meta-ensemble en GPU.
+    Carga los 6 detectores + face detector + meta-ensemble en GPU.
     """
     logger.info("=== Worker DeepScan: inicializando modelos GPU ===")
     try:
@@ -142,7 +142,7 @@ def analyze_image_task(
     híbrida (API en Render + worker GPU local) ya que no comparten sistema de archivos.
     Si se provee, el archivo se escribe en el UPLOAD_DIR local antes de procesar.
     """
-    self.update_state(state="PROCESSING", meta={"progress": 0.05, "stage": "Iniciando"})
+    self.update_state(state="PROCESSING", meta={"progress": 0.05, "stage": "Preparando el análisis"})
     t0 = time.time()
 
     try:
@@ -167,14 +167,14 @@ def analyze_image_task(
             raise FileNotFoundError(f"Archivo no encontrado tras decodificar Base64: {file_path}")
 
         # 1. SHA-256 antes de cualquier procesamiento
-        self.update_state(state="PROCESSING", meta={"progress": 0.10, "stage": "Hash SHA-256"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.10, "stage": "Registrando la huella digital del archivo"})
         from app.services.custody_service import (
             compute_file_sha256, generate_custody_seal, persist_custody_report,
         )
         sha256 = compute_file_sha256(path)
 
         # 1b. C2PA — lectura pre-neural de procedencia criptográfica (0 VRAM, ~10-50ms)
-        self.update_state(state="PROCESSING", meta={"progress": 0.12, "stage": "Procedencia C2PA"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.12, "stage": "Buscando credenciales de contenido (C2PA)"})
         from app.services.c2pa_service import read_c2pa_provenance as _read_c2pa
         try:
             _c2pa_size = path.stat().st_size
@@ -189,14 +189,14 @@ def analyze_image_task(
             }
 
         # 2. Metadatos forenses EXIF/XMP
-        self.update_state(state="PROCESSING", meta={"progress": 0.15, "stage": "Metadatos EXIF/XMP"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.15, "stage": "Leyendo los metadatos de la cámara"})
         from app.services.forensic_metadata_service import (
             extract_forensic_metadata, apply_metadata_risk_to_score,
         )
         forensic_meta = extract_forensic_metadata(path)
 
         # 3. Ensemble de modelos
-        self.update_state(state="PROCESSING", meta={"progress": 0.25, "stage": "Ensemble 5 modelos"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.25, "stage": "Analizando con seis detectores especializados"})
         from app.services.image_service import _run_image_analysis
         raw = _run_image_analysis(path)
 
@@ -216,7 +216,7 @@ def analyze_image_task(
         # podía quedar en "Moderada" (banda 60-80%) sobre un score de 58.5%, que
         # es "Inconcluyente" (banda 40-60%). El sello de custodia llegaba a
         # firmar score y nivel de evidencia contradictorios entre sí.
-        self.update_state(state="PROCESSING", meta={"progress": 0.80, "stage": "Coherencia semántica LLaVA"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.80, "stage": "Revisando la coherencia de la escena"})
         semantic_obj = None
         try:
             from app.services.semantic_inspection_service import (
@@ -269,7 +269,7 @@ def analyze_image_task(
             explanation += f" {meta_note}."
 
         # 7. Sello de custodia
-        self.update_state(state="PROCESSING", meta={"progress": 0.90, "stage": "Sello de custodia"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.90, "stage": "Sellando el informe"})
         seal = generate_custody_seal(
             task_id=task_id, file_sha256=sha256, filename=filename,
             file_type="image", final_score=prob, evidence_level=ev_level.value,
@@ -403,7 +403,7 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
         from app.services.video_service import _run_video_analysis
         raw = _run_video_analysis(path, progress_cb=progress_cb)
 
-        self.update_state(state="PROCESSING", meta={"progress": 0.90, "stage": "Generando sello"})
+        self.update_state(state="PROCESSING", meta={"progress": 0.90, "stage": "Sellando el informe"})
 
         prob, _ = apply_metadata_risk_to_score(raw["fake_probability"], forensic_meta)
 

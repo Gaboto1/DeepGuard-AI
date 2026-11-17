@@ -2,16 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-// Pipeline stages mapped to actual backend steps
+// Etapas del analisis, en el orden en que las recorre el worker
+// (backend/app/services/image_service.py). Escritas para quien espera el
+// resultado: que se esta haciendo, no con que biblioteca. Antes anunciaban
+// "ensemble 5 modelos", "meta-ensemble XGBoost" y una temperatura T=0.620
+// que no correspondian a ningun modelo en produccion.
 const STAGES = [
-  { id: 'sha256',    label: 'Calculando huella SHA-256 del archivo original...' },
-  { id: 'exif',      label: 'Extrayendo metadatos forenses EXIF/XMP/IPTC...' },
-  { id: 'ood',       label: 'Evaluando señales detector Out-of-Distribution...' },
-  { id: 'ensemble',  label: 'Inferencia ensemble 5 modelos (ViT · SDXL · CLIP · AiArt · SigLIP)...' },
-  { id: 'xgboost',   label: 'Meta-ensemble XGBoost (7 features) + calibración temperatura T=0.620...' },
-  { id: 'llava',     label: 'Análisis semántico LLaVA-1.5-7b-hf (4-bit NF4)...' },
-  { id: 'fusion',    label: 'Fusión semántica + correcciones forenses post-hoc...' },
-  { id: 'custody',   label: 'Generando sello HMAC-SHA256 cadena de custodia v2...' },
+  { id: 'sha256',    label: 'Registrando la huella digital del archivo original...' },
+  { id: 'exif',      label: 'Leyendo los metadatos de la cámara y del programa de edición...' },
+  { id: 'ood',       label: 'Identificando el tipo de imagen: fotografía, ilustración o composición...' },
+  { id: 'ensemble',  label: 'Analizando con seis detectores especializados...' },
+  { id: 'meta',      label: 'Combinando sus resultados con el modelo de decisión...' },
+  { id: 'semantico', label: 'Revisando la coherencia de la escena con un modelo de visión y lenguaje...' },
+  { id: 'fusion',    label: 'Ajustando el resultado con reglas forenses...' },
+  { id: 'custody',   label: 'Sellando el informe para que no pueda alterarse...' },
 ];
 
 const FILLED  = '█';
@@ -20,7 +24,7 @@ const BAR_LEN = 20;
 
 interface Props {
   progress:     number;
-  currentStage?: string;   // etapa real reportada por el worker (ej. "Ensemble 5 modelos")
+  currentStage?: string;   // etapa real reportada por el worker
   fileType:     'image' | 'video';
   previewUrl?:  string;
   previewType?: 'image' | 'video';

@@ -49,7 +49,7 @@ DEBE_APARECER = [
     ("INFORME", "0,995", 2),
     ("INFORME", "60.000 imágenes", 3),
     ("INFORME", "nueve fuentes", 3),
-    ("INFORME", "120 pruebas", 3),
+    ("INFORME", "121 pruebas", 3),
     # Sexta pasada: latencia. El valor y la meta del KPI-04 y la meta del SLA
     # se corrigieron contra la medicion real (reports/latencia_medida.json).
     ("INFORME", "11,7 s (p95)", 1),
@@ -63,7 +63,7 @@ DEBE_APARECER = [
     ("INFORME", "ELSA multigenerador", 1),
     ("INFORME", "Nueve fuentes independientes", 1),
     ("INFORME", "peso del track facial", 1),
-    ("GUION", "Ciento veinte pruebas", 1),
+    ("GUION", "Ciento veintiuna pruebas", 1),
     ("GUION", "Sesenta mil imágenes", 1),
     ("GUION", "nueve fuentes independientes", 1),
     ("GUION", "0,992", 1),
@@ -71,7 +71,7 @@ DEBE_APARECER = [
     ("GUION", "5,7 % con pesos fijos y 12,5 % en septiembre de 2026", 1),
     ("DEFENSA", "0,992", 1),
     ("DEFENSA", "0,35 a 0,99", 1),
-    ("DEFENSA", "120", 1),
+    ("DEFENSA", "121", 1),
     # Cuarta pasada: la tabla de cifras del guion y la lamina 13 seguian
     # diciendo 14.000 imagenes y 6 fuentes mientras el cuerpo del guion ya
     # decia "Sesenta mil". Eran celdas con la cifra sola, que un barrido del

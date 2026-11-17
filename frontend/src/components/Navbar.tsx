@@ -48,17 +48,17 @@ export default function Navbar() {
 
   const badge: Record<typeof status, { label: string; dot?: boolean; style: React.CSSProperties }> = {
     checking: {
-      label: 'VERIFICANDO',
+      label: 'CONECTANDO',
       dot:   true,
       style: { color: '#3d4f62', borderColor: '#1e2d42', background: 'transparent' },
     },
     online: {
-      label: 'EN LÍNEA',
+      label: 'SERVICIO ACTIVO',
       style: { color: '#1d7a45', borderColor: 'rgba(29,122,69,0.35)', background: 'rgba(29,122,69,0.07)' },
     },
     offline: {
-      label: 'FUERA DE LÍNEA',
-      style: { color: '#c42b2b', borderColor: 'rgba(196,43,43,0.35)', background: 'rgba(196,43,43,0.07)' },
+      label: 'EN PAUSA',
+      style: { color: '#d4ad2a', borderColor: 'rgba(154,124,18,0.45)', background: 'rgba(154,124,18,0.08)' },
     },
   };
 
@@ -86,7 +86,7 @@ export default function Navbar() {
             Analizar
           </a>
           <a href="#historial"
-             className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
+             className="hidden sm:inline px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             Historial
           </a>
           {/* Los planes se abren en una ventana flotante sobre la pagina
@@ -109,10 +109,10 @@ export default function Navbar() {
             Planes
           </button>
           <a href={`${BASE_URL}/docs`} target="_blank" rel="noopener noreferrer"
-             className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
+             className="hidden sm:inline px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             API
           </a>
-          <div className="w-px h-4 bg-border-subtle mx-1" />
+          <div className="hidden sm:block w-px h-4 bg-border-subtle mx-1" />
 
           <span
             className="px-2 py-1 border text-2xs font-mono font-semibold cursor-default select-none"

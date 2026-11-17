@@ -168,7 +168,7 @@ documentadas en `reports/MEJORA_ENSEMBLE_v4.md`, secciones 4 y 11.
 | Latencia del ensemble, sin análisis semántico | 5,3 s mediana · 11,7 s p95 | 49 análisis, GPU dedicada |
 | Latencia total, lo que espera el usuario | 32,4 s mediana · 61,6 s p95 | 49 análisis, GPU dedicada |
 | VRAM con todo residente (ensemble + LLaVA) | 7,1 GB / 12,9 GB | arranque del worker |
-| Batería de pruebas automatizadas | 120, todas en verde | `pytest` en `backend/` |
+| Batería de pruebas automatizadas | 121, todas en verde | `pytest` en `backend/` |
 
 > **Fotografía moderna «en la calle».** Sobre material de Reddit (OpenFake),
 > las falsas alarmas son del 14,2 % con etiquetas ruidosas: el sistema es mucho

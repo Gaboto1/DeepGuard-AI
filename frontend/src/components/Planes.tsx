@@ -12,6 +12,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 // La licencia vive en el navegador. Es un portador: quien la tenga, la usa.
 // Por eso caduca a los 30 dias y por eso no se guarda nada mas junto a ella.
 import { CLAVE_LICENCIA, cabecerasIdentidad, avisarConsumo } from '@/lib/identidad';
+import { Metricas } from '@/components/Portada';
 
 interface Plan {
   id: string;
@@ -53,17 +54,17 @@ const CATALOGO_LOCAL: Catalogo = {
   nota: '',
   planes: [
     { id: 'gratis', nombre: 'Gratuito',
-      descripcion: 'Para comprobar una imagen suelta. Sin registro y sin tarjeta: el analisis completo con los seis detectores y el meta-ensemble.',
+      descripcion: 'Para comprobar una imagen suelta. Sin registro y sin tarjeta: el análisis completo con los seis detectores y el meta-ensemble.',
       analisis_por_dia: 5, analisis_por_mes: null, prioridad: 1,
       informe_pdf_sellado: false, acceso_api: false, analisis_por_lote: false,
       historial_dias: 1, video: false, precio_clp: 0, precio_anual_clp: 0 },
     { id: 'pro', nombre: 'Profesional',
-      descripcion: 'Para quien verifica a diario. Cola prioritaria, informe PDF con el sello de cadena de custodia, historial de 90 dias y analisis de video.',
+      descripcion: 'Para quien verifica a diario. Cola prioritaria, informe PDF con el sello de cadena de custodia, historial de 90 días y análisis de video.',
       analisis_por_dia: null, analisis_por_mes: 300, prioridad: 5,
       informe_pdf_sellado: true, acceso_api: false, analisis_por_lote: true,
       historial_dias: 90, video: true, precio_clp: 9990, precio_anual_clp: 99900 },
     { id: 'pericial', nombre: 'Pericial',
-      descripcion: 'Para redacciones y peritajes. Todo lo del plan Profesional mas acceso por API, prioridad maxima y un ano de historial.',
+      descripcion: 'Para redacciones y peritajes. Todo lo del plan Profesional más acceso por API, prioridad máxima y un año de historial.',
       analisis_por_dia: null, analisis_por_mes: 1500, prioridad: 9,
       informe_pdf_sellado: true, acceso_api: true, analisis_por_lote: true,
       historial_dias: 365, video: true, precio_clp: 29990, precio_anual_clp: 299900 },
@@ -96,6 +97,13 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
   const [anual, setAnual] = useState(false);
   // True cuando el catalogo viene de la API y no de la copia local.
   const [enLinea, setEnLinea] = useState(false);
+  // Si la API no contesta en 12 s (Render la duerme en el plan gratuito), se
+  // dice con claridad en vez de dejar "Conectando…" indefinidamente.
+  const [sinApi, setSinApi] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setSinApi(true), 12000);
+    return () => clearTimeout(t);
+  }, []);
   const [contratando, setContratando] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [licencia, setLicencia] = useState<string | null>(null);
@@ -343,7 +351,7 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
                       {contratando === p.id
                         ? 'Procesando…'
                         : !enLinea
-                        ? 'Conectando…'
+                        ? (sinApi ? 'Contratación no disponible ahora' : 'Conectando…')
                         : !cat?.se_puede_contratar
                         ? 'Aún no disponible'
                         : soloSimulada
@@ -360,20 +368,7 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
         {/* Prueba en vez de promesas. No hay testimonios ni logos de clientes
             porque no los hay: inventarlos seria prueba social falsa. Lo que si
             hay son mediciones, y cada una dice de donde sale. */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px mt-8 border" style={{ borderColor: '#1a2030', background: '#1a2030' }}>
-          {[
-            ['0,9 %', 'falsas alarmas', 'sobre 1.000 fotos que ningún modelo vio'],
-            ['84,9 %', 'de imágenes IA señaladas', 'de generadores nunca vistos'],
-            ['0,995', 'AUC fuera de muestra', 'FLUX, DALL·E 3, ImageNet, LFW'],
-            ['+100', 'pruebas automáticas', 'en verde en cada cambio'],
-          ].map(([cifra, que, donde]) => (
-            <div key={que} className="px-4 py-3" style={{ background: '#05080f' }}>
-              <p className="text-lg font-bold" style={{ color: 'var(--fg-primary)' }}>{cifra}</p>
-              <p className="text-2xs" style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif' }}>{que}</p>
-              <p className="text-2xs mt-0.5" style={{ color: '#3d4f62', fontFamily: 'system-ui,sans-serif' }}>{donde}</p>
-            </div>
-          ))}
-        </div>
+        <Metricas className="mt-8" />
 
         {/* Que es exactamente el informe sellado: es el producto, conviene explicarlo */}
         <div className="border mt-8 px-5 py-4" style={{ borderColor: '#1a2030', background: '#05080f' }}>

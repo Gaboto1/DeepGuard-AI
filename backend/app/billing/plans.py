@@ -88,7 +88,7 @@ GRATIS = Plan(
     nombre="Gratuito",
     descripcion=(
         "Para comprobar una imagen suelta. Sin registro y sin tarjeta: "
-        "el analisis completo con los seis detectores y el meta-ensemble."
+        "el análisis completo con los seis detectores y el meta-ensemble."
     ),
     analisis_por_dia=5,
     analisis_por_mes=None,
@@ -106,7 +106,7 @@ PRO = Plan(
     nombre="Profesional",
     descripcion=(
         "Para quien verifica a diario. Cola prioritaria, informe PDF con el "
-        "sello de cadena de custodia, historial de 90 dias y analisis de video."
+        "sello de cadena de custodia, historial de 90 días y análisis de video."
     ),
     analisis_por_dia=None,
     analisis_por_mes=300,
@@ -124,8 +124,8 @@ PERICIAL = Plan(
     id="pericial",
     nombre="Pericial",
     descripcion=(
-        "Para redacciones y peritajes. Todo lo del plan Profesional mas acceso "
-        "por API, prioridad maxima y un ano de historial."
+        "Para redacciones y peritajes. Todo lo del plan Profesional más acceso "
+        "por API, prioridad máxima y un año de historial."
     ),
     analisis_por_dia=None,
     analisis_por_mes=1500,

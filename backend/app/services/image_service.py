@@ -30,7 +30,9 @@ _executor = ThreadPoolExecutor(max_workers=2)
 _MODEL_DEFS = [
     ("a",    "Face-Deepfake ViT"),
     ("b",    "SDXL Detector"),
-    ("c",    "EfficientNet (FF++)"),
+    # Antes "EfficientNet (FF++)": el detector C se sustituyo por un probe
+    # sobre CLIP ViT-L/14 y el nombre visible se quedo con el del modelo viejo.
+    ("c",    "CLIP ViT-L/14 (probe)"),
     ("d",    "AI Art Detector"),
     ("e",    "SigLIP Deepfake"),
     ("f",    "AI-Human Detector"),

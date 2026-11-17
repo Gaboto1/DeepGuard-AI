@@ -120,8 +120,8 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
         >
           <Loader2 size={14} className="animate-spin flex-shrink-0" style={{ color: '#1E63D4' }} />
           <div>
-            <p className="font-semibold" style={{ color: '#7a8899' }}>Verificando disponibilidad del sistema...</p>
-            <p className="text-2xs mt-0.5">El análisis estará disponible cuando el badge muestre EN LÍNEA</p>
+            <p className="font-semibold" style={{ color: 'var(--fg-secondary)' }}>Conectando con el servicio de análisis…</p>
+            <p className="text-2xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>Puede tardar unos segundos la primera vez.</p>
           </div>
         </motion.div>
       );
@@ -131,18 +131,16 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
     return (
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        className="mb-3 flex items-start gap-3 px-4 py-3 rounded border text-xs font-mono"
-        style={{ borderColor: 'rgba(196,43,43,0.4)', background: 'rgba(196,43,43,0.06)', color: '#c42b2b' }}
+        className="mb-3 flex items-start gap-3 px-4 py-3 border text-xs"
+        style={{ borderColor: 'rgba(154,124,18,0.4)', background: 'rgba(154,124,18,0.06)', fontFamily: 'system-ui, sans-serif' }}
+        title={tooltip}
       >
-        <WifiOff size={16} className="flex-shrink-0 mt-0.5" />
+        <WifiOff size={16} className="flex-shrink-0 mt-0.5" style={{ color: '#b8941a' }} />
         <div>
-          <p className="font-semibold">Worker GPU no disponible — análisis bloqueado</p>
-          <p className="text-2xs mt-1 leading-relaxed" style={{ color: '#9a3030' }}>
-            {tooltip}
-          </p>
-          <p className="text-2xs mt-1.5" style={{ color: '#7a3030' }}>
-            Para activar el sistema: ejecuta <span className="px-1 py-0.5 rounded" style={{ background: 'rgba(196,43,43,0.15)' }}>START CELERY WORKER.bat</span> y
-            espera ~90 segundos a que el badge cambie a <span className="font-bold">EN LÍNEA</span>.
+          <p className="font-semibold" style={{ color: '#d4ad2a' }}>El servicio de análisis está en pausa</p>
+          <p className="mt-1 leading-relaxed" style={{ color: 'var(--fg-secondary)' }}>
+            Se reanudará en breve. Puedes dejar esta página abierta: se activará sola
+            en cuanto esté disponible. Mientras tanto puedes revisar cómo funciona y los planes.
           </p>
         </div>
       </motion.div>
@@ -169,14 +167,14 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
               <p className="text-sm font-medium mb-1"
                 style={{ color: workerBlocked ? '#253348' : 'var(--fg-primary)' }}>
                 {workerBlocked
-                  ? 'Análisis no disponible — worker offline'
-                  : isDragActive ? 'Suelte el archivo aquí' : 'Arrastre un archivo aquí o haga clic para seleccionar'}
+                  ? 'El análisis se activará en cuanto el servicio esté disponible'
+                  : isDragActive ? 'Suelta el archivo aquí' : 'Arrastra una imagen o un video, o haz clic para elegirlo'}
               </p>
               <p className="text-xs" style={{ color: 'var(--fg-secondary)' }}>
                 Imágenes: JPG, PNG, WEBP — Videos: MP4, MOV, MKV, WEBM
               </p>
               <p className="text-2xs mt-1 mono" style={{ color: 'var(--fg-muted)' }}>
-                Máximo {MAX_MB}MB
+                Hasta {MAX_MB} MB
               </p>
             </div>
           </motion.div>
