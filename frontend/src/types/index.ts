@@ -40,6 +40,23 @@ export interface OsintResult {
   disclaimer: string;
 }
 
+// Deteccion de firmas de IA y de edicion en los metadatos del archivo
+// (backend/app/services/forensic_metadata_service.py). El worker la enviaba en
+// cada resultado y la interfaz no la mostraba en ningun sitio.
+export interface ForensicMetadata {
+  ai_generator_detected: boolean;
+  ai_generator_name?: string | null;
+  editing_software_detected: boolean;
+  editing_software_name?: string | null;
+  missing_exif: boolean;
+  risk_signal?: string | null;
+  risk_reasons?: string[];
+  xmp_ai_hints?: string[];
+  inconsistencies?: string[];
+  raw_software_tag?: string | null;
+  has_gps?: boolean;
+}
+
 export interface MetadataAnalysis {
   has_exif: boolean;
   camera_make?: string | null;
@@ -165,6 +182,7 @@ export interface AnalysisResult {
   // Supporting evidence
   heatmap?: string | null;
   metadata_analysis?: MetadataAnalysis | null;
+  forensic_metadata?: ForensicMetadata | null;
   osint?: OsintResult | null;
 
   // Analysis metadata

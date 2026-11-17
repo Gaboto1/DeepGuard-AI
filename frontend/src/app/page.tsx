@@ -11,7 +11,7 @@ import type { AnalysisResult } from '@/types';
 import { ComoFunciona, ComoLeerElResultado, Confianza, LlamadaPlanes } from '@/components/Portada';
 import { Clock, Gift, ShieldCheck } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// (API_URL ya no se muestra al usuario; ver el mensaje de error.)
 
 type Stage = 'idle' | 'analyzing' | 'done' | 'error';
 
@@ -137,11 +137,12 @@ export default function Page() {
           {stage === 'error' && (
             <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="panel p-6 text-center">
-                <p className="text-xs font-semibold text-risk-critical mb-2">Error en el análisis</p>
-                <p className="text-xs text-fg-secondary mb-4">{result?.error ?? 'Error desconocido'}</p>
+                <p className="text-xs font-semibold text-risk-critical mb-2">No pudimos completar el análisis</p>
+                <p className="text-xs text-fg-secondary mb-4">{result?.error ?? 'Ocurrió un error inesperado.'}</p>
+                {/* Antes: "Verifique que el backend esté activo en <URL>", una
+                    instrucción para el equipo, no para quien usa la página. */}
                 <p className="text-2xs text-fg-muted mb-5">
-                  Verifique que el backend esté activo en {' '}
-                  <span className="mono text-fg-secondary">{API_URL}</span>
+                  Vuelve a intentarlo en unos minutos. Si el problema continúa, prueba con otro archivo.
                 </p>
                 <button onClick={handleReset}
                   className="px-4 py-2 rounded border border-border-strong text-xs text-fg-secondary hover:text-fg-primary transition-colors">

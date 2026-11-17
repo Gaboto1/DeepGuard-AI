@@ -1,8 +1,8 @@
 'use client';
 
-import type { MetadataAnalysis } from '@/types';
+import type { MetadataAnalysis, ForensicMetadata } from '@/types';
 
-interface Props { metadata: MetadataAnalysis }
+interface Props { metadata?: MetadataAnalysis | null; forense?: ForensicMetadata | null }
 
 function Row({ k, v }: { k: string; v?: string | number | null }) {
   if (v === null || v === undefined || v === '') return null;
@@ -14,9 +14,53 @@ function Row({ k, v }: { k: string; v?: string | number | null }) {
   );
 }
 
-export default function MetadataPanel({ metadata }: Props) {
+function FirmasForenses({ f }: { f: ForensicMetadata }) {
+  const ia = f.ai_generator_detected;
+  const edicion = f.editing_software_detected;
+  return (
+    <div className="space-y-2">
+      {/* Lo mas importante de la pestana: si el propio archivo declara haber
+          sido creado por una IA. Es la evidencia mas directa que existe. */}
+      <div className="px-3 py-2.5 border text-xs"
+           style={ia
+             ? { borderColor: 'rgba(196,43,43,0.45)', background: 'rgba(196,43,43,0.07)' }
+             : { borderColor: '#1a2030', background: '#05080f' }}>
+        <p className="font-semibold" style={{ color: ia ? '#e05555' : 'var(--fg-primary)' }}>
+          {ia
+            ? `Los metadatos declaran un generador de IA${f.ai_generator_name ? `: ${f.ai_generator_name}` : ''}`
+            : 'Los metadatos no declaran ningún generador de IA'}
+        </p>
+        <p className="mt-1 leading-relaxed" style={{ color: 'var(--fg-secondary)' }}>
+          {ia
+            ? 'El propio archivo dice haber sido creado por una herramienta de IA. Es una evidencia directa, aunque se puede borrar al reenviar la imagen.'
+            : 'Esto no prueba que sea auténtica: la mayoría de las plataformas eliminan esta información al subir o reenviar una imagen.'}
+        </p>
+      </div>
+      {edicion && (
+        <div className="px-3 py-2 border text-xs" style={{ borderColor: 'rgba(154,124,18,0.4)', background: 'rgba(154,124,18,0.06)' }}>
+          <span className="font-semibold" style={{ color: '#d4ad2a' }}>Editada con {f.editing_software_name || 'software de edición'}</span>
+          <span style={{ color: 'var(--fg-secondary)' }}> — no implica manipulación, pero indica que el archivo no es el original de la cámara.</span>
+        </div>
+      )}
+      {!!f.risk_reasons?.length && (
+        <ul className="text-xs space-y-1 pl-1" style={{ color: 'var(--fg-secondary)' }}>
+          {f.risk_reasons.map(r => <li key={r}>· {r}</li>)}
+        </ul>
+      )}
+      {!!f.inconsistencies?.length && (
+        <ul className="text-xs space-y-1 pl-1" style={{ color: '#d4ad2a' }}>
+          {f.inconsistencies.map(r => <li key={r}>· {r}</li>)}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default function MetadataPanel({ metadata, forense }: Props) {
   return (
     <div className="space-y-4">
+      {forense && <FirmasForenses f={forense} />}
+      {metadata && (<>
       {/* EXIF Status */}
       <div className={`flex items-center gap-2 px-3 py-2 rounded border text-xs ${
         metadata.has_exif
@@ -100,6 +144,7 @@ export default function MetadataPanel({ metadata }: Props) {
       <p className="text-2xs text-fg-muted italic">
         Los metadatos son informativos. No modifican la probabilidad de manipulación calculada.
       </p>
+      </>)}
     </div>
   );
 }

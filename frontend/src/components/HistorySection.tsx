@@ -7,13 +7,28 @@ import type { AnalysisResult, EvidenceLevel } from '@/types';
 
 const STORAGE_KEY = 'deepguard_history';
 
+// Solo los campos que el historial muestra. Antes se guardaba el resultado
+// completo, mapa de atencion incluido (~98 KB en base64 cada uno): hacia el
+// analisis 40-50 se llenaban los ~5 MB del navegador, setItem lanzaba y el
+// catch vacio se lo tragaba, de modo que el historial dejaba de guardar sin
+// avisar. Una entrada ligera ocupa unos 300 bytes.
+function aligerar(r: AnalysisResult): AnalysisResult {
+  const { task_id, filename, file_type, fake_probability, evidence_level, created_at, status } = r;
+  return { task_id, filename, file_type, fake_probability, evidence_level, created_at, status } as AnalysisResult;
+}
+
 export function saveToHistory(result: AnalysisResult): void {
   try {
     const stored  = localStorage.getItem(STORAGE_KEY);
     const history: AnalysisResult[] = stored ? JSON.parse(stored) : [];
-    const updated = [result, ...history.filter(h => h.task_id !== result.task_id)].slice(0, 50);
+    const updated = [result, ...history.filter(h => h.task_id !== result.task_id)]
+      .slice(0, 50)
+      .map(aligerar);   // tambien aligera las entradas pesadas que ya hubiera
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  } catch {}
+  } catch {
+    // Modo privado o almacenamiento bloqueado: el historial es una comodidad,
+    // no debe interrumpir el analisis.
+  }
 }
 
 function evidenceColor(level?: EvidenceLevel): string {

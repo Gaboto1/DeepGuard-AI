@@ -566,7 +566,7 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
         >
           {(TABS as readonly Tab[]).filter(t => {
             if (t === 'Mapa de Atención'  && !result.heatmap)          return false;
-            if (t === 'Metadatos'         && !result.metadata_analysis) return false;
+            if (t === 'Metadatos'         && !result.metadata_analysis && !result.forensic_metadata) return false;
             if (t === 'Verificación'      && !result.osint)             return false;
             if (t === 'Ensemble'          && !result.ensemble)          return false;
             if (t === 'Procedencia C2PA'  && !result.c2pa_provenance)   return false;
@@ -691,8 +691,8 @@ export default function ResultCard({ result, onReset, previewUrl, previewType }:
               )}
 
               {/* ── Metadatos ───────────────────────────────────────────────── */}
-              {activeTab === 'Metadatos' && result.metadata_analysis && (
-                <MetadataPanel metadata={result.metadata_analysis} />
+              {activeTab === 'Metadatos' && (result.metadata_analysis || result.forensic_metadata) && (
+                <MetadataPanel metadata={result.metadata_analysis} forense={result.forensic_metadata} />
               )}
 
               {/* ── Verificación ────────────────────────────────────────────── */}

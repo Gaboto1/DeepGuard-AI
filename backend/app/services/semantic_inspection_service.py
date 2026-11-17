@@ -279,6 +279,16 @@ def _parse_llava_response(raw: str) -> tuple[int, str]:
     Robusto a texto extra antes/después del JSON.
     Fallback a análisis de texto libre si el JSON es inválido.
     """
+    # LLaVA escribe a menudo las claves con el guion bajo escapado al estilo
+    # Markdown: {"risk\_score": 80, "semantic\_observations": ...}. "\_" no es
+    # un escape JSON valido, asi que json.loads fallaba, las dos busquedas por
+    # "risk_score" no lo encontraban y el score caia al valor por defecto de 50.
+    # El usuario veia ademas el JSON crudo, con barras, como "observaciones".
+    # Detectado el 17 de noviembre de 2026 en una respuesta real: LLaVA dijo 80
+    # y el sistema uso 50. En el registro del worker aparecia 39 veces.
+    if raw:
+        raw = raw.replace("\\_", "_")
+
     # Intento 1: JSON puro en la respuesta
     try:
         data = json.loads(raw)

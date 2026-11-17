@@ -316,6 +316,20 @@ def analyze_image_task(
                 "raw_software_tag":          forensic_meta["raw_software_tag"],
                 "has_gps":                   forensic_meta["has_gps"],
             },
+            # Metadatos de camara y busqueda inversa. El analisis los calcula
+            # en cada imagen, pero este diccionario no los copiaba, y las
+            # pestanas "Metadatos" y "Verificacion" de la pagina -que los
+            # esperan con estos nombres- no aparecian nunca. Detectado el 17
+            # de noviembre de 2026 comparando las claves de una respuesta real
+            # con los campos que lee la interfaz.
+            "metadata_analysis": (
+                raw["metadata"].model_dump()
+                if hasattr(raw.get("metadata"), "model_dump") else raw.get("metadata")
+            ),
+            "osint": (
+                raw["osint"].model_dump()
+                if hasattr(raw.get("osint"), "model_dump") else raw.get("osint")
+            ),
             "semantic_analysis": semantic_obj,
             "chain_of_custody": seal,
             "c2pa_provenance": c2pa_provenance,
