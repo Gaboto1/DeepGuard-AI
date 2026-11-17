@@ -1,13 +1,15 @@
 'use client';
 
 import { ShieldCheck } from 'lucide-react';
-import Link from 'next/link';
+import { useState } from 'react';
+import { PlanesModal } from '@/components/Planes';
 import { useWorkerStatus } from '@/components/WorkerStatusProvider';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function Navbar() {
   const { status, tooltip } = useWorkerStatus();
+  const [planesAbierto, setPlanesAbierto] = useState(false);
 
   const badge: Record<typeof status, { label: string; dot?: boolean; style: React.CSSProperties }> = {
     checking: {
@@ -52,12 +54,12 @@ export default function Navbar() {
              className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             Historial
           </a>
-          {/* Link y no <a>: con basePath de GitHub Pages un href absoluto
-              plano pierde el prefijo /DeepGuard-AI y da 404. */}
-          <Link href="/precios"
+          {/* Los planes se abren en una ventana flotante sobre la pagina
+              actual, no en otra pagina: no se pierde el analisis en curso. */}
+          <button onClick={() => setPlanesAbierto(true)}
              className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             Planes
-          </Link>
+          </button>
           <a href={`${BASE_URL}/docs`} target="_blank" rel="noopener noreferrer"
              className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             API
@@ -75,6 +77,7 @@ export default function Navbar() {
           </span>
         </nav>
       </div>
+      <PlanesModal abierto={planesAbierto} alCerrar={() => setPlanesAbierto(false)} />
     </header>
   );
 }
