@@ -1,0 +1,93 @@
+{
+  "generado": "2026-11-17T13:37:02",
+  "traza": "reports/traza_e2_conf.json",
+  "n": 632,
+  "tramo": [
+    316,
+    632
+  ],
+  "criterio": {
+    "origen": "scripts/decidir_adopcion.py",
+    "tol_fpr_subida_pt": 0.3,
+    "tol_auc_bajada": 0.005,
+    "mejora_min_ia_pt": 1.0
+  },
+  "variantes": {
+    "V0 vigente": {
+      "falsas_alarmas_pct": 18.67,
+      "ia_senalada_pct": 75.32,
+      "auc": 0.8397,
+      "por_fuente": {
+        "reddit_ia": {
+          "label": 1,
+          "n": 316,
+          "senaladas": 238
+        },
+        "reddit_real": {
+          "label": 0,
+          "n": 316,
+          "senaladas": 59
+        }
+      },
+      "extras": {},
+      "veredicto": "(linea base)"
+    },
+    "V1 vigente + mezcla o": {
+      "falsas_alarmas_pct": 22.78,
+      "ia_senalada_pct": 87.34,
+      "auc": 0.8707,
+      "por_fuente": {
+        "reddit_ia": {
+          "label": 1,
+          "n": 316,
+          "senaladas": 276
+        },
+        "reddit_real": {
+          "label": 0,
+          "n": 316,
+          "senaladas": 72
+        }
+      },
+      "extras": {},
+      "veredicto": "VETO falsas +4.11"
+    },
+    "V2 cabezales nuevos": {
+      "falsas_alarmas_pct": 12.03,
+      "ia_senalada_pct": 72.78,
+      "auc": 0.8751,
+      "por_fuente": {
+        "reddit_ia": {
+          "label": 1,
+          "n": 316,
+          "senaladas": 230
+        },
+        "reddit_real": {
+          "label": 0,
+          "n": 316,
+          "senaladas": 38
+        }
+      },
+      "extras": {},
+      "veredicto": "sin mejora suficiente"
+    },
+    "V3 cabezales nuevos + mezcla o": {
+      "falsas_alarmas_pct": 14.24,
+      "ia_senalada_pct": 84.81,
+      "auc": 0.9109,
+      "por_fuente": {
+        "reddit_ia": {
+          "label": 1,
+          "n": 316,
+          "senaladas": 268
+        },
+        "reddit_real": {
+          "label": 0,
+          "n": 316,
+          "senaladas": 45
+        }
+      },
+      "extras": {},
+      "veredicto": "PASA"
+    }
+  }
+}

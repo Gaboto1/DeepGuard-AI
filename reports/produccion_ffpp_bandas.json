@@ -1,18 +1,18 @@
 {
   "origen": "produccion_ffpp.json",
-  "generado": "2026-11-09T09:33:57",
+  "generado": "2026-11-17T13:45:10",
   "por_clase": {
     "real": {
       "n": 400,
-      "senalada_pct": 0.5,
+      "senalada_pct": 0.75,
       "descartada_pct": 98.5,
-      "inconclusive_pct": 1.0
+      "inconclusive_pct": 0.75
     },
     "deepfake": {
       "n": 400,
-      "senalada_pct": 94.0,
-      "descartada_pct": 5.25,
-      "inconclusive_pct": 0.75
+      "senalada_pct": 95.0,
+      "descartada_pct": 4.75,
+      "inconclusive_pct": 0.25
     }
   },
   "nota": "Banda >= Moderate Evidence cuenta como senalada; <= Low Evidence como descartada; Inconclusive no cuenta en ninguna direccion."

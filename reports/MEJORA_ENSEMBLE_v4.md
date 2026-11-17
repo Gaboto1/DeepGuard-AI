@@ -496,6 +496,23 @@ detecciones. Se midieron dos arreglos y **los dos se descartaron**. Esta
 sección registra el hallazgo, el intento y la razón de no adoptarlo, porque el
 problema sigue ahí y la decisión de convivir con él debe ser explícita.
 
+> **Corrección del 17 de noviembre de 2026 — esta sección comparó contra una
+> línea base caducada.** El 0,70 % de falsas alarmas usado como referencia se
+> midió el 9 de noviembre a las 10:17, *antes* del commit `a705209` (13:03) que
+> condicionó el peso facial al tipo de contenido. El sistema que estuvo en
+> producción desde entonces nunca se volvió a medir; su cifra real, medida el
+> 17 de noviembre por la vía de producción sobre la misma muestra, es
+> **1,20 % de falsas alarmas y 78,0 % de IA señalada**. Contra esa base, el
+> intento 1 (1,40 % / 87,5 %) habría sido +0,20 pt de falsas alarmas —dentro
+> de la tolerancia de 0,3— y +9,5 pt de detección: **habría pasado el
+> criterio**. Los intentos 2 y 3 también quedaban dentro del veto. La
+> conclusión de 12.6 de que «toda reconfiguración sube las falsas alarmas»
+> descansaba en esa comparación y no se sostiene tal como está escrita. Las
+> mediciones de los intentos siguen siendo válidas; lo que estaba mal era la
+> referencia. Las variantes de la Regla 1 no se reabren aquí: lo adoptado el
+> 17 de noviembre es otra cosa (sección 13), y R1 queda como candidato a
+> medir con el procedimiento de esa sección.
+
 ### 12.1 Qué hace la regla hoy
 
 R1 se escribió para **rescatar**: el penalizador OOD arrastraba hacia 0,50 el
@@ -663,3 +680,126 @@ medir, nunca después. Queda anotado como decisión pendiente, no como cifra.
 | línea base del sistema vigente | `reports/linea_base_pre_r1/` |
 | intento 3: medición y veredicto | `reports/descartado_sinF_20261116/` |
 | intento 3: selección LOSO | `reports/etapa9_sinF.log` |
+
+
+## 13. El sistema adoptado el 17 de noviembre: fuentes externas y mezcla «o»
+
+### 13.1 El caso que lo abrió
+
+Un retrato fotorrealista generado por IA, con dos rostros, puntuado en
+**18 %** (`reports/caso_retrato_sintetico.json`, sin datos de la imagen). El
+desglose mostró dos defectos encadenados:
+
+1. **La rama de rostro imponía un techo.** Con un rostro detectado, el score
+   final era `0,80 × rostro + 0,20 × imagen completa`. El cabezal facial
+   responde «¿es un intercambio de rostro?», y ante una generación completa
+   dice que no: 0,00. Con ese peso, la imagen no podía pasar de 0,20 por
+   segura que estuviera la rama completa.
+2. **La rama completa también dijo «real» (0,04).** El cabezal principal daba
+   el **64 % del peso al probe CLIP**, que sobre esta imagen dio 0,003, y el
+   9,6 % al detector de arte IA, que dio **0,907**.
+
+El 18 % final no lo puso el ensemble (0,008): lo puso el análisis semántico.
+
+### 13.2 La causa de fondo: una fuga de stacking
+
+El meta-ensemble se entrena sobre las salidas de los seis detectores. El probe
+CLIP se entrena en este proyecto **con las mismas fuentes** que componen el
+conjunto del meta-ensemble, donde es casi perfecto. En ese conjunto no hay ni
+una fila en la que el probe falle y otro detector acierte, así que el segundo
+nivel sólo puede aprender a fiarse de él. Por eso reentrenar con los mismos
+datos no cambió nada en la sección 12, y por eso el control de 13.5 lo
+confirma.
+
+### 13.3 El punto ciego que el retenido no veía
+
+Se descargaron 4 shards de OpenFake (ComplexDataLab, cc-by-nc-4.0; 19 GB) y se
+puntuaron 13.877 imágenes: fotografía auténtica de LAION y Pexels y 45
+generadores modernos, **excluidos FLUX, sus derivados y DALL·E 3** para no
+tocar el retenido (`scripts/score_fuentes_externas.py`).
+
+Sobre esa fotografía auténtica, el probe CLIP supera 0,70 en el 52,8 %
+(LAION) y el 68,2 % (Pexels), con un AUC de **0,79** frente a 0,987 en el
+retenido. El meta-ensemble vigente señalaba el **38,7 %** de esas fotos
+reales. LFW e ImageNet son fotografía antigua, pequeña y comprimida, del mismo
+estilo que el entrenamiento: el retenido no podía ver esto.
+
+### 13.4 Método
+
+El criterio se amplió **antes de entrenar ningún candidato** y se commiteó
+(`reports/CRITERIO_AMPLIADO_20261116.md`, commit `148ca9f`): un segundo
+conjunto de confirmación —el subconjunto `reddit` de OpenFake, material «en la
+calle»—, cada conjunto partido en desarrollo y confirmación, cuatro variantes
+y un control declarados de antemano.
+
+`scripts/traza_retenido.py` graba por imagen las entradas exactas de la
+fusión, y `scripts/repetir_fusion.py` reevalúa variantes llamando a las mismas
+funciones de producción. La variante V0 reprodujo el score de producción con
+diferencia máxima **0,00** sobre las 4.865 imágenes trazadas.
+
+### 13.5 Resultados
+
+**Paso A — desarrollo** (E1: retenido, tramo `[500:900]`; E2: Reddit, mitad 1):
+
+| | E1 falsas | E1 IA | E2 falsas | E2 IA | elegible | error eq. E2 |
+|---|---|---|---|---|---|---|
+| V0 vigente | 1,00 % | 76,50 % | 21,52 % | 70,89 % | (base) | 25,3 |
+| V1 mezcla «o» | 1,00 % | 83,88 % | 25,95 % | 82,59 % | no: sube falsas en E2 | — |
+| V2 cabezales nuevos | 0,62 % | 75,62 % | 14,56 % | 69,30 % | sí | 22,6 |
+| **V3 nuevos + «o»** | **0,62 %** | **83,12 %** | **18,35 %** | **80,38 %** | sí | **19,0** |
+| control (reentreno sin externas) | 1,00 % | 76,50 % | — | — | — | — |
+
+El control reproduce V0 exactamente: **la mejora la ponen los datos, no el
+reentrenamiento.** La mezcla «o» sola (V1) sube las falsas alarmas en material
+real; con los cabezales nuevos deja de hacerlo, porque la rama completa ya no
+se equivoca con tanta confianza.
+
+**Paso B — confirmación, mirada una sola vez:**
+
+| | falsas alarmas | IA señalada | AUC |
+|---|---|---|---|
+| E1 retenido oficial (2.000), V0 → V3 | 1,20 → **0,90 %** | 78,0 → **84,9 %** | 0,9887 → **0,9947** |
+| E2 Reddit (632), V0 → V3 | 18,67 → **14,24 %** | 75,3 → **84,8 %** | 0,840 → **0,911** |
+
+Ningún veto. Mejora en E1 por la regla de siempre. **ADOPTADO.**
+
+Medido después por la vía de producción completa, con el sistema ya
+instalado: **0,90 % / 84,90 % / AUC 0,9947**, idéntico a la predicción, y
+KPI-01 (deepfake facial, ff++, dentro de muestra) **94,0 → 95,0 %**.
+
+### 13.6 Qué cambió en producción
+
+- Los tres cabezales de `models/meta_ensemble/` (respaldo de los anteriores en
+  `reports/snapshot_pre_v3ext_*`). El cabezal principal es ahora LightGBM y
+  reparte el peso: arte IA 26,4 %, probe CLIP 21,1 %, ningún detector por
+  encima de un tercio.
+- `MEZCLA_RAMAS = "o"` en `backend/app/services/image_service.py`: en
+  fotografía, el score con rostro es `max(rostro, completa)`. En obra gráfica
+  se conserva la mezcla lineal con 0,30.
+
+### 13.7 Lo que sigue sin resolverse
+
+- **El retrato de 13.1 queda en 0,51, «Inconclusive».** Sube desde 0,18 y ya
+  no se declara auténtico, pero tampoco se señala.
+- **Sobre material «en la calle» las falsas alarmas siguen siendo altas:
+  14,2 %.** Con etiquetas ruidosas —la clase la da el subreddit—, pero el
+  orden de magnitud es real: el sistema es mucho más fiable con fotografía
+  del estilo de LFW e ImageNet que con fotografía moderna de alta resolución.
+- **El probe CLIP sigue entrenado sólo con las fuentes antiguas.** El arreglo
+  de fondo es reentrenarlo incluyendo fotografía moderna. Eso exige reservar
+  otra parte de OpenFake para el meta-ensemble, porque las filas que entrenan
+  el probe dejan de servir para enseñar al segundo nivel cuándo falla.
+- Las variantes de la Regla 1 (sección 12) merecen medirse de nuevo con este
+  procedimiento.
+
+### 13.8 Procedencia
+
+| cifra | archivo |
+|---|---|
+| criterio previo | `reports/CRITERIO_AMPLIADO_20261116.md` |
+| desarrollo E1 / E2 | `reports/repeticion_dev.json`, `reports/repeticion_e2_dev.json` |
+| confirmación E1 / E2 | `reports/repeticion_oficial.json`, `reports/repeticion_e2_conf.json` |
+| control | `reports/repeticion_dev_control.json` |
+| medición por la vía de producción | `reports/heldout_eval*.json`, `reports/produccion_ffpp*.json` |
+| conjunto externo puntuado | `reports/dataset_meta_externo_scores.csv` (no versionado) |
+| entrenamiento del candidato | `reports/entrena_externo.log` |

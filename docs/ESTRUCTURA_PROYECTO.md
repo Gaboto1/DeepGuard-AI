@@ -161,14 +161,19 @@ documentadas en `reports/MEJORA_ENSEMBLE_v4.md`, secciones 4 y 11.
 
 | Métrica | Valor | Procedencia |
 |---------|-------|-------------|
-| KPI-01 — señalamiento de deepfake facial | 94,0 % | **dentro** de muestra (ff++) |
-| KPI-02 — falsas alarmas sobre fotografía auténtica | 0,7 % | **fuera** de muestra |
-| KPI-03 — capacidad discriminativa (AUC) | 0,990 | **fuera** de muestra |
+| KPI-01 — señalamiento de deepfake facial | 95,0 % | **dentro** de muestra (ff++) |
+| KPI-02 — falsas alarmas sobre fotografía auténtica | 0,9 % | **fuera** de muestra |
+| KPI-03 — capacidad discriminativa (AUC) | 0,995 | **fuera** de muestra |
 | KPI-05 — exactitud de la compuerta de tipo de contenido | 0,973 | mixto, declarado |
 | Latencia del ensemble, sin análisis semántico | 5,3 s mediana · 11,7 s p95 | 49 análisis, GPU dedicada |
 | Latencia total, lo que espera el usuario | 32,4 s mediana · 61,6 s p95 | 49 análisis, GPU dedicada |
 | VRAM con todo residente (ensemble + LLaVA) | 7,1 GB / 12,9 GB | arranque del worker |
-| Batería de pruebas automatizadas | 81, todas en verde | `pytest` en `backend/` |
+| Batería de pruebas automatizadas | 116, todas en verde | `pytest` en `backend/` |
+
+> **Fotografía moderna «en la calle».** Sobre material de Reddit (OpenFake),
+> las falsas alarmas son del 14,2 % con etiquetas ruidosas: el sistema es mucho
+> más fiable con fotografía del estilo de LFW e ImageNet que con fotografía
+> moderna de alta resolución. Ver reports/MEJORA_ENSEMBLE_v4.md, sección 13.
 
 > **La latencia depende del equipo, no solo del sistema.** Las cifras de arriba
 > suponen la GPU dedicada. Con la memoria de vídeo ocupada por otras

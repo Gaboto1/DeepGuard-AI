@@ -1,0 +1,141 @@
+{
+  "generado": "2026-11-16T22:35:01",
+  "traza": "reports/traza_dev.json",
+  "n": 1601,
+  "tramo": [
+    500,
+    900
+  ],
+  "criterio": {
+    "origen": "scripts/decidir_adopcion.py",
+    "tol_fpr_subida_pt": 0.3,
+    "tol_auc_bajada": 0.005,
+    "mejora_min_ia_pt": 1.0
+  },
+  "variantes": {
+    "V0 vigente": {
+      "falsas_alarmas_pct": 1.0,
+      "ia_senalada_pct": 76.5,
+      "auc": 0.9851,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 357
+        },
+        "flux": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 255
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 8
+        },
+        "lfw": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 0
+        }
+      },
+      "extras": {
+        "4.png": 0.0074
+      },
+      "veredicto": "(linea base)"
+    },
+    "V1 vigente + mezcla o": {
+      "falsas_alarmas_pct": 1.0,
+      "ia_senalada_pct": 83.88,
+      "auc": 0.9873,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 385
+        },
+        "flux": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 286
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 8
+        },
+        "lfw": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 0
+        }
+      },
+      "extras": {
+        "4.png": 0.0358
+      },
+      "veredicto": "PASA"
+    },
+    "V2 cabezales nuevos": {
+      "falsas_alarmas_pct": 0.62,
+      "ia_senalada_pct": 75.62,
+      "auc": 0.9916,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 355
+        },
+        "flux": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 250
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 5
+        },
+        "lfw": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 0
+        }
+      },
+      "extras": {
+        "4.png": 0.1021
+      },
+      "veredicto": "sin mejora suficiente"
+    },
+    "V3 cabezales nuevos + mezcla o": {
+      "falsas_alarmas_pct": 0.62,
+      "ia_senalada_pct": 83.12,
+      "auc": 0.9934,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 383
+        },
+        "flux": {
+          "label": 1,
+          "n": 400,
+          "senaladas": 282
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 5
+        },
+        "lfw": {
+          "label": 0,
+          "n": 400,
+          "senaladas": 0
+        }
+      },
+      "extras": {
+        "4.png": 0.5095
+      },
+      "veredicto": "PASA"
+    }
+  }
+}

@@ -1,14 +1,14 @@
-INFORME   69,691 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
-GUION     23,039 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
-DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
+INFORME   69,787 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
+GUION     23,365 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
+DEFENSA   12,554 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
 
 === DEBE APARECER (cifras y textos nuevos) ===
-  ok  INFORME    3x (>= 3)  94,0 %
-  ok  INFORME    2x (>= 2)  0,7 %
-  ok  INFORME    2x (>= 2)  0,990
+  ok  INFORME    3x (>= 3)  95,0 %
+  ok  INFORME    2x (>= 2)  0,9 %
+  ok  INFORME    2x (>= 2)  0,995
   ok  INFORME    4x (>= 3)  60.000 imágenes
   ok  INFORME    3x (>= 3)  nueve fuentes
-  ok  INFORME    3x (>= 3)  81 pruebas
+  ok  INFORME    3x (>= 3)  116 pruebas
   ok  INFORME    1x (>= 1)  11,7 s (p95)
   ok  INFORME    1x (>= 1)  ≤ 15 s en el percentil 95
   ok  INFORME    1x (>= 1)  ≤ 90 s en el percentil 95
@@ -20,7 +20,7 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    1x (>= 1)  ELSA multigenerador
   ok  INFORME    1x (>= 1)  Nueve fuentes independientes
   ok  INFORME    1x (>= 1)  peso del track facial
-  ok  GUION      1x (>= 1)  Ochenta y una pruebas
+  ok  GUION      1x (>= 1)  Ciento dieciséis pruebas
   ok  GUION      1x (>= 1)  Sesenta mil imágenes
   ok  GUION      1x (>= 1)  nueve fuentes independientes
   ok  GUION      1x (>= 1)  0,992
@@ -28,7 +28,7 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  GUION      1x (>= 1)  5,7 % con pesos fijos y 12,5 % en septiembre de 2026
   ok  DEFENSA    1x (>= 1)  0,992
   ok  DEFENSA    1x (>= 1)  0,35 a 0,99
-  ok  DEFENSA    2x (>= 1)  81
+  ok  DEFENSA    1x (>= 1)  116
   ok  GUION      2x (>= 1)  60.000
   ok  DEFENSA    1x (>= 1)  60.000
   ok  DEFENSA    1x (>= 1)  9 fuentes
@@ -54,6 +54,15 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  DEFENSA    0x  78 pruebas                                   | recuento de la cuarta pasada en la lamin
   ok  INFORME    0x  < 3 s                                        | valor de latencia falso: el minimo medid
   ok  INFORME    0x  ≤ 5 s en el percentil 95                     | meta de latencia incumplida: el p95 medi
+  ok  INFORME    0x  81 pruebas                                   | recuento de la quinta pasada: la suite d
+  ok  GUION      0x  Ochenta y una                                | recuento de la quinta pasada, con letras
+  ok  DEFENSA    0x  81 pruebas                                   | recuento de la quinta pasada en la lamin
+  ok  GUION      0x  Subieron de 5,7 % a 0,7 %                    | frase que se contradecia: esas cifras ba
+  ok  DEFENSA    0x  De 5,7 % a 0,7 %                             | frase que se contradecia: esas cifras ba
+  ok  DEFENSA    0x  ¿Por qué suben los falsos positivos?         | pregunta con premisa falsa: los falsos p
+  ok  GUION      0x  concentró el 64 % del peso                   | se presentaba como virtud la concentraci
+  ok  GUION      0x  alcanza 0,990                                | AUC del sistema anterior
+  ok  DEFENSA    0x  0,990                                        | AUC del sistema anterior
   ok  INFORME    0x  entre 1 y 3 segundos                         | justificacion SMART basada en una medici
   ok  GUION      0x  14.000                                       | tamano anterior en la tabla de cifras de
   ok  DEFENSA    0x  14.000                                       | tamano anterior en la lamina de evidenci
@@ -65,6 +74,7 @@ DEFENSA   12,591 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    1x  seis fuentes     | parrafo de lecciones aprendidas: narra cuando se construyo
   ok  INFORME    2x  0,1 %            | punto de partida de la progresion
   ok  INFORME    1x  14.000           | cantidad de ELSA multigenerador en la tabla 40
+  ok  INFORME    1x  94,0 %           | fila historica del 9 nov en la tabla 5 de progresion
   ok  INFORME    1x  0.75             | AUC del promedio ponderado en la tabla de metodos
   ok  INFORME    2x  0.975            | AUC del detector de arte sobre obra grafica
   ok  GUION      2x  0,975            | AUC que justifico separar el detector de arte

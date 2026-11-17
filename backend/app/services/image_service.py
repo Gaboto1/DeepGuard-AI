@@ -147,9 +147,13 @@ PESO_TRACK_FACIAL_OBRA = 0.30
 # PESO_TRACK_FACIAL_OBRA: ese peso se valido aparte, y un maximo dejaria pasar
 # los falsos positivos del cabezal facial ante rostros dibujados.
 #
-# El valor por defecto solo cambia si el criterio de adopcion lo avala; el
-# registro esta en reports/MEJORA_ENSEMBLE_v4.md, seccion 13.
-MEZCLA_RAMAS = "lineal"
+# Adoptado "o" el 17 de noviembre de 2026 con el criterio ampliado fijado
+# antes de medir (reports/CRITERIO_AMPLIADO_20261116.md). Junto con los
+# cabezales reentrenados con fuentes externas: retenido oficial 1,20 -> 0,90 %
+# de falsas alarmas y 78,0 -> 84,9 % de IA senalada. Sola, sin los cabezales
+# nuevos, subia las falsas alarmas en material real: no deshacer uno sin el
+# otro. Registro en reports/MEJORA_ENSEMBLE_v4.md, seccion 13.
+MEZCLA_RAMAS = "o"
 
 
 def mezclar_ramas(rostro: float, completa: float, es_obra: bool,

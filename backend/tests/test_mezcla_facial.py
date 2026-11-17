@@ -31,16 +31,23 @@ from pathlib import Path
 import pytest
 
 from app.services.image_service import (
-    PESO_TRACK_FACIAL, PESO_TRACK_FACIAL_OBRA)
+    PESO_TRACK_FACIAL, PESO_TRACK_FACIAL_OBRA, mezclar_ramas)
 
 RAIZ = Path(__file__).resolve().parents[2]
 CONFIG = RAIZ / "models" / "meta_ensemble" / "meta_config.json"
 
 
 def mezcla(facial: float, completa: float, obra: bool = False) -> float:
-    """Reproduce la mezcla de image_service._run_image_analysis."""
-    w = PESO_TRACK_FACIAL_OBRA if obra else PESO_TRACK_FACIAL
-    return w * facial + (1.0 - w) * completa
+    """
+    La mezcla que usa produccion, llamada y no copiada.
+
+    Hasta el 17 de noviembre de 2026 esta funcion reproducia a mano la formula
+    lineal. Al adoptarse la mezcla "o" en fotografia
+    (image_service.MEZCLA_RAMAS), la copia siguio comprobando la formula vieja:
+    las pruebas habrian seguido pasando sobre un calculo que produccion ya no
+    hacia. Llamando a la funcion real, las pruebas fijan lo que el usuario ve.
+    """
+    return mezclar_ramas(facial, completa, obra)
 
 
 def umbral() -> float:
@@ -168,12 +175,25 @@ def test_el_deepfake_facial_conserva_el_peso_alto():
 
 
 def test_mezcla_es_monotona_y_acotada():
-    """Propiedades basicas: convexa en ambos argumentos y dentro de [0, 1]."""
+    """
+    Propiedades basicas: dentro de [0, 1] y NO DECRECIENTE en el veredicto
+    facial.
+
+    Hasta el 17 de noviembre de 2026 se exigia crecimiento ESTRICTO, que es
+    propiedad de la mezcla lineal. Con la mezcla "o" adoptada en fotografia,
+    un veredicto facial por debajo del de la imagen completa no mueve el
+    resultado: es exactamente lo que se busca, porque un "no es un intercambio
+    de rostro" no es evidencia de autenticidad. Lo que si debe seguir siendo
+    cierto es que subir el veredicto facial nunca baje el resultado, y que por
+    encima de la imagen completa lo arrastre hacia arriba.
+    """
     assert mezcla(0.0, 0.0) == pytest.approx(0.0)
     assert mezcla(1.0, 1.0) == pytest.approx(1.0)
     anterior = -1.0
     for f in (0.0, 0.25, 0.5, 0.75, 1.0):
         v = mezcla(f, 0.5)
         assert 0.0 <= v <= 1.0
-        assert v > anterior, "la mezcla debe crecer con el veredicto facial"
+        assert v >= anterior, "la mezcla no puede bajar al subir el veredicto facial"
         anterior = v
+    assert mezcla(0.9, 0.5) > mezcla(0.6, 0.5), (
+        "por encima de la imagen completa, el veredicto facial debe mandar")

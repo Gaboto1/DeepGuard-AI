@@ -1,0 +1,133 @@
+{
+  "generado": "2026-11-17T13:36:47",
+  "traza": "reports/traza_oficial.json",
+  "n": 2000,
+  "tramo": [
+    0,
+    500
+  ],
+  "criterio": {
+    "origen": "scripts/decidir_adopcion.py",
+    "tol_fpr_subida_pt": 0.3,
+    "tol_auc_bajada": 0.005,
+    "mejora_min_ia_pt": 1.0
+  },
+  "variantes": {
+    "V0 vigente": {
+      "falsas_alarmas_pct": 1.2,
+      "ia_senalada_pct": 78.0,
+      "auc": 0.9887,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 440
+        },
+        "flux": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 340
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 10
+        },
+        "lfw": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 2
+        }
+      },
+      "extras": {},
+      "veredicto": "(linea base)"
+    },
+    "V1 vigente + mezcla o": {
+      "falsas_alarmas_pct": 1.3,
+      "ia_senalada_pct": 85.5,
+      "auc": 0.99,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 472
+        },
+        "flux": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 383
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 11
+        },
+        "lfw": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 2
+        }
+      },
+      "extras": {},
+      "veredicto": "PASA"
+    },
+    "V2 cabezales nuevos": {
+      "falsas_alarmas_pct": 0.9,
+      "ia_senalada_pct": 77.3,
+      "auc": 0.9925,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 436
+        },
+        "flux": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 337
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 7
+        },
+        "lfw": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 2
+        }
+      },
+      "extras": {},
+      "veredicto": "sin mejora suficiente"
+    },
+    "V3 cabezales nuevos + mezcla o": {
+      "falsas_alarmas_pct": 0.9,
+      "ia_senalada_pct": 84.9,
+      "auc": 0.9947,
+      "por_fuente": {
+        "dalle3": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 468
+        },
+        "flux": {
+          "label": 1,
+          "n": 500,
+          "senaladas": 381
+        },
+        "imagenet": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 7
+        },
+        "lfw": {
+          "label": 0,
+          "n": 500,
+          "senaladas": 2
+        }
+      },
+      "extras": {},
+      "veredicto": "PASA"
+    }
+  }
+}

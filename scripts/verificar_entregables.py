@@ -44,12 +44,12 @@ DOCS = {
 # el KPI-01 lleva su cifra en la celda de valor y en la justificacion SMART,
 # y el 94,0 % aparece ademas en la fila nueva de la tabla de progresion.
 DEBE_APARECER = [
-    ("INFORME", "94,0 %", 3),
-    ("INFORME", "0,7 %", 2),
-    ("INFORME", "0,990", 2),
+    ("INFORME", "95,0 %", 3),
+    ("INFORME", "0,9 %", 2),
+    ("INFORME", "0,995", 2),
     ("INFORME", "60.000 imágenes", 3),
     ("INFORME", "nueve fuentes", 3),
-    ("INFORME", "81 pruebas", 3),
+    ("INFORME", "116 pruebas", 3),
     # Sexta pasada: latencia. El valor y la meta del KPI-04 y la meta del SLA
     # se corrigieron contra la medicion real (reports/latencia_medida.json).
     ("INFORME", "11,7 s (p95)", 1),
@@ -63,7 +63,7 @@ DEBE_APARECER = [
     ("INFORME", "ELSA multigenerador", 1),
     ("INFORME", "Nueve fuentes independientes", 1),
     ("INFORME", "peso del track facial", 1),
-    ("GUION", "Ochenta y una pruebas", 1),
+    ("GUION", "Ciento dieciséis pruebas", 1),
     ("GUION", "Sesenta mil imágenes", 1),
     ("GUION", "nueve fuentes independientes", 1),
     ("GUION", "0,992", 1),
@@ -71,7 +71,7 @@ DEBE_APARECER = [
     ("GUION", "5,7 % con pesos fijos y 12,5 % en septiembre de 2026", 1),
     ("DEFENSA", "0,992", 1),
     ("DEFENSA", "0,35 a 0,99", 1),
-    ("DEFENSA", "81", 1),
+    ("DEFENSA", "116", 1),
     # Cuarta pasada: la tabla de cifras del guion y la lamina 13 seguian
     # diciendo 14.000 imagenes y 6 fuentes mientras el cuerpo del guion ya
     # decia "Sesenta mil". Eran celdas con la cifra sola, que un barrido del
@@ -116,6 +116,20 @@ NO_DEBE_QUEDAR = [
     ("INFORME", "< 3 s", "valor de latencia falso: el minimo medido es 3,43 s"),
     ("INFORME", "≤ 5 s en el percentil 95",
      "meta de latencia incumplida: el p95 medido es 11,7 s"),
+    # Septima pasada (17 nov 2026): sistema con fuentes externas y mezcla "o".
+    ("INFORME", "81 pruebas", "recuento de la quinta pasada: la suite da 116"),
+    ("GUION", "Ochenta y una", "recuento de la quinta pasada, con letras"),
+    ("DEFENSA", "81 pruebas", "recuento de la quinta pasada en la lamina 17"),
+    ("GUION", "Subieron de 5,7 % a 0,7 %",
+     "frase que se contradecia: esas cifras bajan, no suben"),
+    ("DEFENSA", "De 5,7 % a 0,7 %",
+     "frase que se contradecia: esas cifras bajan, no suben"),
+    ("DEFENSA", "¿Por qué suben los falsos positivos?",
+     "pregunta con premisa falsa: los falsos positivos bajaron"),
+    ("GUION", "concentró el 64 % del peso",
+     "se presentaba como virtud la concentracion que el 16 nov se midio como defecto"),
+    ("GUION", "alcanza 0,990", "AUC del sistema anterior"),
+    ("DEFENSA", "0,990", "AUC del sistema anterior"),
     ("INFORME", "entre 1 y 3 segundos",
      "justificacion SMART basada en una medicion que no existe"),
     ("GUION", "14.000", "tamano anterior en la tabla de cifras de consulta"),
@@ -137,6 +151,7 @@ DEBE_CONSERVARSE = [
     # exacto. Se afirma aqui para que una futura pasada que persiga el 14.000
     # como cifra obsoleta no se lo lleve por delante.
     ("INFORME", "14.000", "cantidad de ELSA multigenerador en la tabla 40"),
+    ("INFORME", "94,0 %", "fila historica del 9 nov en la tabla 5 de progresion"),
     ("INFORME", "0.75", "AUC del promedio ponderado en la tabla de metodos"),
     ("INFORME", "0.975", "AUC del detector de arte sobre obra grafica"),
     ("GUION", "0,975", "AUC que justifico separar el detector de arte"),

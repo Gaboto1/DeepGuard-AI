@@ -1,6 +1,6 @@
 {
-  "generado": "2026-11-09T10:17:27",
-  "umbral": 0.8764,
+  "generado": "2026-11-17T14:01:45",
+  "umbral": 0.9786,
   "n_analizadas": 2000,
   "n_fallidas": 0,
   "nota": "Fuentes ausentes de todo plan de entrenamiento. Medido por la via de produccion (_run_image_analysis), incluidas reglas forenses y banda de evidencia.",
@@ -8,70 +8,71 @@
     "dalle3": {
       "clase": "IA",
       "n": 500,
-      "score_medio": 0.8692,
-      "score_mediana": 0.9987,
-      "error": 0.304,
+      "score_medio": 0.8955,
+      "score_mediana": 0.9773,
+      "error": 0.508,
       "bandas": {
-        "Low Evidence": 25,
-        "Strong Evidence": 353,
-        "Inconclusive": 26,
-        "Moderate Evidence": 95,
-        "Very Low Evidence": 1
+        "Moderate Evidence": 84,
+        "Strong Evidence": 384,
+        "Inconclusive": 30,
+        "Low Evidence": 2
       }
     },
     "flux": {
       "clase": "IA",
       "n": 500,
-      "score_medio": 0.6683,
-      "score_mediana": 0.6341,
-      "error": 0.704,
+      "score_medio": 0.7347,
+      "score_mediana": 0.679,
+      "error": 0.75,
       "bandas": {
-        "Inconclusive": 113,
-        "Strong Evidence": 152,
-        "Moderate Evidence": 167,
-        "Very Low Evidence": 30,
-        "Low Evidence": 38
+        "Moderate Evidence": 193,
+        "Inconclusive": 89,
+        "Strong Evidence": 188,
+        "Very Low Evidence": 8,
+        "Low Evidence": 22
       }
     },
     "imagenet": {
       "clase": "real",
       "n": 500,
-      "score_medio": 0.0493,
-      "score_mediana": 0.0097,
-      "error": 0.01,
+      "score_medio": 0.0521,
+      "score_mediana": 0.014,
+      "error": 0.0,
       "bandas": {
-        "Very Low Evidence": 470,
-        "Low Evidence": 14,
-        "Inconclusive": 9,
-        "Strong Evidence": 5,
-        "Moderate Evidence": 2
+        "Very Low Evidence": 466,
+        "Low Evidence": 20,
+        "Inconclusive": 7,
+        "Moderate Evidence": 6,
+        "Strong Evidence": 1
       }
     },
     "lfw": {
       "clase": "real",
       "n": 500,
-      "score_medio": 0.0166,
-      "score_mediana": 0.0017,
-      "error": 0.0,
+      "score_medio": 0.0506,
+      "score_mediana": 0.0159,
+      "error": 0.002,
       "bandas": {
-        "Very Low Evidence": 497,
-        "Low Evidence": 3
+        "Very Low Evidence": 491,
+        "Low Evidence": 6,
+        "Strong Evidence": 2,
+        "Inconclusive": 1
       }
     }
   },
   "global": {
-    "auc": 0.9906,
-    "fpr": 0.005,
-    "deteccion_ia": 0.496
+    "auc": 0.9947,
+    "fpr": 0.001,
+    "deteccion_ia": 0.371
   },
   "extra": [
     {
-      "path": "C:/Users/gabot/AppData/Local/Temp/claude/d7d8245cac6433a7/82b639b4-3726-436f-bf62-d7da5b0c00fc/images/2.jpg",
-      "p": 0.146468,
-      "banda": "Very Low Evidence",
+      "path": "C:/Users/gabot/AppData/Local/Temp/claude/d7d8245cac6433a7/82b639b4-3726-436f-bf62-d7da5b0c00fc/images/4.png",
+      "p": 0.509499,
+      "banda": "Inconclusive",
       "tipo_contenido": "photographic",
-      "prob_obra_grafica": 0.0123,
-      "rostros": 1
+      "prob_obra_grafica": 0.0152,
+      "rostros": 2
     }
   ]
 }

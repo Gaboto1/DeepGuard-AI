@@ -85,12 +85,16 @@ def main() -> int:
     ap.add_argument("--desde", type=int, default=500)
     ap.add_argument("--n", type=int, default=400)
     ap.add_argument("--nombre", default="dev")
+    ap.add_argument("--raiz", default=None,
+                    help="otro conjunto con la misma estructura "
+                         "<raiz>/{real,ai}/<fuente>/; por defecto data/heldout")
     ap.add_argument("--extra", action="append", default=[],
                     help="imagen suelta que se traza aparte (fuente 'extra')")
     args = ap.parse_args()
 
+    raiz = (ROOT / args.raiz) if args.raiz else HELDOUT
     tareas = []
-    for clase_dir in sorted(HELDOUT.iterdir()):
+    for clase_dir in sorted(raiz.iterdir()):
         if not clase_dir.is_dir():
             continue
         label = 0 if clase_dir.name == "real" else 1

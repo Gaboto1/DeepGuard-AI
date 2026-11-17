@@ -1,0 +1,42 @@
+{
+  "generado": "2026-11-09T10:01:08",
+  "umbral": 0.8764,
+  "n_analizadas": 800,
+  "n_fallidas": 0,
+  "nota": "DENTRO DE MUESTRA: ff++ participa en el entrenamiento del meta-ensemble. Es un techo, no una estimacion de generalizacion. Medido por la via de produccion, incluida la mezcla 0.60*facial + 0.40*completa.",
+  "por_fuente": {
+    "ff_fake": {
+      "clase": "deepfake",
+      "n": 400,
+      "score_medio": 0.8452,
+      "score_mediana": 0.8806,
+      "error": 0.145,
+      "con_rostro_detectado": 400,
+      "bandas": {
+        "Very Low Evidence": 19,
+        "Strong Evidence": 367,
+        "Moderate Evidence": 9,
+        "Low Evidence": 2,
+        "Inconclusive": 3
+      }
+    },
+    "ff_real": {
+      "clase": "real",
+      "n": 400,
+      "score_medio": 0.0179,
+      "score_mediana": 0.0018,
+      "error": 0.0,
+      "con_rostro_detectado": 400,
+      "bandas": {
+        "Very Low Evidence": 394,
+        "Inconclusive": 4,
+        "Moderate Evidence": 2
+      }
+    }
+  },
+  "global": {
+    "auc": 0.9977,
+    "fpr": 0.0,
+    "deteccion_deepfake": 0.855
+  }
+}

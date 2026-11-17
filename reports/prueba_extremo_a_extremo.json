@@ -1,5 +1,5 @@
 {
-  "generado": "2026-11-16T01:50:01",
+  "generado": "2026-11-17T14:07:36",
   "n": 5,
   "fallos": 0,
   "filas": [
@@ -7,8 +7,8 @@
       "fuente": "lfw (rostro real)",
       "clase": "real",
       "archivo": "lfw_000381.jpg",
-      "score": 0.1785704319981424,
-      "banda": "Very Low Evidence",
+      "score": 0.24375245565783638,
+      "banda": "Low Evidence",
       "veredicto": "ok",
       "rostros": 1,
       "content_type": {
@@ -22,7 +22,7 @@
       "fuente": "imagenet (foto real)",
       "clase": "real",
       "archivo": "imagenet_000097.jpg",
-      "score": 0.12487505205765921,
+      "score": 0.12854294629331448,
       "banda": "Very Low Evidence",
       "veredicto": "ok",
       "rostros": 0,
@@ -52,7 +52,7 @@
       "fuente": "dalle3 (IA)",
       "clase": "ia",
       "archivo": "dalle3_000594.jpg",
-      "score": 0.9089867235437252,
+      "score": 0.8835693894117325,
       "banda": "Strong Evidence",
       "veredicto": "ok",
       "rostros": 0,
@@ -67,8 +67,8 @@
       "fuente": "ff++ Deepfakes (deepfake)",
       "clase": "ia",
       "archivo": "678_460_011.jpg",
-      "score": 0.7666600839592282,
-      "banda": "Moderate Evidence",
+      "score": 0.8499354896371473,
+      "banda": "Strong Evidence",
       "veredicto": "ok",
       "rostros": 1,
       "content_type": {

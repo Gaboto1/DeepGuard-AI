@@ -1,0 +1,49 @@
+{
+  "nota__": "SEPTIMA PASADA. Lleva a los entregables el sistema adoptado el 17 de noviembre de 2026: cabezales del meta-ensemble reentrenados con fuentes externas (OpenFake) y mezcla 'o' de la rama de rostro y la de imagen completa en fotografia. Adoptado con el criterio ampliado fijado antes de medir (reports/CRITERIO_AMPLIADO_20261116.md); registro completo en reports/MEJORA_ENSEMBLE_v4.md, seccion 13.",
+
+  "nota_cifras__": "KPI-01 94,0 -> 95,0 % (reports/produccion_ffpp_bandas.json, dentro de muestra). KPI-02 0,7 -> 0,9 % y KPI-03 0,990 -> 0,995 (reports/heldout_eval*.json, fuera de muestra). Pruebas 81 -> 116.",
+
+  "nota_kpi02__": "El 0,7 % que se reemplaza se habia medido el 9 de noviembre a las 10:17, ANTES del commit a705209 (13:03) que cambio el peso facial segun el tipo de contenido. El sistema que estuvo en produccion desde entonces nunca se volvio a medir y su cifra real era 1,2 %. El 0,9 % de ahora es por tanto una mejora sobre el 1,2 %, no un empeoramiento sobre el 0,7 %.",
+
+  "nota_tabla5__": "La tabla 5 del informe es una PROGRESION historica: su fila del 94,0 % es un hecho del 9 de noviembre y se conserva. La nueva configuracion se anade como fila aparte, fuera de este mapa. Por eso las reglas del 94,0 % van acotadas a #t17 y #t39.",
+
+  "nota_reescrituras__": "Dos frases se reescriben, no solo se actualizan. (1) La respuesta a '¿Por que suben los falsos positivos?' decia 'De 5,7 % a 0,7 %': esas cifras BAJAN, la frase se contradecia sola. (2) El guion presentaba como virtud que el meta-clasificador 'concentro el 64 % del peso en el probe CLIP'; ese es precisamente el defecto encontrado el 16 de noviembre, y los cabezales nuevos reparten el peso.",
+
+  "el valor actual es de 94,0 %": {"nuevo": "el valor actual es de 95,0 %", "docs": ["InformeDeepScan"], "ubicaciones": ["#t17"], "veces": 1},
+  "el valor actual es de 0,7 %": {"nuevo": "el valor actual es de 0,9 %", "docs": ["InformeDeepScan"], "ubicaciones": ["#t17"], "veces": 1},
+  "el valor actual es de 0,990": {"nuevo": "el valor actual es de 0,995", "docs": ["InformeDeepScan"], "ubicaciones": ["#t17"], "veces": 1},
+
+  "94,0 %": [
+    {"nuevo": "95,0 %", "docs": ["InformeDeepScan"], "ubicaciones": ["#t17"], "veces": 1},
+    {"nuevo": "95,0 %", "docs": ["Guion"], "ubicaciones": ["#t39"], "veces": 1}
+  ],
+  "0,7 %": [
+    {"nuevo": "0,9 %", "docs": ["InformeDeepScan"], "ubicaciones": ["#t17"], "veces": 1},
+    {"nuevo": "0,9 %", "docs": ["Guion"], "ubicaciones": ["#t39"], "veces": 1}
+  ],
+  "0,990": [
+    {"nuevo": "0,995", "docs": ["InformeDeepScan"], "ubicaciones": ["#t17"], "veces": 1},
+    {"nuevo": "0,995", "docs": ["Guion"], "ubicaciones": ["#t39"], "veces": 1}
+  ],
+
+  "con el reentrenamiento de noviembre llegó al 94,0 %": {"nuevo": "con los reentrenamientos de noviembre llegó al 95,0 %", "docs": ["Guion"], "veces": 1},
+  "y el reentrenamiento de noviembre al 94,0 %": {"nuevo": "y los reentrenamientos de noviembre al 95,0 %", "docs": ["Defensa_DeepScan"], "veces": 1},
+
+  "El meta-clasificador alcanza un AUC de 0,990 sobre el conjunto de evaluación.": {"nuevo": "El meta-clasificador alcanza un AUC de 0,995 sobre fuentes que ningún modelo vio.", "docs": ["Defensa_DeepScan"], "veces": 1},
+  "el sistema completo alcanza 0,990.": {"nuevo": "el sistema completo alcanza 0,995.", "docs": ["Defensa_DeepScan"], "veces": 1},
+
+  "Subieron de 5,7 % a 0,7 %, y es un costo real que asumimos conscientemente. Lo aceptamos por dos razones.": {
+    "nuevo": "No suben: bajaron. Eran 5,7 % con pesos fijos y 12,5 % en septiembre; hoy son 0,9 % sobre fotografía que ningún modelo había visto. Y no los bajamos a costa de detectar menos. Hay dos razones de fondo.",
+    "docs": ["Guion"], "veces": 1},
+  "De 5,7 % a 0,7 %. Es el costo de la separación. Lo asumimos porque un detector que señala el 0,1 % de los deepfakes no cumple su función, y porque el sistema informa bandas de evidencia, no acusaciones.": {
+    "nuevo": "No suben: bajaron. Eran 5,7 % con pesos fijos y 12,5 % en septiembre; hoy son 0,9 % fuera de muestra, y el sistema informa bandas de evidencia, no acusaciones.",
+    "docs": ["Defensa_DeepScan"], "veces": 1},
+  "¿Por qué suben los falsos positivos?": {"nuevo": "¿Qué pasa con los falsos positivos?", "docs": ["Defensa_DeepScan"], "veces": 1},
+
+  "y concentró el 64 % del peso en el probe CLIP. El sistema completo alcanza 0,990 sobre esas mismas fuentes no vistas.": {
+    "nuevo": "y reparte el peso entre los dos mejores, el detector de arte IA y el probe CLIP, sin que ninguno pase de un tercio. Una versión anterior concentraba el 64 % en el probe, y medido sobre fotografía moderna se vio el costo: cuando ese único detector fallaba, nada lo cubría. El sistema completo alcanza 0,995 sobre esas mismas fuentes no vistas.",
+    "docs": ["Guion"], "veces": 1},
+
+  "81 pruebas": {"nuevo": "116 pruebas", "veces": 4},
+  "Ochenta y una pruebas": {"nuevo": "Ciento dieciséis pruebas", "docs": ["Guion"], "veces": 1}
+}
