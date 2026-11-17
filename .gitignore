@@ -101,6 +101,11 @@ sdist/
 develop-eggs/
 .installed.cfg
 lib/
+# La regla de arriba es de la plantilla de Python y casa con CUALQUIER carpeta
+# lib/, incluida la del frontend. El 17 nov 2026 dejo fuera del repositorio
+# frontend/src/lib/identidad.ts sin avisar: compilaba en local y el despliegue
+# de GitHub Pages fallaba con "Module not found".
+!frontend/src/lib/
 lib64/
 wheels/
 .pytest_cache/
