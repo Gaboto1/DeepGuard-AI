@@ -38,6 +38,38 @@ interface Catalogo {
   nota: string;
 }
 
+// Copia local del catalogo, para que los planes se vean al instante y sin
+// depender de la API ni del worker. La API en Render duerme en el plan
+// gratuito y tarda hasta un minuto en despertar; mientras tanto la ventana
+// quedaba vacia. La fuente de verdad sigue siendo backend/app/billing/plans.py:
+// si la API responde, su catalogo reemplaza a este. Solo CONTRATAR necesita la
+// API. Si se cambia un precio o una cuota, hay que cambiarlo en los dos sitios;
+// lo comprueba backend/tests/test_catalogo_frontend.py.
+const CATALOGO_LOCAL: Catalogo = {
+  moneda: 'CLP',
+  cuota_aplicada: false,
+  pasarelas: [],
+  se_puede_contratar: false,
+  nota: '',
+  planes: [
+    { id: 'gratis', nombre: 'Gratuito',
+      descripcion: 'Para comprobar una imagen suelta. Sin registro y sin tarjeta: el analisis completo con los seis detectores y el meta-ensemble.',
+      analisis_por_dia: 5, analisis_por_mes: null, prioridad: 1,
+      informe_pdf_sellado: false, acceso_api: false, analisis_por_lote: false,
+      historial_dias: 1, video: false, precio_clp: 0 },
+    { id: 'pro', nombre: 'Profesional',
+      descripcion: 'Para quien verifica a diario. Cola prioritaria, informe PDF con el sello de cadena de custodia, historial de 90 dias y analisis de video.',
+      analisis_por_dia: null, analisis_por_mes: 300, prioridad: 5,
+      informe_pdf_sellado: true, acceso_api: false, analisis_por_lote: true,
+      historial_dias: 90, video: true, precio_clp: 9990 },
+    { id: 'pericial', nombre: 'Pericial',
+      descripcion: 'Para redacciones y peritajes. Todo lo del plan Profesional mas acceso por API, prioridad maxima y un ano de historial.',
+      analisis_por_dia: null, analisis_por_mes: 1500, prioridad: 9,
+      informe_pdf_sellado: true, acceso_api: true, analisis_por_lote: true,
+      historial_dias: 365, video: true, precio_clp: 29990 },
+  ],
+};
+
 function clp(n: number) {
   return n === 0 ? 'Gratis' : `$${n.toLocaleString('es-CL')}`;
 }
@@ -60,8 +92,9 @@ function Rasgo({ ok, children }: { ok: boolean; children: React.ReactNode }) {
 }
 
 export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
-  const [cat, setCat] = useState<Catalogo | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [cat, setCat] = useState<Catalogo>(CATALOGO_LOCAL);
+  // True cuando el catalogo viene de la API y no de la copia local.
+  const [enLinea, setEnLinea] = useState(false);
   const [contratando, setContratando] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [licencia, setLicencia] = useState<string | null>(null);
@@ -71,13 +104,18 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
   }, []);
 
   useEffect(() => {
+    // Los planes ya se ven con la copia local. Esto solo trae el estado real
+    // (si se puede contratar, que pasarelas hay) y, si falla, no muestra
+    // ningun error: el catalogo sigue ahi.
     fetch(`${API_URL}/api/v1/billing/plans`)
-      .then(r => r.json())
-      .then(setCat)
-      .catch(() => setError(
-        'No se pudo consultar el catálogo. La API puede estar despertando; ' +
-        'en el plan gratuito de Render tarda hasta un minuto.'
-      ));
+      .then(r => (r.ok ? r.json() : Promise.reject()))
+      .then((j: Catalogo) => {
+        if (j && Array.isArray(j.planes) && j.planes.length) {
+          setCat(j);
+          setEnLinea(true);
+        }
+      })
+      .catch(() => { /* sin API: se queda la copia local */ });
   }, []);
 
   const contratar = useCallback(async (plan: Plan) => {
@@ -152,13 +190,6 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
             plan promete análisis ilimitados.
           </p>
         </div>
-
-        {error && (
-          <div className="border px-4 py-3 mb-6 text-xs"
-               style={{ borderColor: 'rgba(196,43,43,0.35)', background: 'rgba(196,43,43,0.07)', color: '#c42b2b' }}>
-            {error}
-          </div>
-        )}
 
         {soloSimulada && (
           <div className="border px-4 py-3 mb-6 flex gap-3"
@@ -279,6 +310,8 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
                     >
                       {contratando === p.id
                         ? 'Procesando…'
+                        : !enLinea
+                        ? 'Conectando…'
                         : !cat?.se_puede_contratar
                         ? 'Aún no disponible'
                         : soloSimulada
