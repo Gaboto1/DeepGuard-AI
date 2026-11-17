@@ -1,0 +1,29 @@
+{
+  "generado": "2026-11-16",
+  "descripcion": "Retrato fotorrealista generado por IA, con dos rostros, aportado por el usuario. El sistema lo puntuo en 18 %. No se conserva la imagen ni dato que la identifique: solo las salidas numericas.",
+  "score_final": 0.183,
+  "banda": "Very Low Evidence",
+  "tipo_contenido": "photographic",
+  "prob_obra_grafica": 0.0152,
+  "rostros": 2,
+  "is_ood": false,
+  "rama_rostro": 0.0,
+  "rama_completa": 0.04,
+  "mezcla_lineal": 0.01,
+  "nota_ramas": "valores del log del worker (2 decimales): 'Face blend: face=0.00 full=0.04 -> 0.01'",
+  "detectores_mezclados": {
+    "Face-Deepfake ViT": 0.7349,
+    "SDXL Detector": 0.0001,
+    "EfficientNet (FF++)": 0.003,
+    "AI Art Detector": 0.907,
+    "SigLIP Deepfake": 0.2003,
+    "AI-Human Detector": 0.3221,
+    "Freq. Spectral": 0.0327,
+    "SRM Noise Residual": 1.0
+  },
+  "semantico": {
+    "risk_score_normalized": 0.5,
+    "fusion_type": "semantic_blend"
+  },
+  "lectura": "Las dos ramas dicen 'real' (0,00 y 0,04) aunque el detector de arte IA da 0,907. El probe CLIP da 0,003 y lleva el 64 % del peso del cabezal principal. El 18 % final lo aporta el analisis semantico, no el ensemble."
+}

@@ -130,6 +130,38 @@ PESO_TRACK_FACIAL = 0.80
 PESO_TRACK_FACIAL_OBRA = 0.30
 
 
+# Como se combinan la rama de rostro y la de imagen completa en FOTOGRAFIA.
+#
+#   "lineal"  w * rostro + (1 - w) * completa, con w = PESO_TRACK_FACIAL
+#   "o"       max(rostro, completa): es IA si lo dice cualquiera de las dos
+#
+# Las dos ramas no estiman lo mismo. La de rostro responde "¿es un intercambio
+# de rostro?" y la completa "¿es una imagen sintetica?". Promediarlas trata un
+# "no es un intercambio" como evidencia de autenticidad, cuando el cabezal
+# facial es ciego a los rostros enteramente sinteticos: con el rostro en 0,00
+# y w = 0,80 la imagen no puede pasar de 0,20 por segura que este la rama
+# completa. Sobre la muestra oficial del retenido eso enterraba del orden de
+# 113 detecciones en las que la imagen completa superaba 0,65.
+#
+# En obra grafica se conserva SIEMPRE la mezcla lineal con
+# PESO_TRACK_FACIAL_OBRA: ese peso se valido aparte, y un maximo dejaria pasar
+# los falsos positivos del cabezal facial ante rostros dibujados.
+#
+# El valor por defecto solo cambia si el criterio de adopcion lo avala; el
+# registro esta en reports/MEJORA_ENSEMBLE_v4.md, seccion 13.
+MEZCLA_RAMAS = "lineal"
+
+
+def mezclar_ramas(rostro: float, completa: float, es_obra: bool,
+                  modo: Optional[str] = None) -> float:
+    """Score conjunto de las dos ramas cuando se detecto un rostro."""
+    modo = modo or MEZCLA_RAMAS
+    if modo == "o" and not es_obra:
+        return float(max(rostro, completa))
+    w = PESO_TRACK_FACIAL_OBRA if es_obra else PESO_TRACK_FACIAL
+    return float(w * rostro + (1.0 - w) * completa)
+
+
 def _run_image_analysis(image_path: Path) -> dict:
     start_total = time.time()
 
@@ -222,7 +254,7 @@ def _run_image_analysis(image_path: Path) -> dict:
         face_scores, face_ens = _predict_all(faces[0], face=True)
         # El peso depende del tipo de contenido: ver PESO_TRACK_FACIAL_OBRA.
         w_face = PESO_TRACK_FACIAL_OBRA if is_artwork else PESO_TRACK_FACIAL
-        final_score  = w_face * face_ens + (1.0 - w_face) * full_ens
+        final_score  = mezclar_ramas(face_ens, full_ens, is_artwork)
         blend_scores = [
             (w_face * (f or 0.0) + (1.0 - w_face) * (u or 0.0))
             if (f is not None or u is not None) else None

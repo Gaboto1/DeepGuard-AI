@@ -38,6 +38,14 @@ CSV = ROOT / "reports" / "dataset_v2_scores.csv"
 # síntesis: sin ellas, recomprimir una foto real de COCO en JPEG de calidad 55
 # subía su score del 26 % al 58 %.
 CSV_AUG = ROOT / "reports" / "dataset_v2_aug_scores.csv"
+# Fuentes que el probe CLIP NO vio (ver scripts/score_fuentes_externas.py).
+#
+# El resto del conjunto sale de las mismas fuentes con las que se entrena el
+# probe, de modo que ahi el probe es casi perfecto y el meta-ensemble solo
+# puede aprender a fiarse de el: le daba el 64 % del peso. Es la fuga clasica
+# del stacking. Estas filas son las unicas donde el segundo nivel ve al primero
+# equivocarse, y por eso son las unicas de las que puede aprender a cubrirse.
+CSV_EXT = ROOT / "reports" / "dataset_meta_externo_scores.csv"
 
 # Fuentes que solo existen en el conjunto v3. Si el CSV no las trae, la etapa de
 # puntuacion no llego a rehacerse (por ejemplo, por falta de VRAM si el worker de
@@ -387,6 +395,22 @@ def train_head(df: pd.DataFrame, feats: list[str], stat_keys: list[str],
 
 
 def main() -> int:
+    import argparse
+    global META_DIR, REPORT
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--salida", default=None,
+                    help="directorio donde escribir los cabezales. Por defecto "
+                         "models/meta_ensemble, es decir PRODUCCION. Un "
+                         "candidato debe ir a otra carpeta hasta que el "
+                         "criterio de adopcion lo avale.")
+    ap.add_argument("--sin-externo", action="store_true",
+                    help="no incorpora las fuentes externas aunque existan")
+    args = ap.parse_args()
+    if args.salida:
+        META_DIR = (ROOT / args.salida)
+        REPORT = META_DIR / "meta_dual_head_report.json"
+        print(f"  Los cabezales se escriben en {META_DIR} (no en produccion)")
+
     if not CSV.exists():
         print(f"ERROR: falta {CSV}. Ejecuta primero scripts/score_dataset_v2.py")
         return 1
@@ -406,6 +430,16 @@ def main() -> int:
         print(f"  AVISO: no existe {CSV_AUG.name}; se entrena sin variantes "
               f"de compresión y el modelo seguirá inflando el score de las "
               f"fotos recomprimidas.")
+
+    if CSV_EXT.exists() and not args.sin_externo:
+        ext = pd.read_csv(CSV_EXT)
+        ext["variante"] = "original"
+        df = pd.concat([df, ext], ignore_index=True)
+        print(f"  Fuentes externas incorporadas: {len(ext)} filas "
+              f"({sorted(ext['source'].unique())})")
+    elif not args.sin_externo:
+        print(f"  AVISO: no existe {CSV_EXT.name}; el meta-ensemble se entrena "
+              f"solo con fuentes que el probe CLIP ya vio.")
 
     df = df.dropna(subset=["label"])
     df["label"] = df["label"].astype(int)

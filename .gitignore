@@ -310,3 +310,10 @@ ipython_config.py
 *.prof
 *.lprof
 .benchmarks/
+
+# Trazas de la fusion y mediciones crudas: se regeneran con
+# scripts/traza_retenido.py; se versiona el resumen, no la materia prima.
+reports/traza_*.json
+reports/_*.csv
+# Cabezales candidatos: no son de produccion hasta que el criterio los avale.
+models/_candidatos/
