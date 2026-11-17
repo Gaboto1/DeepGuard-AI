@@ -11,8 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 // La licencia vive en el navegador. Es un portador: quien la tenga, la usa.
 // Por eso caduca a los 30 dias y por eso no se guarda nada mas junto a ella.
-const CLAVE_LICENCIA = 'deepscan_licencia';
-const CLAVE_DISPOSITIVO = 'deepscan_dispositivo';
+import { CLAVE_LICENCIA, cabecerasIdentidad, avisarConsumo } from '@/lib/identidad';
 
 interface Plan {
   id: string;
@@ -27,6 +26,7 @@ interface Plan {
   historial_dias: number;
   video: boolean;
   precio_clp: number;
+  precio_anual_clp: number;
 }
 
 interface Catalogo {
@@ -56,17 +56,17 @@ const CATALOGO_LOCAL: Catalogo = {
       descripcion: 'Para comprobar una imagen suelta. Sin registro y sin tarjeta: el analisis completo con los seis detectores y el meta-ensemble.',
       analisis_por_dia: 5, analisis_por_mes: null, prioridad: 1,
       informe_pdf_sellado: false, acceso_api: false, analisis_por_lote: false,
-      historial_dias: 1, video: false, precio_clp: 0 },
+      historial_dias: 1, video: false, precio_clp: 0, precio_anual_clp: 0 },
     { id: 'pro', nombre: 'Profesional',
       descripcion: 'Para quien verifica a diario. Cola prioritaria, informe PDF con el sello de cadena de custodia, historial de 90 dias y analisis de video.',
       analisis_por_dia: null, analisis_por_mes: 300, prioridad: 5,
       informe_pdf_sellado: true, acceso_api: false, analisis_por_lote: true,
-      historial_dias: 90, video: true, precio_clp: 9990 },
+      historial_dias: 90, video: true, precio_clp: 9990, precio_anual_clp: 99900 },
     { id: 'pericial', nombre: 'Pericial',
       descripcion: 'Para redacciones y peritajes. Todo lo del plan Profesional mas acceso por API, prioridad maxima y un ano de historial.',
       analisis_por_dia: null, analisis_por_mes: 1500, prioridad: 9,
       informe_pdf_sellado: true, acceso_api: true, analisis_por_lote: true,
-      historial_dias: 365, video: true, precio_clp: 29990 },
+      historial_dias: 365, video: true, precio_clp: 29990, precio_anual_clp: 299900 },
   ],
 };
 
@@ -93,6 +93,7 @@ function Rasgo({ ok, children }: { ok: boolean; children: React.ReactNode }) {
 
 export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
   const [cat, setCat] = useState<Catalogo>(CATALOGO_LOCAL);
+  const [anual, setAnual] = useState(false);
   // True cuando el catalogo viene de la API y no de la copia local.
   const [enLinea, setEnLinea] = useState(false);
   const [contratando, setContratando] = useState<string | null>(null);
@@ -124,8 +125,8 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
     try {
       const r = await fetch(`${API_URL}/api/v1/billing/checkout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: plan.id, email: '' }),
+        headers: { 'Content-Type': 'application/json', ...cabecerasIdentidad() },
+        body: JSON.stringify({ plan: plan.id, email: '', periodo: anual ? 'anual' : 'mensual' }),
       });
       const j = await r.json();
       if (!r.ok) {
@@ -137,6 +138,7 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
         try {
           localStorage.setItem(CLAVE_LICENCIA, j.licencia);
           setLicencia(j.licencia);
+          avisarConsumo();
         } catch { /* modo privado: la licencia se pierde al cerrar */ }
         setAviso(j.mensaje || 'Licencia activada.');
       }
@@ -145,11 +147,12 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
     } finally {
       setContratando(null);
     }
-  }, []);
+  }, [anual]);
 
   const quitarLicencia = useCallback(() => {
     try { localStorage.removeItem(CLAVE_LICENCIA); } catch { /* nada */ }
     setLicencia(null);
+    avisarConsumo();
     setAviso('Licencia retirada de este navegador.');
   }, []);
 
@@ -232,6 +235,28 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
         )}
 
         {/* Planes */}
+        {/* Selector de periodo. El anual son diez meses: dos de regalo. */}
+        <div className="flex items-center justify-center gap-1 mb-5">
+          {([['mensual', false], ['anual', true]] as const).map(([etq, val]) => (
+            <button key={etq} onClick={() => setAnual(val)}
+              aria-pressed={anual === val}
+              className="px-4 py-1.5 text-xs border transition-colors"
+              style={{
+                borderColor: anual === val ? 'rgba(30,99,212,0.55)' : '#1a2030',
+                background: anual === val ? 'rgba(30,99,212,0.10)' : 'transparent',
+                color: anual === val ? '#1E63D4' : 'var(--fg-muted)',
+                fontFamily: 'system-ui,sans-serif',
+              }}>
+              {etq === 'mensual' ? 'Mensual' : 'Anual'}
+              {etq === 'anual' && (
+                <span className="ml-1.5 text-2xs px-1 py-0.5" style={{ background: 'rgba(29,122,69,0.15)', color: '#1d7a45' }}>
+                  2 meses gratis
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
         <div className="grid gap-4 md:grid-cols-3">
           {(cat?.planes ?? []).map(p => {
             const destacado = p.id === 'pro';
@@ -255,13 +280,20 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
                     )}
                   </div>
                   <p className="text-xl font-bold mb-1" style={{ color: destacado ? '#1E63D4' : 'var(--fg-primary)' }}>
-                    {clp(p.precio_clp)}
+                    {clp(anual && p.precio_clp > 0 ? Math.round(p.precio_anual_clp / 12) : p.precio_clp)}
                     {p.precio_clp > 0 && (
                       <span className="text-2xs font-normal ml-1" style={{ color: 'var(--fg-muted)' }}>
                         CLP / mes
                       </span>
                     )}
                   </p>
+                  {p.precio_clp > 0 && (
+                    <p className="text-2xs" style={{ color: 'var(--fg-muted)', fontFamily: 'system-ui,sans-serif' }}>
+                      {anual
+                        ? `${clp(p.precio_anual_clp)} al año · ahorras ${clp(p.precio_clp * 12 - p.precio_anual_clp)}`
+                        : `o ${clp(p.precio_anual_clp)} al año, con 2 meses gratis`}
+                    </p>
+                  )}
                   <p className="text-xs leading-relaxed mt-2"
                      style={{ color: 'var(--fg-muted)', fontFamily: 'system-ui,sans-serif' }}>
                     {p.descripcion}
@@ -325,6 +357,24 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
           })}
         </div>
 
+        {/* Prueba en vez de promesas. No hay testimonios ni logos de clientes
+            porque no los hay: inventarlos seria prueba social falsa. Lo que si
+            hay son mediciones, y cada una dice de donde sale. */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px mt-8 border" style={{ borderColor: '#1a2030', background: '#1a2030' }}>
+          {[
+            ['0,9 %', 'falsas alarmas', 'sobre 1.000 fotos que ningún modelo vio'],
+            ['84,9 %', 'de imágenes IA señaladas', 'de generadores nunca vistos'],
+            ['0,995', 'AUC fuera de muestra', 'FLUX, DALL·E 3, ImageNet, LFW'],
+            ['+100', 'pruebas automáticas', 'en verde en cada cambio'],
+          ].map(([cifra, que, donde]) => (
+            <div key={que} className="px-4 py-3" style={{ background: '#05080f' }}>
+              <p className="text-lg font-bold" style={{ color: 'var(--fg-primary)' }}>{cifra}</p>
+              <p className="text-2xs" style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif' }}>{que}</p>
+              <p className="text-2xs mt-0.5" style={{ color: '#3d4f62', fontFamily: 'system-ui,sans-serif' }}>{donde}</p>
+            </div>
+          ))}
+        </div>
+
         {/* Que es exactamente el informe sellado: es el producto, conviene explicarlo */}
         <div className="border mt-8 px-5 py-4" style={{ borderColor: '#1a2030', background: '#05080f' }}>
           <div className="flex gap-3">
@@ -345,6 +395,31 @@ export function PlanesContenido({ alCerrar }: { alCerrar?: () => void }) {
                 un perito pagarían por esto.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Preguntas frecuentes: las dudas que frenan una contratacion */}
+        <div className="mt-8">
+          <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--fg-primary)', fontFamily: 'system-ui,sans-serif' }}>
+            Preguntas frecuentes
+          </h3>
+          <div className="border" style={{ borderColor: '#1a2030' }}>
+            {[
+              ["¿El análisis gratuito es peor que el de pago?", "No. Los tres planes usan exactamente el mismo análisis: los seis detectores, el meta-ensemble y el análisis semántico. Lo que cambia es cuántos puedes hacer, la prioridad en la cola y el informe sellado."],
+              ["¿Necesito crear una cuenta?", "No. El plan gratuito no pide registro. Al contratar recibes una licencia que queda guardada en este navegador; no guardamos contraseñas ni datos personales."],
+              ["¿Se renueva solo?", "No. La licencia caduca al terminar el período contratado y no se vuelve a cobrar nada. Si quieres seguir, la renuevas tú."],
+              ["¿Qué pasa si agoto la cuota?", "El análisis se detiene hasta que la cuota se renueva: cada día en el plan gratuito y cada mes en los de pago. Nunca se cobra por exceso."],
+              ["¿Sirve como prueba ante un tribunal?", "No reemplaza un peritaje oficial. El informe sellado permite demostrar que el resultado corresponde a ese archivo exacto y que no se alteró, que es lo que suele exigirse a una verificación periodística."],
+            ].map(([q, a]) => (
+              <details key={q} className="group px-4 py-3 border-b last:border-b-0" style={{ borderColor: '#1a2030' }}>
+                <summary className="text-xs cursor-pointer list-none flex items-center justify-between gap-3"
+                         style={{ color: 'var(--fg-secondary)', fontFamily: 'system-ui,sans-serif' }}>
+                  {q}
+                  <span className="transition-transform group-open:rotate-45" style={{ color: 'var(--fg-muted)' }}>+</span>
+                </summary>
+                <p className="text-xs leading-relaxed mt-2" style={{ color: 'var(--fg-muted)', fontFamily: 'system-ui,sans-serif' }}>{a}</p>
+              </details>
+            ))}
           </div>
         </div>
 

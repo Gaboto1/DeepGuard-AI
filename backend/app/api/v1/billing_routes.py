@@ -25,6 +25,7 @@ class SolicitudCheckout(BaseModel):
     email: str = Field("", max_length=200,
                        description="opcional; identifica la licencia")
     proveedor: str = Field("", description="pasarela; vacio = la disponible")
+    periodo: str = Field("mensual", description="mensual | anual")
 
 
 @router.get("/plans")
@@ -95,7 +96,12 @@ async def crear_checkout(peticion: SolicitudCheckout,
         })
 
     try:
-        res = pasarela.crear_checkout(plan, peticion.email or "")
+        if peticion.periodo not in plans.PERIODOS:
+            return JSONResponse(status_code=400, content={
+                "error": "periodo_invalido",
+                "mensaje": f"Periodo desconocido: {peticion.periodo}"})
+        res = pasarela.crear_checkout(plan, peticion.email or "",
+                                      periodo=peticion.periodo)
     except NotImplementedError as e:
         return JSONResponse(status_code=501, content={
             "error": "pasarela_incompleta", "mensaje": str(e)})

@@ -307,3 +307,19 @@ def test_el_env_file_enciende_la_facturacion(monkeypatch):
     monkeypatch.delenv("BILLING_ENABLED", raising=False)
     monkeypatch.setattr(settings, "BILLING_ENABLED", True, raising=False)
     assert b.habilitado() is True
+
+
+# ─── Periodo anual ───────────────────────────────────────────────────────────
+
+def test_el_anual_cuesta_diez_meses():
+    """Dos meses de regalo, ni mas ni menos: es lo que anuncia la pagina."""
+    for p in (plans.PRO, plans.PERICIAL):
+        assert p.precio_anual_clp == p.precio_clp * 10
+
+
+def test_la_licencia_anual_dura_un_ano(con_clave):
+    ch = providers.PasarelaSimulada().crear_checkout(plans.PRO, "x@y.cl",
+                                                     periodo="anual")
+    lic = licenses.verificar(ch.licencia)
+    assert 364 * 86400 <= lic.caduca - lic.emitida <= 366 * 86400
+    assert "365" in ch.mensaje

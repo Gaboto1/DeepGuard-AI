@@ -79,7 +79,8 @@ class PasarelaDePago(ABC):
         """True si esta configurada y se puede usar."""
 
     @abstractmethod
-    def crear_checkout(self, plan: Plan, email: str) -> Checkout:
+    def crear_checkout(self, plan: Plan, email: str,
+                       periodo: str = "mensual") -> Checkout:
         """Inicia un cobro y devuelve a donde mandar al usuario."""
 
 
@@ -103,18 +104,21 @@ class PasarelaSimulada(PasarelaDePago):
     def disponible(self) -> bool:
         return licenses.habilitado()
 
-    def crear_checkout(self, plan: Plan, email: str) -> Checkout:
+    def crear_checkout(self, plan: Plan, email: str,
+                       periodo: str = "mensual") -> Checkout:
+        from app.billing.plans import PERIODOS
+        dias = PERIODOS.get(periodo, 30)
         ref = f"sim_{secrets.token_hex(8)}"
         if plan.precio_clp == 0:
             return Checkout(self.id, ref, None, None, True,
                             "El plan gratuito no requiere pago.")
-        token = licenses.emitir(sub=email or ref, plan=plan.id, dias=30)
+        token = licenses.emitir(sub=email or ref, plan=plan.id, dias=dias)
         logger.info(f"[billing] checkout simulado {ref} plan={plan.id}")
         return Checkout(
             proveedor=self.id, referencia=ref, url_pago=None, licencia=token,
             simulado=True,
-            mensaje=("Pago simulado: no se ha cobrado nada. La licencia es "
-                     "real y caduca en 30 dias."),
+            mensaje=(f"Pago simulado: no se ha cobrado nada. La licencia es "
+                     f"real y caduca en {dias} dias."),
         )
 
 
@@ -133,7 +137,8 @@ class _PasarelaExterna(PasarelaDePago):
     def _faltan(self) -> list[str]:
         return [k for k, v in self._credenciales().items() if not v]
 
-    def crear_checkout(self, plan: Plan, email: str) -> Checkout:
+    def crear_checkout(self, plan: Plan, email: str,
+                       periodo: str = "mensual") -> Checkout:
         raise NotImplementedError(
             f"{self.nombre} no esta implementada todavia. Faltan las "
             f"credenciales {self._faltan()} y la llamada HTTP a su API. "

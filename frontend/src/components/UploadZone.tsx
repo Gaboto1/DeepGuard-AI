@@ -3,8 +3,9 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Upload, X, AlertTriangle, WifiOff, Loader2 } from 'lucide-react';
-import { uploadFile, pollTask } from '@/lib/api';
+import { Upload, X, AlertTriangle, WifiOff, Loader2, Sparkles } from 'lucide-react';
+import { uploadFile, pollTask, CuotaAgotadaError } from '@/lib/api';
+import { abrirPlanes } from '@/lib/identidad';
 import { useWorkerStatus } from '@/components/WorkerStatusProvider';
 import type { AnalysisResult } from '@/types';
 
@@ -29,6 +30,7 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
   const { status, tooltip } = useWorkerStatus();
 
   const [error,     setError]     = useState<string | null>(null);
+  const [cuotaAgotada, setCuotaAgotada] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress,  setProgress]  = useState(0);
   const [preview,   setPreview]   = useState<{ url: string; type: 'image'|'video'; name: string } | null>(null);
@@ -83,6 +85,7 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
         }
       });
     } catch (e) {
+      setCuotaAgotada(e instanceof CuotaAgotadaError);
       setError(e instanceof Error ? e.message : 'Error al subir el archivo');
       setUploading(false);
     }
@@ -92,6 +95,7 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
     if (preview) URL.revokeObjectURL(preview.url);
     setPreview(null);
     setError(null);
+    setCuotaAgotada(false);
     setUploading(false);
   };
 
@@ -215,7 +219,24 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
         )}
       </AnimatePresence>
 
-      {error && (
+      {error && cuotaAgotada && (
+        // Agotar la cuota no es un fallo: es el momento en que mejorar de plan
+        // tiene sentido. Se explica y se ofrece, en vez de pintarlo en rojo.
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="mt-2 flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 border text-xs"
+          style={{ borderColor: 'rgba(30,99,212,0.45)', background: 'rgba(30,99,212,0.06)' }}>
+          <div className="flex items-start gap-2 flex-1" style={{ color: 'var(--fg-secondary)' }}>
+            <Sparkles size={13} className="flex-shrink-0 mt-0.5" style={{ color: '#1E63D4' }} />
+            <span>{error} La cuota gratuita se renueva cada día a medianoche (UTC).</span>
+          </div>
+          <button onClick={abrirPlanes}
+            className="flex-shrink-0 px-3 py-2 border font-semibold"
+            style={{ borderColor: 'rgba(30,99,212,0.55)', color: '#1E63D4', background: 'rgba(30,99,212,0.08)' }}>
+            Ver planes
+          </button>
+        </motion.div>
+      )}
+      {error && !cuotaAgotada && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           className="mt-2 flex items-start gap-2 px-3 py-2.5 rounded border border-risk-critical-border bg-risk-critical-bg text-risk-critical text-xs">
           <AlertTriangle size={13} className="flex-shrink-0 mt-0.5" />

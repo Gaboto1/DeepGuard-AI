@@ -1,5 +1,16 @@
 import axios from 'axios';
 import type { AnalysisResult, UploadResponse, TaskStatus } from '@/types';
+import { cabecerasIdentidad, avisarConsumo } from '@/lib/identidad';
+
+/** La API rechazo el analisis porque el plan agoto su cuota (HTTP 429). */
+export class CuotaAgotadaError extends Error {
+  plan: string;
+  constructor(mensaje: string, plan: string) {
+    super(mensaje);
+    this.name = 'CuotaAgotadaError';
+    this.plan = plan;
+  }
+}
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -57,18 +68,33 @@ export async function uploadFile(
   const form = new FormData();
   form.append('file', file);
 
-  const { data } = await client.post<Record<string, unknown>>(
+  let data: Record<string, unknown>;
+  try {
+    ({ data } = await client.post<Record<string, unknown>>(
     '/api/v1/analyze',
     form,
     {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      // Identidad del navegador: sin ella la cuota se contaba por IP y un
+      // suscriptor no se distinguia de un anonimo. Ver lib/identidad.ts.
+      headers: { 'Content-Type': 'multipart/form-data', ...cabecerasIdentidad() },
       onUploadProgress: (e) => {
         if (onUploadProgress && e.total) {
           onUploadProgress(Math.round((e.loaded / e.total) * 100));
         }
       },
     },
-  );
+    ));
+  } catch (e) {
+    const r = axios.isAxiosError(e) ? e.response : undefined;
+    if (r?.status === 429) {
+      const j = (r.data ?? {}) as Record<string, unknown>;
+      throw new CuotaAgotadaError(
+        String(j.mensaje ?? 'Has agotado la cuota de tu plan.'),
+        String(j.plan ?? 'gratis'));
+    }
+    throw e;
+  }
+  avisarConsumo();
 
   return {
     task_id: String(data.task_id ?? ''),

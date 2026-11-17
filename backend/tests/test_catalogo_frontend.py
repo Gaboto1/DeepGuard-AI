@@ -14,7 +14,8 @@ from app.billing import plans
 
 TSX = Path(__file__).resolve().parents[2] / "frontend" / "src" / "components" / "Planes.tsx"
 CAMPOS = ("analisis_por_dia", "analisis_por_mes", "prioridad", "historial_dias",
-          "precio_clp", "informe_pdf_sellado", "acceso_api", "analisis_por_lote", "video")
+          "precio_clp", "precio_anual_clp", "informe_pdf_sellado", "acceso_api",
+          "analisis_por_lote", "video")
 
 
 def _copia_local() -> dict:

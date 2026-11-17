@@ -67,6 +67,11 @@ class Plan:
 
     # Precio mensual en pesos chilenos. 0 = gratuito.
     precio_clp: int = 0
+    # Precio por un ano pagado de una vez: diez meses, dos de regalo. Es el
+    # descuento anual habitual del sector y, para un servicio con un solo
+    # equipo detras, el que mejor se sostiene: cobra por adelantado sin
+    # comprometer mas capacidad que la mensual.
+    precio_anual_clp: int = 0
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -112,6 +117,7 @@ PRO = Plan(
     historial_dias=90,
     video=True,
     precio_clp=9990,
+    precio_anual_clp=99900,
 )
 
 PERICIAL = Plan(
@@ -130,9 +136,13 @@ PERICIAL = Plan(
     historial_dias=365,
     video=True,
     precio_clp=29990,
+    precio_anual_clp=299900,
 )
 
 PLANES: dict[str, Plan] = {p.id: p for p in (GRATIS, PRO, PERICIAL)}
+
+# Periodos de contratacion y su duracion en dias.
+PERIODOS = {"mensual": 30, "anual": 365}
 PLAN_POR_DEFECTO = GRATIS
 
 
