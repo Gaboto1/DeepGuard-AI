@@ -48,7 +48,7 @@ DEBE_APARECER = [
     ("INFORME", "0,9 %", 2),
     ("INFORME", "0,995", 2),
     ("INFORME", "60.000 imágenes", 3),
-    ("INFORME", "nueve fuentes", 3),
+    ("INFORME", "nueve fuentes", 2),
     ("INFORME", "138 pruebas", 3),
     # Sexta pasada: latencia. El valor y la meta del KPI-04 y la meta del SLA
     # se corrigieron contra la medicion real (reports/latencia_medida.json).
@@ -56,7 +56,18 @@ DEBE_APARECER = [
     ("INFORME", "≤ 15 s en el percentil 95", 1),
     ("INFORME", "≤ 90 s en el percentil 95", 1),
     ("INFORME", "restando semantic_analysis.analysis_time", 1),
-    ("INFORME", "realizada en noviembre de 2026", 1),
+    ("INFORME", "se midieron en noviembre de 2026", 1),
+    # Estado del sistema al 18 nov 2026 (decimotercera pasada): politica
+    # "gated" del arte IA, tres cabezales LightGBM, LLaVA en cada analisis,
+    # limites fuera de dominio y auditoria.
+    ("INFORME", "LightGBM", 4),
+    ("INFORME", "Política vigente de participación del detector de arte IA", 1),
+    ("INFORME", "14,2 %", 2),
+    ("INFORME", "84,9 %", 1),
+    ("INFORME", "LLaVA", 4),
+    ("INFORME", "Auditoría técnica del 17 de noviembre de 2026", 1),
+    ("INFORME", "CC BY-NC 4.0", 2),
+    ("INFORME", "7,1 GB", 2),
     ("INFORME", "frente al 12,5 % de septiembre de 2026", 1),
     ("INFORME", "y de un 49,9 % en septiembre de 2026", 1),
     ("INFORME", "conjunto retenido", 2),
@@ -83,6 +94,15 @@ DEBE_APARECER = [
 
 # (documento, texto que NO debe quedar, motivo)
 NO_DEBE_QUEDAR = [
+    ("INFORME", "XGBoost + scikit-learn", "el meta-clasificador en produccion es LightGBM desde el 17 nov"),
+    ("INFORME", "Celery, PyTorch, XGBoost", "idem, en la tabla de capas"),
+    ("INFORME", "análisis semántico opcional", "LLaVA se ejecuta en cada analisis"),
+    ("INFORME", "Sondeo cada 5 minutos", "el monitor real corre cada 3 horas"),
+    ("INFORME", "~6 GB con los seis detectores", "medido al arranque: 7,1 GB con LLaVA"),
+    ("INFORME", "sin incluir el detector de arte IA", "politica gated: participa en fotografia"),
+    ("INFORME", "No — indicador independiente", "idem, en la tabla de detectores"),
+    ("INFORME", "integración continua, de modo que cada envío", "la CI no ejecuta las pruebas"),
+    ("INFORME", "mantiene el proceso activo", "nada mantiene despierta la API de Render"),
     ("INFORME", "frente al 0,7 % de septiembre de 2026",
      "la referencia historica quedo sustituida por el valor nuevo"),
     ("INFORME", "14.000 imágenes", "tamano del conjunto anterior"),
