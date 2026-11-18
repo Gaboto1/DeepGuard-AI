@@ -98,7 +98,9 @@ PROYECTO TITULO FINAL/
 ├── scripts/preparar_worker.ps1      # Comprobacion previa de la version de consola
 ├── scripts/tee_log.py               # Duplica la salida de la version de consola a reports/worker.log
 ├── scripts/medir_latencia.py        # Latencia real por la via de produccion -> reports/latencia_medida.json
-├── tools/generar_informe.py         # Generador del informe Word (.docx)
+├── tools/generar_informes_word.py   # Genera los Word vigentes: informe tecnico y auditoria
+├── tools/generar_informe*.py        # Generadores de los informes de mayo-julio (historicos)
+├── informes/                        # Word vigentes + versiones_anteriores/ (local, no versionado)
 ├── .gitignore                       # Reglas Git: venv, .env, models, uploads, etc.
 └── ESTRUCTURA_PROYECTO.md           # Este archivo
 ```

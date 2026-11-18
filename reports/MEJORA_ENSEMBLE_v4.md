@@ -2,6 +2,8 @@
 
 **Fecha:** 2026-11-09
 **Continúa:** `MEJORA_ENSEMBLE_v3.md` (2026-09-28), cuyas cifras quedan superadas
+(desde el 18 nov 2026 en `informes/versiones_anteriores/`, fuera del repositorio;
+sigue en el historial de git)
 **Alcance:** reentrenamiento con 68.000 muestras, construcción del primer
 conjunto retenido del proyecto, corrección de tres defectos que afectaban al
 resultado que ve el usuario, y actualización de los tres entregables.

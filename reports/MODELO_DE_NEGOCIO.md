@@ -209,10 +209,10 @@ caducidad exigiría una lista de revocación, que no está implementada; cambiar
 se registra en el log. Un contador caído no es razón para dejar sin servicio a
 quien paga.
 
-**La prioridad de cola está definida pero no conectada.** El campo `prioridad`
-existe en cada plan y Celery admite prioridades en la cola `images`, pero
-`/analyze` todavía no la pasa al encolar. Es el siguiente paso natural y es
-pequeño.
+**La prioridad de cola está conectada** (desde el 16 de noviembre de 2026):
+`/analyze` encola con la `prioridad` del plan y la cola `images` la respeta
+(`x-max-priority: 10`). Con un solo worker y concurrencia 2, solo se nota
+cuando hay cola.
 
 **El informe PDF sellado no está generado.** El sello HMAC existe y se emite
 con cada análisis; lo que falta es componer el PDF que lo presenta. Es el
