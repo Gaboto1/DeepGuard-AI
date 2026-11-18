@@ -30,7 +30,7 @@ from docx.shared import Cm, Pt, RGBColor
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "informes"
 
-AUTOR = "Gabriel Rojas Liapiz"
+AUTOR = "Gabriel Rojas y Vicente Liapiz"
 INSTITUCION = "INACAP · Ingeniería en Informática · Proyecto de Título"
 
 NAVY = RGBColor(0x08, 0x2A, 0x4A)
@@ -381,7 +381,7 @@ def auditoria() -> Path:
         "coherencia de datos e higiene del repositorio",
         [f"**Fecha de la auditoría:** 17 de noviembre de 2026",
          f"**Verificación en producción:** 18 de noviembre de 2026",
-         f"**Autor:** {AUTOR}",
+         f"**Autores:** {AUTOR}",
          INSTITUCION,
          "**Fuente:** reports/AUDITORIA_20261117.md (commit d8b7811 y 4bdea31)"],
         "Cada hallazgo se comprobó contra el sistema real —la API publicada en "
@@ -567,7 +567,7 @@ def informe_tecnico() -> Path:
         "Sistema de análisis forense digital para la detección de contenido "
         "visual generado o manipulado por inteligencia artificial",
         ["**Versión:** 18 de noviembre de 2026",
-         f"**Autor:** {AUTOR}",
+         f"**Autores:** {AUTOR}",
          INSTITUCION,
          "**En vivo:** https://gaboto1.github.io/DeepGuard-AI/",
          "**Sustituye a:** los informes técnicos de mayo a julio de 2026 (DeepGuard AI), "
