@@ -108,10 +108,9 @@ export default function Navbar() {
              className="px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
             Planes
           </button>
-          <a href={`${BASE_URL}/docs`} target="_blank" rel="noopener noreferrer"
-             className="hidden sm:inline px-3 py-1.5 rounded hover:text-fg-primary hover:bg-bg-elevated transition-colors">
-            API
-          </a>
+          {/* La documentacion de la API no va en el menu principal: es para
+              desarrolladores del plan Pericial, no para quien verifica una
+              imagen. Sigue enlazada en el pie de pagina. */}
           <div className="hidden sm:block w-px h-4 bg-border-subtle mx-1" />
 
           <span

@@ -237,7 +237,11 @@ class _Head:
                 f"T={self.temperature:.3f} | {len(self.feature_cols)} features"
             )
         except Exception as e:
-            logger.warning(f"[meta:{self.tag}] carga fallida: {e}")
+            # ERROR y no warning: si un cabezal no carga, el sistema sigue
+            # respondiendo con pesos fijos -mucho peores- y nada en la
+            # pagina lo delata. Paso con lightgbm ausente de requirements.
+            logger.error(f"[meta:{self.tag}] CARGA FALLIDA, se usaran pesos fijos "
+                         f"de respaldo: {type(e).__name__}: {e}")
             self.available = False
 
     def predict_proba(self, scores: dict[str, Optional[float]]) -> float:

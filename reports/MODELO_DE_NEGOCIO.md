@@ -175,6 +175,16 @@ cobrar nada y diciéndolo en pantalla.
    ninguna licencia.
 4. Ponerlas en el entorno: `FLOW_API_KEY`, `FLOW_SECRET_KEY`.
 
+**Antes del paso 4, la licencia de los datos.** Desde el 17 de noviembre
+de 2026 los cabezales del meta-ensemble están entrenados, entre otras fuentes,
+con OpenFake, que se publica bajo **CC BY-NC 4.0: uso no comercial**. Un
+servicio de pago no puede apoyarse en esos pesos. Antes de cobrar hay que
+reentrenar los cabezales sin las filas de OpenFake (con
+`scripts/train_meta_dual_head.py --sin-externo` y otra fuente de datos
+externos con licencia comercial) o conseguir una licencia del autor. Los
+detectores preentrenados de HuggingFace también tienen licencias propias que
+revisar.
+
 **Antes del paso 4, lo que no es código:** cobrar en Chile obliga a emitir
 boleta o factura y a declarar el IVA. Decide si facturas como persona natural o
 constituyes una empresa, e inscribe la actividad en el SII. Esto no es

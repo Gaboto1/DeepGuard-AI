@@ -2,6 +2,7 @@ import ssl as _ssl
 from pathlib import Path
 from urllib.parse import urlparse, urlencode, parse_qs, urlunparse
 
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 # Directorio raíz del proyecto (backend/app/config.py → ../.. → ROOT)
@@ -20,8 +21,11 @@ class Settings(BaseSettings):
     API_ONLY: bool = False
 
     # ── Redis / Celery ────────────────────────────────────────────────────────
-    REDIS_URL:     str = "redis://localhost:6379/0"
-    REDIS_BACKEND: str = "redis://localhost:6379/1"
+    # repr=False en los campos con credenciales: el objeto de configuracion
+    # se imprime entero en tracebacks y asserts, y una auditoria del 17 nov
+    # 2026 vio salir fragmentos de claves en el mensaje de error de pytest.
+    REDIS_URL:     str = Field("redis://localhost:6379/0", repr=False)
+    REDIS_BACKEND: str = Field("redis://localhost:6379/1", repr=False)
 
     # ── CORS ──────────────────────────────────────────────────────────────────
     ALLOWED_ORIGINS_CSV: str = (
@@ -32,7 +36,12 @@ class Settings(BaseSettings):
     )
 
     # ── Archivos ──────────────────────────────────────────────────────────────
-    MAX_FILE_SIZE_MB: int  = 500
+    # 100 MB y no 500. La API lee el archivo entero en memoria y luego hace una
+    # copia en Base64 un tercio mayor para enviarla al worker: con 500 MB eso
+    # son ~1,2 GB, y el plan gratuito de Render tiene 512 MB de RAM. Una sola
+    # subida grande tumbaba la API. 100 MB es ademas lo que compromete el SLA
+    # para video. Auditoria del 17 de noviembre de 2026.
+    MAX_FILE_SIZE_MB: int  = 100
     UPLOAD_DIR:       Path = Path("uploads")
     # Apunta a ROOT/models/ independientemente del cwd (el worker arranca desde backend/)
     MODELS_DIR:       Path = _PROJECT_ROOT / "models"
@@ -42,14 +51,14 @@ class Settings(BaseSettings):
     CUSTODY_DIR: Path = Path("reports") / "custody"
 
     # ── Clave HMAC ────────────────────────────────────────────────────────────
-    DEEPGUARD_SIGNING_KEY: str = ""
+    DEEPGUARD_SIGNING_KEY: str = Field("", repr=False)
 
     # Clave de firma de las licencias de suscripcion. Separada a proposito de
     # DEEPGUARD_SIGNING_KEY: esa acredita un peritaje y esta autoriza un cobro.
     # Compartirlas significaria que comprometer la facturacion compromete la
     # prueba forense. Vacia = las licencias quedan deshabilitadas y todo el
     # mundo es plan gratuito, que es el valor por defecto deseado.
-    DEEPGUARD_BILLING_KEY: str = ""
+    DEEPGUARD_BILLING_KEY: str = Field("", repr=False)
     # Interruptor de la cuota. Apagado por defecto: un fallo contando cuotas
     # se manifiesta dejando usuarios sin servicio.
     BILLING_ENABLED: bool = False

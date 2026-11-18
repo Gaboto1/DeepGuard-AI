@@ -19,9 +19,9 @@ celery[redis]>=5.3.0
 redis>=5.0.0
 
 # ─── Web Framework ────────────────────────────────────────────────────────────
-fastapi==0.104.1
+fastapi==0.115.14
 uvicorn[standard]==0.24.0
-python-multipart==0.0.6
+python-multipart==0.0.20
 aiofiles==23.2.1
 
 # AI / ML (PyTorch installed separately with CUDA)
@@ -42,6 +42,19 @@ Pillow>=10.3.0
 # NumPy 2.x — required for Python 3.13
 numpy>=2.0.0
 scipy>=1.13.0
+
+# Meta-ensemble. Los cabezales se guardan serializados con joblib y solo se
+# pueden cargar con estas bibliotecas, en estas versiones exactas: un modelo
+# serializado con una version de scikit-learn o LightGBM no garantiza cargar
+# con otra. Faltaban en este archivo hasta la auditoria del 17 nov 2026: el
+# worker funcionaba porque estaban instaladas a mano, pero en una instalacion
+# nueva los tres cabezales fallaban al cargar y el sistema caia en silencio a
+# pesos fijos, mucho peores. xgboost se conserva porque los respaldos de
+# reports/snapshot_* pueden contener cabezales XGBoost.
+scikit-learn==1.8.0
+joblib==1.5.3
+lightgbm==4.6.0
+xgboost==3.2.0
 
 # Data validation
 pydantic>=2.7.0

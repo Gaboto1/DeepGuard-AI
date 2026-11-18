@@ -53,7 +53,7 @@ PROYECTO TITULO FINAL/
 │   │   ├── models/
 │   │   │   ├── deepfake_detector.py # 6 detectores (ViT, SDXL, probe CLIP, AiArt, SigLIP2, umm-maybe)
 │   │   │   ├── face_detector.py     # MTCNN para detección y crop de rostros
-│   │   │   ├── meta_ensemble.py     # 3 cabezales: full/noart logreg + face XGBoost
+│   │   │   ├── meta_ensemble.py     # 3 cabezales LightGBM: fotografia / obra grafica / rostro
 │   │   │   └── ood_detector.py      # Detector Out-of-Distribution (5 señales)
 │   │   │
 │   │   ├── services/
@@ -143,7 +143,7 @@ PROYECTO TITULO FINAL/
 | Cola | Celery + Upstash Redis | 5.3+ |
 | ML | PyTorch + CUDA | 2.x + cu124 |
 | VLM | LLaVA-1.5-7b-hf (4-bit NF4) | bitsandbytes 0.43+ |
-| Meta-ensemble | 3 cabezales (full/noart logreg, face XGBoost), umbral 0.8764 | 2.x |
+| Meta-ensemble | 3 cabezales LightGBM (fotografía, obra gráfica, rostro), umbral 0,9786; mezcla «o» de ramas | 4.x |
 | Custodia | SHA-256 + HMAC-SHA256 v2 | stdlib |
 | Hosting API | Render (free tier) | — |
 | Hosting Web | GitHub Pages (gratuito permanente) | — |
@@ -168,7 +168,7 @@ documentadas en `reports/MEJORA_ENSEMBLE_v4.md`, secciones 4 y 11.
 | Latencia del ensemble, sin análisis semántico | 5,3 s mediana · 11,7 s p95 | 49 análisis, GPU dedicada |
 | Latencia total, lo que espera el usuario | 32,4 s mediana · 61,6 s p95 | 49 análisis, GPU dedicada |
 | VRAM con todo residente (ensemble + LLaVA) | 7,1 GB / 12,9 GB | arranque del worker |
-| Batería de pruebas automatizadas | 125, todas en verde | `pytest` en `backend/` |
+| Batería de pruebas automatizadas | 132, todas en verde | `pytest` en `backend/` |
 
 > **Fotografía moderna «en la calle».** Sobre material de Reddit (OpenFake),
 > las falsas alarmas son del 14,2 % con etiquetas ruidosas: el sistema es mucho

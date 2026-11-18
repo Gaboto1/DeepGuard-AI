@@ -277,6 +277,20 @@ async def analyze_async(
         # pagina sin servicio por un fallo del contador.
         logger.warning(f"[billing] compuerta omitida ({type(e).__name__}: {e})")
 
+    # Validación 3a: rechazar por la cabecera ANTES de leer. Sin esto el
+    # archivo entero se cargaba en memoria y solo despues se comprobaba su
+    # tamano: una sola subida enorme agotaba la RAM de la API. El margen de
+    # 1 MB cubre las cabeceras multipart que envuelven al archivo.
+    _declarado = request.headers.get("content-length")
+    if _declarado and _declarado.isdigit() and             int(_declarado) > settings.max_file_size_bytes + 1_048_576:
+        raise HTTPException(
+            status_code=413,
+            detail={
+                "error":   "archivo_demasiado_grande",
+                "mensaje": f"El archivo supera el máximo de {settings.MAX_FILE_SIZE_MB} MB.",
+            },
+        )
+
     # Validación 3: leer y verificar tamaño
     content = await file.read()
     validate_not_empty(len(content), file.filename)
@@ -590,6 +604,21 @@ async def get_history_v1(limit: int = 20) -> JSONResponse:
     Ordenados por fecha de modificación descendente (más reciente primero).
     Máximo 100 resultados.
     """
+    # Desactivado por defecto. Este endpoint devuelve los analisis de TODOS los
+    # usuarios -nombres de archivo, scores, resultados completos- sin pedir
+    # identidad, y el sistema no guarda de quien es cada analisis, de modo que
+    # no hay forma de filtrarlo por usuario. La pagina no lo usa: su historial
+    # vive en el navegador de cada persona. Hoy en Render salia vacio solo
+    # porque la API no comparte disco con el worker; en un despliegue que lo
+    # compartiera, cualquiera veria lo que analizaron los demas. Auditoria del
+    # 17 de noviembre de 2026. Para depurar en local: HISTORIAL_PUBLICO=true.
+    import os as _os
+    if _os.getenv("HISTORIAL_PUBLICO", "").strip().lower() not in {"1", "true", "si", "yes"}:
+        return JSONResponse(status_code=404, content={
+            "error": "no_disponible",
+            "mensaje": "El historial global esta desactivado. El historial de cada "
+                       "usuario se guarda en su navegador."})
+
     limit = min(limit, 100)
     results = []
 

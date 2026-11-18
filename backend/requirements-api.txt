@@ -11,9 +11,9 @@
 # ============================================================
 
 # ── Web framework ──────────────────────────────────────────
-fastapi==0.104.1
+fastapi==0.115.14
 uvicorn[standard]==0.24.0
-python-multipart==0.0.6
+python-multipart==0.0.20
 aiofiles==23.2.1
 
 # ── Cola de tareas (despacho a worker GPU remoto) ──────────

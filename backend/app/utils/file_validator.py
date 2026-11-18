@@ -20,7 +20,7 @@ ALLOWED_VIDEO_MIMES = {
 }
 
 # Límite adicional para el endpoint asíncrono v1 (videos grandes)
-MAX_VIDEO_SIZE_ASYNC_MB = 500
+MAX_VIDEO_SIZE_ASYNC_MB = 100   # ver MAX_FILE_SIZE_MB en config.py
 
 try:
     import magic as _magic

@@ -9,7 +9,8 @@ import { abrirPlanes } from '@/lib/identidad';
 import { useWorkerStatus } from '@/components/WorkerStatusProvider';
 import type { AnalysisResult } from '@/types';
 
-const MAX_MB = 500;
+// Igual que MAX_FILE_SIZE_MB del backend (app/config.py).
+const MAX_MB = 100;
 const ACCEPTED = {
   'image/jpeg': ['.jpg', '.jpeg'],
   'image/png':  ['.png'],
