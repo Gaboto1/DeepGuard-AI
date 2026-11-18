@@ -89,11 +89,14 @@ PROYECTO TITULO FINAL/
 │
 ├── models/                          # Pesos de modelos descargados (en .gitignore, >GB)
 │
-├── INICIAR PAGINA WEB.bat           # Arranca el worker GPU local (es lo que hace funcionar la web)
+├── INICIAR PAGINA WEB.bat           # Abre el panel del worker GPU local (es lo que hace funcionar la web)
 ├── INICIAR LOCAL.bat                # Arranca el stack completo en localhost
 ├── VER PROGRESO.bat                 # Panel en vivo del pipeline y de la fase de medicion
-├── scripts/preparar_worker.ps1      # Comprobacion previa: venv, .env, worker duplicado, VRAM libre
-├── scripts/tee_log.py               # Duplica la salida del worker a pantalla y a reports/worker.log
+├── scripts/panel_worker.py          # Panel de control del worker: arranque, GPU, analisis y registro
+├── scripts/deepscan.ico             # Icono del panel
+├── scripts/worker_consola.bat       # Version de consola del worker, de respaldo
+├── scripts/preparar_worker.ps1      # Comprobacion previa de la version de consola
+├── scripts/tee_log.py               # Duplica la salida de la version de consola a reports/worker.log
 ├── scripts/medir_latencia.py        # Latencia real por la via de produccion -> reports/latencia_medida.json
 ├── tools/generar_informe.py         # Generador del informe Word (.docx)
 ├── .gitignore                       # Reglas Git: venv, .env, models, uploads, etc.

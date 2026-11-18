@@ -119,13 +119,22 @@ Si el worker o la API reportan que Redis no responde, ver `docs/RUNBOOK_REDIS_DO
 ## Puesta en marcha
 
 **Worker GPU (lo que hace funcionar la página):** doble clic en
-`INICIAR PAGINA WEB.bat`. Comprueba el entorno, que no haya otro worker y la
-VRAM libre antes de arrancar, y guarda la salida en `reports/worker.log`.
-Tarda 2–4 minutos en cargar los modelos.
+`INICIAR PAGINA WEB.bat`. Abre el panel de control del worker
+(`scripts/panel_worker.py`), que:
+
+- comprueba el entorno, que no haya otro worker y la VRAM libre;
+- arranca el worker y muestra la carga de cada modelo (2–4 minutos);
+- enseña en vivo la memoria y el uso de la GPU, cada análisis que llega con su
+  resultado y su duración, y si la página publicada ve el worker;
+- guarda toda la salida en `reports/worker.log`.
+
+Cerrar el panel detiene el worker: corre dentro de un *job object* de Windows
+y nunca queda huérfano ocupando la GPU. La versión de consola sigue
+disponible en `scripts/worker_consola.bat`.
 
 > Cierra navegadores y juegos que usen la GPU antes de arrancarlo. Con la VRAM
 > ocupada, LLaVA se ejecuta en CPU y cada análisis pasa de ~30 segundos a
-> decenas de minutos; el worker lo avisa con `VRAM INSUFICIENTE` en el log.
+> decenas de minutos; el panel lo avisa antes de arrancar y en cuanto ocurre.
 
 **Todo en local:** `INICIAR LOCAL.bat` levanta la API y el frontend en
 `http://localhost:3000`.
