@@ -19,7 +19,7 @@ la página publicada en GitHub Pages o el código), no por inspección del texto
 | Media | Un cabezal que no carga solo dejaba un `warning` | ahora es `error` explicando la consecuencia |
 | Media | El README describía otro sistema (un solo ViT, 0,3 s por imagen, 500 MB, componentes inexistentes) y afirmaba una licencia MIT que no existe | reescrito con cifras medidas y procedencia |
 | Baja | `ESTRUCTURA_PROYECTO.md` describía los cabezales anteriores | corregido |
-| Baja | El monitor de salud de GitHub Actions lleva desde el 1 de noviembre desactivado por inactividad | **pendiente del dueño**: reactivarlo |
+| Baja | El monitor de salud de GitHub Actions lleva desde el 1 de noviembre desactivado por inactividad | reactivado el 18 nov; ejecución manual en verde |
 | Baja | «API» en el menú principal de la página | movido al pie de página |
 
 ## Lo que se comprobó y está bien
@@ -61,3 +61,15 @@ Si algún día el frontend pasa a servirse con `next start`, hay que actualizar.
    en la conversación.
 4. **Decidir la licencia** del repositorio y, antes de cobrar, resolver la de
    los datos de entrenamiento.
+
+## Verificación en producción — 18 de noviembre de 2026
+
+Tras el *Manual Deploy* en Render, comprobado contra la API publicada:
+
+- `GET /api/v1/history` responde **404**.
+- Una subida real de 105 MB recibe **413** `archivo_demasiado_grande` («supera el máximo de 100 MB»).
+- `/health` en `api-only` con Redis conectado; catálogo de planes servido.
+- Monitor de salud activo; la ejecución del 18 nov terminó con éxito.
+
+Quedan del dueño los puntos 3 y 4 (rotación de la clave de facturación, si
+procede, y licencias).
