@@ -95,6 +95,9 @@ DEBE_APARECER = [
 # (documento, texto que NO debe quedar, motivo)
 NO_DEBE_QUEDAR = [
     ("INFORME", "138 pruebas", "recuento de la duodecima pasada; retencion sumo 5"),
+    ("INFORME", "10.000 comandos/día", "limite antiguo de Upstash; hoy 500.000 al mes"),
+    ("INFORME", "~4 KB por tarea", "medido: ~66 KB por resultado"),
+    ("INFORME", "hasta 100 MB", "la cola gratuita admite unos 5 MB por archivo"),
     ("GUION", "Ciento treinta y ocho", "mismo recuento, con letras"),
     ("INFORME", "nunca se persiste", "el original se escribe temporalmente y se borra al terminar"),
     ("INFORME", "sin necesidad de confiar", "HMAC es simetrico: la firma se comprueba por la API"),

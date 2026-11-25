@@ -1,4 +1,4 @@
-INFORME   77,617 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
+INFORME   78,410 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
 GUION     23,702 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
 DEFENSA   12,644 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
 
@@ -43,6 +43,9 @@ DEFENSA   12,644 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
 
 === NO DEBE QUEDAR (texto superado) ===
   ok  INFORME    0x  138 pruebas                                  | recuento de la duodecima pasada; retenci
+  ok  INFORME    0x  10.000 comandos/día                          | limite antiguo de Upstash; hoy 500.000 a
+  ok  INFORME    0x  ~4 KB por tarea                              | medido: ~66 KB por resultado
+  ok  INFORME    0x  hasta 100 MB                                 | la cola gratuita admite unos 5 MB por ar
   ok  GUION      0x  Ciento treinta y ocho                        | mismo recuento, con letras
   ok  INFORME    0x  nunca se persiste                            | el original se escribe temporalmente y s
   ok  INFORME    0x  sin necesidad de confiar                     | HMAC es simetrico: la firma se comprueba
