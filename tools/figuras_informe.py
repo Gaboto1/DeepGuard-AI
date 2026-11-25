@@ -129,7 +129,7 @@ def figura_infraestructura(ruta):
             color=AZUL, fontweight="bold")
     caja(ax, 5.5, 41.5, 25, 8, "GitHub Pages\n\nCDN global\nHTTPS automático\nSin servidor propio", F_PRES, NAVY)
     caja(ax, 37.5, 41.5, 25, 8, "Render.com\n\n512 MB RAM · 0.1 vCPU\nContenedor Linux\nSuspensión por inactividad", F_PRES, NAVY)
-    caja(ax, 69.5, 41.5, 25, 8, "Upstash Redis\n\n256 MB · TLS\n10.000 comandos/día\nPersistencia AOF", F_PRES, NAVY)
+    caja(ax, 69.5, 41.5, 25, 8, "Upstash Redis\n\nPlan gratuito · TLS\n10 MB por petición\nCaducidad de 24 h", F_PRES, NAVY)
     caja(ax, 21.5, 32.5, 57, 5.5,
          "GitHub Actions — publicación automática del frontend\n"
          "y verificación de salud de la API y Redis cada 3 horas", F_GRIS, GRIS)
