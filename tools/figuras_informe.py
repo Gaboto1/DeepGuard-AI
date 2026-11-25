@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Figuras 5, 8 y 9 del informe ES2 (componentes, infraestructura y arquitectura),
+Figuras 1, 2, 5, 8 y 9 del informe ES2 (BPMN, componentes, infraestructura y arquitectura),
 redibujadas el 18 nov 2026 con el estado real del sistema: tres cabezales
 LightGBM, politica "gated" del detector de arte IA, LLaVA en cada analisis,
 7,1 GB de VRAM medidos al arranque y GitHub Actions sin pruebas automatizadas.
@@ -187,10 +187,10 @@ def figura_arquitectura(ruta):
          "Meta-ensemble · 3 cabezales LightGBM\ncompleto · sin arte IA · facial\n"
          "mezcla «o» con rostro\ncalibración por temperatura", "#e8f5ec", "#2e8b57", tam=6.4)
     caja(ax, 36.3, 7, 27.5, 8.6,
-         "Análisis semántico\nLLaVA-1.5-7B (4 bits)\ncoherencia visual de la escena\nfusionado con el porcentaje",
+         "Correcciones forenses (4 reglas)\n+ señales CPU: FFT · SRM · ELA",
          "#e8f5ec", "#2e8b57", tam=6.4)
     caja(ax, 64.5, 7, 27.5, 8.6,
-         "Correcciones forenses (4 reglas)\n+ señales CPU: FFT · SRM · ELA\n+ cadena de custodia HMAC-SHA256",
+         "Análisis semántico\nLLaVA-1.5-7B (4 bits)\nfusionado con el porcentaje\n+ sello de custodia HMAC-SHA256",
          "#e8f5ec", "#2e8b57", tam=6.4)
     flecha(ax, 35.5, 11.3, 36.3, 11.3, color=GRIS)
     flecha(ax, 63.8, 11.3, 64.5, 11.3, color=GRIS)
@@ -202,9 +202,117 @@ def figura_arquitectura(ruta):
     plt.close(fig)
 
 
+# =============================================================================
+# Figuras 1 y 2 (BPMN), redibujadas el 25 nov 2026: en produccion la huella y la
+# firma las hace el worker, HMAC usa clave SECRETA (simetrica) y la firma se
+# comprueba a traves de la API, que es quien la tiene.
+# =============================================================================
+from matplotlib.patches import Ellipse, Polygon  # noqa: E402
+
+TEAL_B = "#0f7d9c"
+VERDE_B, ROJO_B = "#1d7a45", "#c0392b"
+
+
+def carril(ax, y, h, texto, color):
+    ax.add_patch(Rectangle((1, y), 98, h, fill=False, ec=color, lw=1.2))
+    ax.add_patch(Rectangle((1, y), 5.5, h, fc=color, ec=color))
+    ax.text(3.75, y + h / 2, texto, rotation=90, ha="center", va="center", fontsize=8.2,
+            color="white", fontweight="bold", linespacing=1.3)
+
+
+def evento(ax, x, y, color, texto, lw=1.8):
+    ax.add_patch(Ellipse((x, y), 4.6, 2.6, fill=False, ec=color, lw=lw))
+    ax.text(x, y - 2.0, texto, ha="center", va="top", fontsize=6.6, color=GRIS, linespacing=1.25)
+
+
+def compuerta(ax, x, y, texto):
+    ax.add_patch(Polygon([(x - 3.4, y), (x, y + 2.3), (x + 3.4, y), (x, y - 2.3)], fc=F_BROKER, ec=DORADO, lw=1.4))
+    ax.text(x, y, "×", ha="center", va="center", fontsize=12, color=DORADO)
+    ax.text(x, y + 2.9, texto, ha="center", va="bottom", fontsize=6.8, color=GRIS)
+
+
+def figura_bpmn1(ruta):
+    fig, ax = lienzo(1097)
+    H = 100 * 1097 / ANCHO_PX
+    titulo(ax, H - 2, "Proceso 1 — Verificación forense de contenido visual")
+    h = 16.2
+    y3, y2, y1 = 1.5, 1.5 + h, 1.5 + 2 * h
+    carril(ax, y1, h, "Usuario", "#1f3d6a")
+    carril(ax, y2, h, "Plataforma\nDeepScan", AZUL)
+    carril(ax, y3, h, "Worker GPU", TEAL_B)
+    c1, c2, c3 = y1 + h / 2, y2 + h / 2, y3 + h / 2
+    w, a = 15, 5.6
+    evento(ax, 11.5, c1, VERDE_B, "Necesita\nverificar")
+    caja(ax, 17.5, c1 - a / 2, w, a, "Cargar archivo\n(imagen o video)", F_PRES, NAVY, 7.6)
+    flecha(ax, 13.9, c1, 17.5, c1)
+    caja(ax, 72, c1 - a / 2, w, a, "Consultar\ninforme forense", F_PRES, NAVY, 7.6)
+    evento(ax, 94, c1, ROJO_B, "Decisión\ninformada", 2.6)
+    flecha(ax, 87, c1, 91.6, c1)
+    caja(ax, 17.5, c2 - a / 2, w, a, "Validar tipo\ny tamaño", F_PRES, NAVY, 7.6)
+    flecha(ax, 25, c1 - a / 2, 25, c2 + a / 2, color=GRIS, ls="--")
+    compuerta(ax, 40.5, c2, "¿válido?")
+    flecha(ax, 32.5, c2, 37.1, c2)
+    flecha(ax, 40.5, c2 - 2.3, 40.5, c2 - 5.2, color=ROJO_B)
+    ax.text(40.5, c2 - 5.6, "no → rechazo (HTTP 415 / 413)", ha="center", va="top", fontsize=6.8, color=ROJO_B)
+    caja(ax, 49, c2 - a / 2, w, a, "Encolar tarea\n(Redis)", F_PRES, NAVY, 7.6)
+    flecha(ax, 43.9, c2, 49, c2)
+    ax.text(46.2, c2 + 0.8, "sí", fontsize=6.8, color=GRIS, ha="center")
+    caja(ax, 72, c2 - a / 2, w, a, "Entregar\nresultado", F_PRES, NAVY, 7.6)
+    flecha(ax, 79.5, c2 + a / 2, 79.5, c1 - a / 2, color=GRIS, ls="--")
+    xs, ws = [8.2, 23.6, 39.0, 54.4, 69.8, 85.2], 12.6
+    ts = ["Calcular\nSHA-256", "Extraer\nmetadatos", "Clasificar tipo\nde contenido", "Ejecutar\nensemble y LLaVA",
+          "Combinar y\ncorregir puntaje", "Firmar HMAC y\nborrar el original"]
+    for k, (x, t) in enumerate(zip(xs, ts)):
+        caja(ax, x, c3 - a / 2, ws, a, t, F_COMP, TEAL_B, 7.2)
+        if k:
+            flecha(ax, xs[k - 1] + ws, c3, x, c3)
+    ax.plot([56.5, 56.5, 14.5], [c2 - a / 2, y2 - 1.6, y2 - 1.6], color=GRIS, lw=1.1, ls="--")
+    flecha(ax, 14.5, y2 - 1.6, 14.5, c3 + a / 2, color=GRIS, ls="--")
+    ax.plot([91.5, 91.5, 87], [c3 + a / 2, c2, c2], color=GRIS, lw=1.1, ls="--")
+    flecha(ax, 91.5, c2, 87, c2, color=GRIS, ls="--")
+    fig.savefig(ruta, dpi=DPI)
+    plt.close(fig)
+
+
+def figura_bpmn2(ruta):
+    fig, ax = lienzo(920)
+    H = 100 * 920 / ANCHO_PX
+    titulo(ax, H - 2, "Proceso 2 — Generación y validación de la cadena de custodia")
+    h = 19
+    y2, y1 = 1.5, 1.5 + h + 0.8
+    carril(ax, y1, h, "Emisión\ndel sello", "#1f3d6a")
+    carril(ax, y2, h, "Verificación\nposterior", TEAL_B)
+    c1, c2, a = y1 + h / 2, y2 + h / 2, 6
+    evento(ax, 11, c1, VERDE_B, "Análisis\nfinalizado")
+    xs, w = [17, 35, 53, 71], 14.5
+    for k, (x, t) in enumerate(zip(xs, ["Tomar huella\nSHA-256, puntaje\ny marca UTC", "Serializar en\ncadena canónica",
+                                       "Firmar con\nHMAC-SHA256\n(clave secreta)", "Guardar sello\ny entregar\nal usuario"])):
+        caja(ax, x, c1 - a / 2, w, a, t, F_PRES, NAVY, 7.4)
+        flecha(ax, xs[k - 1] + w if k else 13.4, c1, x, c1)
+    evento(ax, 94, c1, ROJO_B, "Sello emitido", 2.6)
+    flecha(ax, 85.5, c1, 91.6, c1)
+    evento(ax, 11, c2, VERDE_B, "Tercero\nsolicita")
+    caja(ax, 17, c2 - a / 2, w, a, "Recalcular\nSHA-256 del\narchivo", F_COMP, TEAL_B, 7.4)
+    caja(ax, 36, c2 - a / 2, w, a, "Recomputar la\nfirma mediante\nla API", F_COMP, TEAL_B, 7.4)
+    flecha(ax, 13.4, c2, 17, c2)
+    flecha(ax, 31.5, c2, 36, c2)
+    compuerta(ax, 58, c2, "¿coinciden?")
+    flecha(ax, 50.5, c2, 54.6, c2)
+    caja(ax, 69, c2 + 2.6, 20, 4.6, "Integridad confirmada:\nel informe no fue alterado", "#e8f5ec", VERDE_B, 7.2)
+    caja(ax, 69, c2 - 7.2, 20, 4.6, "Integridad rota:\nevidencia no admisible", "#fdeaea", ROJO_B, 7.2)
+    flecha(ax, 61.2, c2 + 0.4, 69, c2 + 4.9, color=VERDE_B)
+    flecha(ax, 61.2, c2 - 0.4, 69, c2 - 4.9, color=ROJO_B)
+    ax.text(64.2, c2 + 3.6, "sí", fontsize=7, color=VERDE_B)
+    ax.text(64.2, c2 - 4.4, "no", fontsize=7, color=ROJO_B)
+    fig.savefig(ruta, dpi=DPI)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     salida = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     salida.mkdir(parents=True, exist_ok=True)
+    figura_bpmn1(salida / "figura1_bpmn.png")
+    figura_bpmn2(salida / "figura2_bpmn.png")
     figura_componentes(salida / "figura5_componentes.png")
     figura_infraestructura(salida / "figura8_infraestructura.png")
     figura_arquitectura(salida / "figura9_arquitectura.png")

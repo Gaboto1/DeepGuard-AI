@@ -4,7 +4,7 @@ Genera los informes vigentes en Word, en la carpeta informes/ (local, fuera
 del repositorio), con el formato de la plantilla de INACAP
 (TIHI84_U2_ES2_Plantilla_informe_Guia_ABPro):
 
-- DeepScan_Informe_del_Proyecto_2026-11-18.docx
+- DeepScan_Informe_del_Proyecto_2026-11-25.docx
     Copia del informe ES2, que ya sigue la plantilla y se mantiene al dia con
     scripts/actualizar_cifras_entregables.py y scripts/verificar_entregables.py.
 - DeepScan_Auditoria_2026-11-17.docx
@@ -260,7 +260,7 @@ def auditoria() -> Path:
     D = Plantilla("Informe de Auditoría del Proyecto",
                   "Revisión técnica — Noviembre de 2026",
                   "Auditoría técnica del proyecto",
-                  "17 de noviembre de 2026 (verificada en producción el 18)")
+                  "17 de noviembre de 2026 · seguimiento al 25 de noviembre")
 
     # ---------------------------------------------------------------- I
     D.titulo("Introducción")
@@ -272,14 +272,16 @@ def auditoria() -> Path:
               "GPU.")
     D.parrafo("El objetivo fue comprobar que el sistema publicado es seguro, que su "
               "instalación es reproducible y que lo que declaran sus documentos coincide con "
-              "lo que el sistema hace. Cada hallazgo se contrastó contra el sistema real, y no "
-              "por inspección del texto, y cada corrección quedó acompañada de una prueba "
-              "automatizada que falla si el defecto reaparece.")
+              "lo que el sistema hace. Los hallazgos se contrastaron con el sistema real o "
+              "con el código, y las correcciones de mayor riesgo en el código cuentan con "
+              "una prueba automatizada que falla si el defecto reaparece.")
     D.parrafo("Se identificaron **doce hallazgos**: cuatro de gravedad alta, cinco de gravedad "
-              "media y tres de gravedad baja. Once están corregidos y verificados en "
-              "producción el 18 de noviembre de 2026. El restante, la licencia no comercial "
-              "de una fuente de datos de entrenamiento, no se resuelve con código: es una "
-              "decisión del equipo previa a cualquier cobro por el servicio.")
+              "media y tres de gravedad baja. Once están corregidos; los que afectan a la API y "
+              "al monitor se verificaron en producción el 18 de noviembre de 2026. El restante, "
+              "la licencia no comercial de una fuente de datos de entrenamiento, no se resuelve "
+              "con código: es una decisión del equipo previa a cualquier cobro por el servicio. "
+              "El 25 de noviembre se añadió un seguimiento con dos observaciones nuevas "
+              "(sección 4.3).")
 
     # ---------------------------------------------------------------- II
     D.titulo("Alcance y metodología")
@@ -300,11 +302,12 @@ def auditoria() -> Path:
                                          "de trabajo"]],
             [3.2, 9])
     D.subtitulo("2.2", "Criterio de cierre de un hallazgo.")
-    D.parrafo("Un hallazgo se da por cerrado únicamente cuando se cumplen dos condiciones: la "
-              "corrección está comprobada en el sistema real y existe una prueba automatizada "
-              "que falla si el defecto vuelve a aparecer. Una corrección sin prueba se "
-              "considera provisional, porque nada impide que un cambio posterior la deshaga "
-              "sin que nadie lo advierta.")
+    D.parrafo("Un hallazgo se da por cerrado cuando la corrección está aplicada y comprobada por "
+              "el medio que corresponde: una prueba automatizada si es un defecto de código que "
+              "puede reaparecer, la respuesta del sistema publicado si afecta al despliegue, o la "
+              "lectura del documento si es de documentación. Cuatro de las correcciones cuentan "
+              "con prueba de regresión (Anexo A): dependencias de los modelos, límite de subida, "
+              "historial y exposición de credenciales en la configuración.")
 
     # ---------------------------------------------------------------- III
     D.titulo("Hallazgos")
@@ -424,8 +427,25 @@ def auditoria() -> Path:
              ["GET /api/v1/health", "Modo api-only, Redis conectado"],
              ["GET /api/v1/billing/plans", "Catálogo de planes servido"],
              ["Monitor de salud (GitHub Actions)", "Activo; ejecución del 18 de noviembre exitosa"],
-             ["Análisis real de extremo a extremo", "Imagen de prueba analizada en 19,9 s"]],
+             ["Análisis real de extremo a extremo",
+              "Un análisis puntual, en 19,9 s (mediana formal: 32,4 s)"]],
             [6, 6.5])
+    D.subtitulo("4.3", "Seguimiento del 25 de noviembre.")
+    D.parrafo("Al contrastar con el código las afirmaciones de la defensa se encontraron dos "
+              "defectos que la auditoría del 17 de noviembre no detectó, pese a que el primero "
+              "contradecía lo que los documentos declaraban sobre privacidad.")
+    D.tabla("Observaciones del seguimiento",
+            ["Observación", "Estado"],
+            [["El archivo original se borraba una hora después desde un hilo que moría con el "
+              "worker: había 131 sin borrar. Además, la cola guardaba los argumentos de cada "
+              "tarea, con la imagen en Base64, durante 24 horas",
+              "Corregido y verificado con un análisis real: 0 originales en disco y sin imagen "
+              "en Redis. Cinco pruebas nuevas (143 en total)"],
+             ["La API publicada declara inválido un sello legítimo, porque no comparte la clave "
+              "de firma con el worker. Con la clave del worker, 181 de 181 sellos verifican y "
+              "uno alterado se rechaza",
+              "Pendiente: igualar la clave en el entorno de la API"]],
+            [8, 4.5])
 
     # ---------------------------------------------------------------- V
     D.titulo("Riesgo aceptado")
@@ -451,21 +471,22 @@ def auditoria() -> Path:
              ["Rotar la clave de facturación en Render", "Equipo", "Pendiente"],
              ["Definir la licencia del repositorio", "Equipo", "Pendiente"],
              ["Resolver la licencia de los datos de entrenamiento antes de cobrar",
-              "Equipo", "Pendiente"]],
+              "Equipo", "Pendiente"],
+             ["Igualar DEEPGUARD_SIGNING_KEY entre la API y el worker", "Equipo", "Pendiente"],
+             ["Desplegar en Render el borrado de la copia de la API", "Equipo", "Pendiente"]],
             [8, 2.5, 3])
 
     # ---------------------------------------------------------------- VII
     D.titulo("Conclusiones")
-    D.parrafo("La auditoría confirma que el sistema publicado no expone secretos ni datos de "
-              "terceros tras las correcciones, y que su instalación es reproducible: las "
-              "dependencias de las que depende el resultado están declaradas con su versión "
-              "exacta. Los tres hallazgos de seguridad de gravedad alta están corregidos y "
-              "verificados en producción.")
+    D.parrafo("Tras las correcciones no se encontraron secretos en el repositorio ni análisis "
+              "de terceros accesibles, y la instalación es reproducible: las dependencias de las "
+              "que depende el resultado están declaradas con su versión exacta. El cierre del "
+              "historial y el límite de subida se verificaron en producción.")
     D.parrafo("El hallazgo más instructivo no fue de seguridad sino de reproducibilidad: un "
               "sistema que, ante una dependencia ausente, sigue funcionando con un detector "
-              "peor y sin avisar, es más peligroso que uno que falla. De ahí el criterio de "
-              "cierre adoptado: ninguna corrección se da por buena sin una prueba que la "
-              "proteja.")
+              "peor y sin avisar, es más peligroso que uno que falla. El seguimiento dejó una "
+              "segunda lección: una declaración de privacidad debe comprobarse mirando el disco "
+              "y la cola, no leyendo la intención del código.")
     D.parrafo("Queda abierta una decisión que no es técnica: la licencia no comercial de los "
               "datos de entrenamiento. Es compatible con el proyecto de título, pero condiciona "
               "cualquier paso hacia la explotación comercial del servicio.")
@@ -473,14 +494,15 @@ def auditoria() -> Path:
     # ---------------------------------------------------------------- VIII
     D.titulo("Referencias bibliográficas")
     for ref in [
-        "ComplexDataLab. (2025). *OpenFake* [Conjunto de datos]. Hugging Face. "
-        "https://huggingface.co/datasets/ComplexDataLab/OpenFake",
         "Creative Commons. (s.f.). *Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0)*. "
         "https://creativecommons.org/licenses/by-nc/4.0/deed.es",
         "Fielding, R., Nottingham, M., & Reschke, J. (Eds.). (2022). *RFC 9110: HTTP semantics*. "
         "Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc9110",
         "INACAP. (2024). *Guía para citas y referencias bibliográficas según Norma APA 7ª "
         "edición*. https://digital.inacap.cl/documentos/biblioteca/Norma_APA_7ma_ed_v2.pdf",
+        "Livernoche, V., Arodi, A., Musulan, A., Yang, Z., Salvail, A., Marceau Caron, G., "
+        "Godbout, J.-F., & Rabbany, R. (2025). *OpenFake: An open dataset and platform toward "
+        "real-world deepfake detection*. arXiv. https://arxiv.org/abs/2509.09495",
         "National Institute of Standards and Technology. (2024a). *CVE-2024-24762* [Base de "
         "datos]. National Vulnerability Database. https://nvd.nist.gov/vuln/detail/CVE-2024-24762",
         "National Institute of Standards and Technology. (2024b). *CVE-2024-47874* [Base de "
@@ -502,6 +524,8 @@ def auditoria() -> Path:
              ["test_limite_subida", "El límite cabe en la RAM de Render y una subida enorme se "
                                     "rechaza sin leerla; la configuración no muestra secretos"],
              ["test_historial_global", "El historial de todos los usuarios no es accesible"],
+             ["test_retencion (25 nov)", "El original se borra al terminar, también si el "
+                                         "análisis falla, y Redis no guarda la imagen"],
              ["test_catalogo_frontend", "Los precios y cuotas que muestra la página coinciden "
                                         "con los del servidor"]],
             [4.5, 8])
@@ -514,7 +538,7 @@ def auditoria() -> Path:
 
 def informe_proyecto() -> Path:
     SALIDA.mkdir(exist_ok=True)
-    destino = SALIDA / "DeepScan_Informe_del_Proyecto_2026-11-18.docx"
+    destino = SALIDA / "DeepScan_Informe_del_Proyecto_2026-11-25.docx"
     shutil.copy2(ES2, destino)
     return destino
 

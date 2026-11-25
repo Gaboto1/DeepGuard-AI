@@ -1,5 +1,5 @@
-INFORME   76,216 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
-GUION     23,701 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
+INFORME   77,617 caracteres  TIHI84_U2_ES2_InformeDeepScan_RojasLiapiz.docx
+GUION     23,702 caracteres  TIHI84_U3_ES4_Guion_Defensa_RojasLiapiz.docx
 DEFENSA   12,644 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
 
 === DEBE APARECER (cifras y textos nuevos) ===
@@ -8,7 +8,7 @@ DEFENSA   12,644 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    2x (>= 2)  0,995
   ok  INFORME    3x (>= 3)  60.000 imágenes
   ok  INFORME    2x (>= 2)  nueve fuentes
-  ok  INFORME    3x (>= 3)  138 pruebas
+  ok  INFORME    3x (>= 3)  143 pruebas
   ok  INFORME    1x (>= 1)  11,7 s (p95)
   ok  INFORME    1x (>= 1)  ≤ 15 s en el percentil 95
   ok  INFORME    1x (>= 1)  ≤ 90 s en el percentil 95
@@ -28,7 +28,7 @@ DEFENSA   12,644 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  INFORME    1x (>= 1)  ELSA multigenerador
   ok  INFORME    1x (>= 1)  Nueve fuentes independientes
   ok  INFORME    1x (>= 1)  peso del track facial
-  ok  GUION      1x (>= 1)  Ciento treinta y ocho pruebas
+  ok  GUION      1x (>= 1)  Ciento cuarenta y tres pruebas
   ok  GUION      1x (>= 1)  Sesenta mil imágenes
   ok  GUION      1x (>= 1)  nueve fuentes independientes
   ok  GUION      1x (>= 1)  0,992
@@ -36,12 +36,18 @@ DEFENSA   12,644 caracteres  TIHI84_U3_ES4_Defensa_DeepScan_RojasLiapiz.pptx
   ok  GUION      1x (>= 1)  5,7 % con pesos fijos y 12,5 % en septiembre de 2026
   ok  DEFENSA    1x (>= 1)  0,992
   ok  DEFENSA    1x (>= 1)  0,35 a 0,99
-  ok  DEFENSA    2x (>= 1)  138
+  ok  DEFENSA    2x (>= 1)  143
   ok  GUION      2x (>= 1)  60.000
   ok  DEFENSA    1x (>= 1)  60.000
   ok  DEFENSA    1x (>= 1)  9 fuentes
 
 === NO DEBE QUEDAR (texto superado) ===
+  ok  INFORME    0x  138 pruebas                                  | recuento de la duodecima pasada; retenci
+  ok  GUION      0x  Ciento treinta y ocho                        | mismo recuento, con letras
+  ok  INFORME    0x  nunca se persiste                            | el original se escribe temporalmente y s
+  ok  INFORME    0x  sin necesidad de confiar                     | HMAC es simetrico: la firma se comprueba
+  ok  INFORME    0x  corregidos y verificados en producción       | no todos se verificaron en produccion
+  ok  INFORME    0x  revierte automáticamente                     | la restauracion se ejecuta con --aplicar
   ok  INFORME    0x  XGBoost + scikit-learn                       | el meta-clasificador en produccion es Li
   ok  INFORME    0x  Celery, PyTorch, XGBoost                     | idem, en la tabla de capas
   ok  INFORME    0x  análisis semántico opcional                  | LLaVA se ejecuta en cada analisis

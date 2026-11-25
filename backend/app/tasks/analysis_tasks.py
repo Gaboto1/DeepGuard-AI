@@ -26,7 +26,6 @@ from app.config import settings
 
 RESULTS_DIR = settings.RESULTS_DIR   # fuente única de verdad — definida en config.py
 
-FILE_RETENTION_SECONDS = settings.FILE_CLEANUP_DELAY
 
 # Clave Redis del heartbeat — el health endpoint del API la verifica
 HEARTBEAT_KEY = "deepguard:worker:heartbeat"
@@ -97,6 +96,10 @@ def init_worker_models(**kwargs) -> None:
         logger.error(f"Worker model init FAILED: {e}")
         raise
 
+    # Originales que dejara un corte anterior y resultados de mas de 24 h.
+    from app.services.retencion import iniciar_barrido
+    iniciar_barrido()
+
     # Iniciar hilo de heartbeat — escribe en Redis cada 30s para que el
     # health endpoint pueda saber si el worker está vivo sin usar inspect.ping()
     hb = threading.Thread(target=_heartbeat_loop, daemon=True, name="dg-heartbeat")
@@ -145,9 +148,8 @@ def analyze_image_task(
     self.update_state(state="PROCESSING", meta={"progress": 0.05, "stage": "Preparando el análisis"})
     t0 = time.time()
 
+    path, terminado = Path(file_path), False
     try:
-        path = Path(file_path)
-
         # Arquitectura híbrida: la API (Render) envía el contenido del archivo
         # en base64 porque su disco no es compartido con el worker GPU local.
         if file_content_b64:
@@ -339,7 +341,7 @@ def analyze_image_task(
 
         _persist_result(task_id, result)
         persist_custody_report(seal, result)
-        _schedule_file_cleanup(path)
+        terminado = True
         return result
 
     except ValueError as exc:
@@ -350,6 +352,8 @@ def analyze_image_task(
     except Exception as exc:
         logger.error(f"Image task {task_id[:8]} failed: {exc}")
         raise self.retry(exc=exc, countdown=30)
+    finally:
+        _liberar_original(path, terminado, reconstruible=bool(file_content_b64))
 
 
 # ─── Task: Video ──────────────────────────────────────────────────────────────
@@ -367,9 +371,8 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
     self.update_state(state="PROCESSING", meta={"progress": 0.05, "stage": "Iniciando análisis"})
     t0 = time.time()
 
+    path, terminado = Path(file_path), False
     try:
-        path = Path(file_path)
-
         # Arquitectura híbrida: reconstruir archivo desde payload base64
         if file_content_b64:
             import base64 as _b64
@@ -490,7 +493,7 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
 
         _persist_result(task_id, result)
         persist_custody_report(seal, result)
-        _schedule_file_cleanup(path)
+        terminado = True
         return result
 
     except ValueError as exc:
@@ -499,6 +502,8 @@ def analyze_video_task(self, task_id: str, file_path: str, filename: str, *, fil
     except Exception as exc:
         logger.error(f"Video task {task_id[:8]} failed: {exc}")
         raise self.retry(exc=exc, countdown=60)
+    finally:
+        _liberar_original(path, terminado, reconstruible=bool(file_content_b64))
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -511,17 +516,17 @@ def _persist_result(task_id: str, result: dict) -> None:
         logger.warning(f"Failed to persist task result: {e}")
 
 
-def _schedule_file_cleanup(file_path: Path) -> None:
-    import threading
-    def _delete():
-        time.sleep(FILE_RETENTION_SECONDS)
-        try:
-            if file_path.exists():
-                file_path.unlink()
-                logger.debug(f"Auto-deleted: {file_path.name}")
-        except Exception:
-            pass
-    threading.Thread(target=_delete, daemon=True).start()
+def _liberar_original(path: Path, terminado: bool, reconstruible: bool) -> None:
+    """
+    Borra el original al salir de la tarea, termine como termine.
+
+    Si la tarea va a reintentarse y el archivo vino en el payload, se borra
+    igual: el reintento lo reconstruye. Solo se conserva cuando el reintento lo
+    necesitaria y no podria rehacerlo; de ese resto se ocupa el barrido.
+    """
+    if terminado or reconstruible:
+        from app.services.retencion import borrar_original
+        borrar_original(path)
 
 
 def _serialize_temporal(temporal) -> Optional[dict]:

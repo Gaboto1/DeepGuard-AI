@@ -73,3 +73,25 @@ Tras el *Manual Deploy* en Render, comprobado contra la API publicada:
 
 Quedan del dueño los puntos 3 y 4 (rotación de la clave de facturación, si
 procede, y licencias).
+
+## Correcciones a este informe y seguimiento — 25 de noviembre de 2026
+
+**Alcance de las verificaciones.** De los once hallazgos corregidos, cuatro
+tienen prueba de regresión (dependencias de los modelos, límite de subida,
+historial y credenciales en la configuración). En producción se verificaron el
+historial, el límite de subida y el monitor. Los demás son de dependencias, de
+documentación o de interfaz. La versión en Word decía que todos tenían prueba
+y estaban verificados en producción: era inexacto y está corregido.
+
+**Dos defectos que esta auditoría no detectó:**
+
+| observación | estado |
+|---|---|
+| El original se borraba una hora después desde un hilo `daemon` que moría con el worker (131 sin borrar), y `result_extended=True` guardaba en Redis los argumentos de cada tarea, con la imagen en Base64, durante 24 h | corregido (`app/services/retencion.py`, `celery_app.py`), 5 pruebas; verificado con un análisis real |
+| `GET /tasks/{id}/custody` en Render declara inválido un sello legítimo: la API no tiene la misma `DEEPGUARD_SIGNING_KEY` que el worker. Con la del worker verifican 181 de 181 sellos | **pendiente del dueño**: igualar la clave en Render |
+
+El borrado de la copia que hace la API llega a producción con el próximo
+*Manual Deploy*.
+
+La licencia de OpenFake se comprobó en la ficha vigente de Hugging Face el 25
+de noviembre: CC BY-NC 4.0.

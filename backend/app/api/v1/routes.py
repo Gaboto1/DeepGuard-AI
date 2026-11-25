@@ -307,7 +307,11 @@ async def analyze_async(
     dest.write_bytes(content)
 
     # Validación MIME obligatoria — detecta archivos renombrados (P3)
-    validate_mime_type(dest, file_type)
+    try:
+        validate_mime_type(dest, file_type)
+    except Exception:
+        dest.unlink(missing_ok=True)
+        raise
 
     # Codificar en Base64 en el thread pool — evita bloquear el event loop
     # de FastAPI durante operaciones CPU-bound sobre archivos grandes (ALTO-01).
@@ -316,6 +320,12 @@ async def analyze_async(
         _cpu_executor,
         lambda: base64.b64encode(content).decode("ascii"),
     )
+
+    # En Render el disco no se comparte con el worker: el archivo viaja en el
+    # payload y esta copia ya no la lee nadie. En modo local si se comparte, y
+    # la borra el worker al terminar.
+    if _route_settings.API_ONLY:
+        dest.unlink(missing_ok=True)
 
     logger.info(f"v1: Dispatching {file_type} task {task_id[:8]}... ({len(content)/1e6:.1f}MB)")
 
@@ -902,6 +912,9 @@ def _process_sync_fallback(
             }
             with open(RESULTS_DIR / f"{task_id}.json", "w", encoding="utf-8") as f:
                 json.dump(error_result, f)
+        finally:
+            from app.services.retencion import borrar_original
+            borrar_original(file_path)
 
     # ThreadPoolExecutor con max_workers=1 garantiza un solo análisis GPU
     # concurrente y backpressure natural si llegan más requests (ALTO-02).

@@ -49,7 +49,7 @@ DEBE_APARECER = [
     ("INFORME", "0,995", 2),
     ("INFORME", "60.000 imágenes", 3),
     ("INFORME", "nueve fuentes", 2),
-    ("INFORME", "138 pruebas", 3),
+    ("INFORME", "143 pruebas", 3),
     # Sexta pasada: latencia. El valor y la meta del KPI-04 y la meta del SLA
     # se corrigieron contra la medicion real (reports/latencia_medida.json).
     ("INFORME", "11,7 s (p95)", 1),
@@ -74,7 +74,7 @@ DEBE_APARECER = [
     ("INFORME", "ELSA multigenerador", 1),
     ("INFORME", "Nueve fuentes independientes", 1),
     ("INFORME", "peso del track facial", 1),
-    ("GUION", "Ciento treinta y ocho pruebas", 1),
+    ("GUION", "Ciento cuarenta y tres pruebas", 1),
     ("GUION", "Sesenta mil imágenes", 1),
     ("GUION", "nueve fuentes independientes", 1),
     ("GUION", "0,992", 1),
@@ -82,7 +82,7 @@ DEBE_APARECER = [
     ("GUION", "5,7 % con pesos fijos y 12,5 % en septiembre de 2026", 1),
     ("DEFENSA", "0,992", 1),
     ("DEFENSA", "0,35 a 0,99", 1),
-    ("DEFENSA", "138", 1),
+    ("DEFENSA", "143", 1),
     # Cuarta pasada: la tabla de cifras del guion y la lamina 13 seguian
     # diciendo 14.000 imagenes y 6 fuentes mientras el cuerpo del guion ya
     # decia "Sesenta mil". Eran celdas con la cifra sola, que un barrido del
@@ -94,6 +94,12 @@ DEBE_APARECER = [
 
 # (documento, texto que NO debe quedar, motivo)
 NO_DEBE_QUEDAR = [
+    ("INFORME", "138 pruebas", "recuento de la duodecima pasada; retencion sumo 5"),
+    ("GUION", "Ciento treinta y ocho", "mismo recuento, con letras"),
+    ("INFORME", "nunca se persiste", "el original se escribe temporalmente y se borra al terminar"),
+    ("INFORME", "sin necesidad de confiar", "HMAC es simetrico: la firma se comprueba por la API"),
+    ("INFORME", "corregidos y verificados en producción", "no todos se verificaron en produccion"),
+    ("INFORME", "revierte automáticamente", "la restauracion se ejecuta con --aplicar"),
     ("INFORME", "XGBoost + scikit-learn", "el meta-clasificador en produccion es LightGBM desde el 17 nov"),
     ("INFORME", "Celery, PyTorch, XGBoost", "idem, en la tabla de capas"),
     ("INFORME", "análisis semántico opcional", "LLaVA se ejecuta en cada analisis"),

@@ -74,7 +74,10 @@ celery_app.conf.update(
 
     # Track state para endpoint /tasks/{id}
     task_track_started=True,
-    result_extended=True,
+    # result_extended guardaria en Redis los argumentos de cada tarea durante
+    # 24 h, y la imagen original viaja en ellos (file_content_b64): seria
+    # conservar el archivo del usuario, justo lo que el sistema dice no hacer.
+    result_extended=False,
 )
 
 # Routing: videos van a la cola de video, imágenes a la de imagen
