@@ -9,8 +9,11 @@ import { abrirPlanes } from '@/lib/identidad';
 import { useWorkerStatus } from '@/components/WorkerStatusProvider';
 import type { AnalysisResult } from '@/types';
 
-// Igual que MAX_FILE_SIZE_MB del backend (app/config.py).
-const MAX_MB = 100;
+// Maximo REAL de la version publicada, medido el 25 nov 2026: el archivo viaja
+// dentro del mensaje de la cola, que en el plan gratuito admite 10 MB, y al
+// codificarse crece 1,8 veces. Con mas, la API no puede encolarlo.
+const MAX_MB = 5;
+const MENSAJE_TAMANO = `El archivo supera los ${MAX_MB} MB que admite esta versión. Prueba con una imagen más liviana o un video más corto.`;
 const ACCEPTED = {
   'image/jpeg': ['.jpg', '.jpeg'],
   'image/png':  ['.png'],
@@ -64,7 +67,7 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
       return;
     }
     if (file.size > MAX_MB * 1024 * 1024) {
-      setError(`Archivo demasiado grande. Máximo: ${MAX_MB}MB`);
+      setError(MENSAJE_TAMANO);
       return;
     }
 
@@ -106,6 +109,13 @@ export default function UploadZone({ onAnalysisStart, onAnalysisUpdate, onPrevie
     multiple: false,
     disabled: uploading || workerBlocked,   // ← bloqueado si worker no está online
     maxSize:  MAX_MB * 1024 * 1024,
+    // Sin esto, un archivo demasiado grande o de otro formato se descartaba sin
+    // decir nada: la persona soltaba el archivo y no ocurria nada.
+    onDropRejected: r => setError(
+      r[0]?.errors.some(e => e.code === 'file-too-large')
+        ? MENSAJE_TAMANO
+        : 'Formato no soportado. Use JPG, PNG, WEBP, MP4, MOV, MKV o WEBM.'
+    ),
   });
 
   // ── Banner de estado cuando el worker no está listo ───────────────────────
